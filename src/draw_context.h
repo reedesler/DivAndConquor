@@ -9,26 +9,24 @@
 
 class DrawContext {
 public:
-    SDL_Renderer *Renderer;
+    SDL_Renderer* Renderer;
 
-    explicit DrawContext(SDL_Renderer* Renderer, float xScale, float yScale);
+    explicit DrawContext(SDL_Renderer* Renderer, int xScale, int yScale);
 
     void clear(SDL_Color color);
 
     void present();
 
-    void drawTexture(SDL_Texture *tex, SDL_Rect *src, SDL_Rect *dest);
+    void drawTexture(SDL_Texture* tex, SDL_Rect* src, SDL_Rect* dest);
 
     void drawLine(int x1, int y1, int x2, int y2, SDL_Color color);
 
     void drawRect(SDL_Rect rect, SDL_Color color);
 
-    void setViewport(SDL_Rect rect);
-
-    int floatToPixel(float f);
+    void setViewport(SDL_Rect rect);;
 
 private:
-    float xScale, yScale;
+    int xScale, yScale;
 
     SDL_Point screenToPixel(SDL_Point p);
 

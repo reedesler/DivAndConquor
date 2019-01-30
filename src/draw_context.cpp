@@ -4,7 +4,8 @@
 
 #include "draw_context.h"
 
-DrawContext::DrawContext(SDL_Renderer* Renderer, float xScale, float yScale) : Renderer(Renderer), xScale(xScale), yScale(yScale) {
+DrawContext::DrawContext(SDL_Renderer* Renderer, int xScale, int yScale) : Renderer(Renderer), xScale(xScale),
+                                                                           yScale(yScale) {
 }
 
 void DrawContext::clear(SDL_Color color) {
@@ -16,7 +17,7 @@ void DrawContext::present() {
     SDL_RenderPresent(this->Renderer);
 }
 
-void DrawContext::drawTexture(SDL_Texture *tex, SDL_Rect *src, SDL_Rect *dest) {
+void DrawContext::drawTexture(SDL_Texture* tex, SDL_Rect* src, SDL_Rect* dest) {
     SDL_RenderCopy(this->Renderer, tex, src, dest);
 }
 
@@ -37,7 +38,7 @@ void DrawContext::setViewport(SDL_Rect rect) {
 }
 
 SDL_Point DrawContext::screenToPixel(SDL_Point p) {
-    return {floatToPixel(p.x * xScale), floatToPixel(p.y * yScale)};
+    return {p.x * xScale, p.y * yScale};
 }
 
 SDL_Rect DrawContext::screenToPixel(SDL_Rect r) {
@@ -46,8 +47,4 @@ SDL_Rect DrawContext::screenToPixel(SDL_Rect r) {
     SDL_Point wh = {r.w, r.h};
     SDL_Point screenWH = screenToPixel(wh);
     return {screenPos.x, screenPos.y, screenWH.x, screenWH.y};
-}
-
-int DrawContext::floatToPixel(float f) {
-    return static_cast<int>(round(f));
 }

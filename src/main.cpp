@@ -8,10 +8,10 @@
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 1024;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 
-    SDL_Window *window = nullptr;
-    SDL_Renderer *renderer = nullptr;
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
 
 
     //Initialize SDL
@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     } else {
         //Create window
-        window = SDL_CreateWindow("Divide and Conquer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+        window = SDL_CreateWindow("Divide and Conquer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                                  SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
         if (window == nullptr) {
             printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         } else {
@@ -27,12 +28,12 @@ int main(int argc, char *argv[]) {
             renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
             int drawW, drawH;
             SDL_GetRendererOutputSize(renderer, &drawW, &drawH);
-            float xScale = drawW / SCREEN_WIDTH;
-            float yScale = drawH / SCREEN_HEIGHT;
+            int xScale = drawW / SCREEN_WIDTH;
+            int yScale = drawH / SCREEN_HEIGHT;
             auto drawContext = DrawContext(renderer, xScale, yScale);
 
-            Game *game = new Game(&drawContext);
-            game->start();
+            Game game = Game(&drawContext);
+            game.start();
 
         }
     }
