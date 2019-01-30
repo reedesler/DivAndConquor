@@ -25,7 +25,7 @@ endif()
 #find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME}  src/main.cpp src/game.cpp src/game.h src/world.cpp src/world.h src/draw_context.cpp src/draw_context.h src/drawable.h)
+add_executable(${PROJECT_NAME}  src/main.cpp src/game.cpp src/game.h src/world.cpp src/world.h src/draw_context.cpp src/draw_context.h src/drawable.h src/Camera.cpp src/Camera.h)
 # Added this so policy CMP0065 doesn't scream
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 

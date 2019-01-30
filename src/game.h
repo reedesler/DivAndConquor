@@ -9,15 +9,18 @@
 #include <vector>
 #include "world.h"
 #include "drawable.h"
+#include "Camera.h"
 
-class Game: public Drawable {
+class Game : public Drawable {
 public:
     Game();
+
     ~Game();
-    void Start(DrawContext* dc);
+
+    void start(DrawContext *dc);
 
 private:
-
+    Camera camera;
     World world;
 public:
     void draw(DrawContext *dc) override;

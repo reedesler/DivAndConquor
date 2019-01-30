@@ -25,7 +25,7 @@ void DrawContext::drawLine(int x1, int y1, int x2, int y2, SDL_Color color) {
     SDL_RenderDrawLine(this->Renderer, x1, y1, x2, y2);
 }
 
-void DrawContext::drawRect(SDL_Rect *rect, SDL_Color color) {
+void DrawContext::drawRect(SDL_Rect rect, SDL_Color color) {
     SDL_SetRenderDrawColor(this->Renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderDrawRect(this->Renderer, rect);
+    SDL_RenderFillRect(this->Renderer, &rect);
 }

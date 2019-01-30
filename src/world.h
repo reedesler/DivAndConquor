@@ -6,10 +6,20 @@
 #define DIVCONQ_WORLD_H
 
 #include <vector>
-class World {
+#include "drawable.h"
+#include "Camera.h"
+
+class World : Drawable {
 public:
-    World(int w, int h);
+    World(int w, int h, Camera *camera);
+
     ~World();
+
+    void update() override;
+
+    void draw(DrawContext *dc) override;
+
+    Camera *camera;
 
 private:
     std::vector<std::vector<int>> tilemap;
