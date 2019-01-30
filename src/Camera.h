@@ -7,19 +7,28 @@
 
 
 #include <SDL_events.h>
+#include "draw_context.h"
 
 class Camera {
 public:
-    Camera();
+    Camera(SDL_Rect viewPort, DrawContext* pContext);
 
     float x, y;
+    SDL_Rect viewPort;
 
     void update();
 
+    void draw(DrawContext *dc);
+
     void handleInput(SDL_Event& event);
-    float velX, velY;
+
+    SDL_Rect transform(SDL_Rect r);
+
+    void drawRect(SDL_Rect rect, SDL_Color color);
 
 private:
+    float velX, velY;
+    DrawContext* dc;
 };
 
 

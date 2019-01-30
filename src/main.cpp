@@ -25,10 +25,14 @@ int main(int argc, char *argv[]) {
         } else {
 
             renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-            auto drawContext = DrawContext(renderer);
+            int drawW, drawH;
+            SDL_GetRendererOutputSize(renderer, &drawW, &drawH);
+            float xScale = drawW / SCREEN_WIDTH;
+            float yScale = drawH / SCREEN_HEIGHT;
+            auto drawContext = DrawContext(renderer, xScale, yScale);
 
-            Game *game = new Game();
-            game->start(&drawContext);
+            Game *game = new Game(&drawContext);
+            game->start();
 
         }
     }

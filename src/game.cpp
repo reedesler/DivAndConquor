@@ -6,10 +6,10 @@
 
 #define UPDATE_INTERVAL_MS 1000/144
 
-Game::Game() : world(500, 500, &camera) {
+Game::Game(DrawContext *dc) : dc(dc), camera({100, 100, 500, 500}, dc), world(500, 500, &camera) {
 }
 
-void Game::start(DrawContext *dc) {
+void Game::start() {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     auto lastUpdate = 0;
@@ -33,12 +33,12 @@ void Game::start(DrawContext *dc) {
             lastUpdate = now;
         }
 
-        this->draw(dc);
+        this->draw();
     }
 
 }
 
-void Game::draw(DrawContext *dc) {
+void Game::draw() {
     dc->clear({0, 0, 0, 255});
     this->world.draw(dc);
     dc->present();

@@ -11,21 +11,22 @@
 #include "drawable.h"
 #include "Camera.h"
 
-class Game : public Drawable {
+class Game {
 public:
-    Game();
+    explicit Game(DrawContext *dc);
 
     ~Game();
 
-    void start(DrawContext *dc);
+    void start();
 
 private:
     Camera camera;
     World world;
+    DrawContext* dc;
 public:
-    void draw(DrawContext *dc) override;
+    void draw();
 
-    void update() override;
+    void update();
 
 };
 

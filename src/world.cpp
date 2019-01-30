@@ -15,5 +15,7 @@ void World::update() {
 }
 
 void World::draw(DrawContext *dc) {
-    dc->drawRect({static_cast<int>(round(0 - camera->x)), static_cast<int>(round(0 - camera->y)), 100, 100}, {255, 255, 255, 255});
+    camera->draw(dc);
+    camera->drawRect({50, 50, 100, 100}, {0, 255, 255, 255});
+    camera->drawRect({75, 0, 50, 50}, {0, 255, 0, 0});
 }
