@@ -10,6 +10,13 @@ World::World(int w, int h, Camera *camera) : camera(camera)
 {
     this->tilemap.resize(w, std::vector<int>(h, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
+    gameObjects.push_back(new PirateBoat(0, 0));
 }
 
 World::~World() = default;
@@ -25,8 +32,11 @@ void World::draw(DrawContext *dc) {
     camera->draw(dc);
     for (int i = 0; i < 100; i++)
     {
-        camera->drawRect({200 + 10 * i, 200, 10, 10}, {0, 255, 255, 255});
+        camera->drawRect({200 + 10 * (float)i, 200, 10, 10}, {0, 255, 255, 255});
     }
     camera->drawRect({50, 50, 100, 100}, {0, 255, 255, 255});
     camera->drawRect({75, 0, 50, 50}, {0, 255, 0, 0});
+    for (auto go : gameObjects) {
+        camera->drawRect({go->x, go->y, go->w, go->h}, {0, 0, 255, 255});
+    }
 }
