@@ -9,6 +9,12 @@
 #include <SDL_events.h>
 #include "draw_context.h"
 
+typedef struct Float_Rect
+{
+    float x, y;
+    float w, h;
+} Float_Rect;
+
 class Camera {
 public:
     Camera(SDL_Rect viewPort, DrawContext* pContext);
@@ -19,9 +25,9 @@ public:
 
     void handleInput(SDL_Event &event);
 
-    SDL_Rect transform(SDL_Rect r);
+    SDL_Rect transform(Float_Rect r);
 
-    void drawRect(SDL_Rect rect, SDL_Color color);
+    void drawRect(Float_Rect rect, SDL_Color color);
 
 private:
     float x, y;

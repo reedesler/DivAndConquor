@@ -3,11 +3,14 @@
 //
 
 #include <cstdlib>
+#include <math.h>
 #include "PirateBoat.h"
 
 PirateBoat::PirateBoat(float x, float y) : Boat(x, y) {
     counter = 0;
     setRandomDirection();
+    w = 50;
+    h = 20;
 }
 
 void PirateBoat::update() {
@@ -21,5 +24,7 @@ void PirateBoat::update() {
 
 void PirateBoat::setRandomDirection() {
     double r = (double) rand() / RAND_MAX;
-    printf("%lf\n", r);
+    double angle = r * 2 * M_PI;
+    velX = static_cast<float>(cos(angle) * 5);
+    velY = static_cast<float>(sin(angle) * 5);
 }

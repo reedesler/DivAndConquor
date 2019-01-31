@@ -51,7 +51,7 @@ void Camera::update() {
     }
 }
 
-SDL_Rect Camera::transform(SDL_Rect r) {
+SDL_Rect Camera::transform(Float_Rect r) {
     float newX = floor(zoom * (r.x - x) + (float) viewPort.w / 2);
     float newY = floor(zoom * (r.y - y) + (float) viewPort.h / 2);
     float newW = ceil(zoom * r.w);
@@ -64,6 +64,6 @@ void Camera::draw(DrawContext* dc) {
     dc->drawRect({0, 0, viewPort.w, viewPort.h}, {255, 255, 255, 255});
 }
 
-void Camera::drawRect(SDL_Rect rect, SDL_Color color) {
+void Camera::drawRect(Float_Rect rect, SDL_Color color) {
     dc->drawRect(transform(rect), color);
 }

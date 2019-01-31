@@ -12,7 +12,7 @@ class GameObject {
 public:
     GameObject(float x, float y);
     virtual void update();
-private:
+    float w, h;
     float x, y;
     float velX, velY;
 };
