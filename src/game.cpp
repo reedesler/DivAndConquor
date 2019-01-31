@@ -6,7 +6,7 @@
 
 #define UPDATE_INTERVAL_MS 1000/144
 
-Game::Game(DrawContext *dc) : dc(dc), camera({100, 100, 500, 500}, dc), world(500, 500, &camera) {
+Game::Game(DrawContext *dc) : dc(dc), camera({0, 0, 1280, 800}, dc), world(500, 500, &camera) {
 }
 
 void Game::start() {
@@ -47,6 +47,5 @@ void Game::draw() {
 Game::~Game() {}
 
 void Game::update() {
-    //printf("Camera update %f\n", camera.velX);
     this->world.update();
 }
