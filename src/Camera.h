@@ -31,6 +31,7 @@ public:
     SDL_Rect transform(Float_Rect r);
 
     void drawRect(Float_Rect rect, SDL_Color color);
+    void drawTexture(SDL_Texture *tex, SDL_Rect *dst);
 
     World* world;
 

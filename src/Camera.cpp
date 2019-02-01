@@ -73,3 +73,9 @@ void Camera::draw(DrawContext* dc) {
 void Camera::drawRect(Float_Rect rect, SDL_Color color) {
     dc->drawRect(transform(rect), color);
 }
+
+void Camera::drawTexture(SDL_Texture *tex, SDL_Rect *dst){
+    SDL_Rect src = {0,0,100,100};
+    SDL_Rect d = transform({float(dst->x), float(dst->y), float(dst->w), float(dst->h)});
+    dc->drawTexture(tex, &src, &d);
+}
