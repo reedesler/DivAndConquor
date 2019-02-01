@@ -10,7 +10,7 @@ void GameArchive::saveWorld(World w) {
 }
 
 World GameArchive::loadWorld() {
-    return World(0, 0, nullptr);
+    //return World(0, 0, nullptr);
 }
 
 void GameArchive::save(std::string archiveName)
