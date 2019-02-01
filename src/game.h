@@ -10,6 +10,7 @@
 #include "world.h"
 #include "drawable.h"
 #include "Camera.h"
+#include "Tile.h"
 
 class Game {
 public:
@@ -23,6 +24,8 @@ private:
     Camera camera;
     World world;
     DrawContext* dc;
+    std::vector<std::vector<Tile *>> tilemap;
+    std::vector<SDL_Texture *> mapTex;
 public:
     void draw();
 

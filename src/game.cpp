@@ -6,11 +6,15 @@
 
 #define UPDATE_INTERVAL_MS 1000/144
 
-Game::Game(DrawContext *dc) : dc(dc), camera({0, 0, 1280, 800}, dc, &world), world(500, 500, &camera) {
+Game::Game(DrawContext *dc) : dc(dc), camera({0, 0, 1280, 800}, dc, &world), world(&tilemap, &camera) {
 }
 
 void Game::start() {
     SDL_Init(SDL_INIT_EVERYTHING);
+
+    //map loading
+    //done here because textures require a renderer(from dc). talk to Dima about how dc works
+    buildMap(&tilemap, &mapTex, dc);
 
     auto lastUpdate = 0;
     SDL_Event event;
