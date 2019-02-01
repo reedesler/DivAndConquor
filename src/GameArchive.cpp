@@ -30,17 +30,17 @@ void GameArchive::save(std::string archiveName)
     }*/
 }
 
-GameArchive GameArchive::load(std::string fileName)
-{
-    // ... some time later restore the class instance to its orginal state
-    /*GameArchive newg;
-    {
-        // create and open an archive for input
-        std::ifstream ifs(fileName);
-        boost::archive::text_iarchive ia(ifs);
-        // read class state from archive
-        ia >> newg;
-        // archive and stream closed when destructors are called
-    }
-    return newg;*/
-}
+//GameArchive GameArchive::load(std::string fileName)
+//{
+//    // ... some time later restore the class instance to its orginal state
+//    /*GameArchive newg;
+//    {
+//        // create and open an archive for input
+//        std::ifstream ifs(fileName);
+//        boost::archive::text_iarchive ia(ifs);
+//        // read class state from archive
+//        ia >> newg;
+//        // archive and stream closed when destructors are called
+//    }
+//    return newg;*/
+//}

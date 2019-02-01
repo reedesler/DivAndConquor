@@ -6,6 +6,7 @@
 #include "world.h"
 #include "PirateBoat.h"
 #include "PlayerBoat.h"
+#include "Pirate.h"
 
 World::World(std::vector<std::vector<Tile *>> *tilemap, Camera *camera) : camera(camera)
 {
@@ -19,6 +20,8 @@ World::World(std::vector<std::vector<Tile *>> *tilemap, Camera *camera) : camera
     gameObjects.push_back(new PirateBoat(0, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
     playerBoat = new PlayerBoat(0, 0);
+    //pirate = new Pirate(0,0);
+    //gameObjects.push_back(pirate);
     gameObjects.push_back(playerBoat);
 }
 

@@ -11,6 +11,7 @@
 #include "drawable.h"
 #include "Camera.h"
 #include "Tile.h"
+#include "Pirate.h"
 
 class Game {
 public:
@@ -26,6 +27,7 @@ private:
     DrawContext* dc;
     std::vector<std::vector<Tile *>> tilemap;
     std::vector<SDL_Texture *> mapTex;
+    Pirate pirate;
 public:
     void draw();
 

@@ -9,6 +9,8 @@
 #include "Unit.h"
 
 class Boat : public Unit {
+
+
 public:
     Boat(float x, float y);
 };
