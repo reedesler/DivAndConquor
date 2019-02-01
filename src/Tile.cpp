@@ -40,13 +40,13 @@ void buildMap(std::vector<std::vector<Tile *>> *map, std::vector<SDL_Texture *> 
 
     //creating textures
     //should be improved
-    SDL_Surface *loadedSurface = SDL_LoadBMP("../assets/mapgen/water00.bmp");
+    SDL_Surface *loadedSurface = SDL_LoadBMP("../assets/mapgen/water.bmp");
     maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
     free(loadedSurface);
-    loadedSurface = SDL_LoadBMP("../assets/mapgen/sand00.bmp");
+    loadedSurface = SDL_LoadBMP("../assets/mapgen/sand.bmp");
     maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
     free(loadedSurface);
-    loadedSurface = SDL_LoadBMP("../assets/mapgen/grass00.bmp");
+    loadedSurface = SDL_LoadBMP("../assets/mapgen/grass.bmp");
     maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
     free(loadedSurface);
 
