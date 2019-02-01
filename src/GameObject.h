@@ -5,6 +5,7 @@
 #ifndef DIVCONQ_GAMEOBJECT_H
 #define DIVCONQ_GAMEOBJECT_H
 
+#include <SDL_pixels.h>
 #include "stdio.h"
 
 
@@ -15,6 +16,7 @@ public:
     float w, h;
     float x, y;
     float velX, velY;
+    SDL_Color color;
 };
 
 

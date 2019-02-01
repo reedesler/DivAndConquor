@@ -7,13 +7,13 @@
 static const int CAM_VEL = 5;
 static const float ZOOM_VEL = 1.01;
 
-Camera::Camera(SDL_Rect viewPort, DrawContext* dc) : viewPort(viewPort), dc(dc) {
+Camera::Camera(SDL_Rect viewPort, DrawContext* dc, World* world) : viewPort(viewPort), dc(dc), world(world) {
     x = 0;
     y = 0;
     velX = 0;
     velY = 0;
     velZoom = 0;
-    zoom = 0.1;
+    zoom = 1;
 }
 
 void Camera::handleInput(SDL_Event &event) {
@@ -38,6 +38,12 @@ void Camera::handleInput(SDL_Event &event) {
             case SDLK_PERIOD: velZoom -= ZOOM_VEL; break;
             case SDLK_COMMA: velZoom += ZOOM_VEL; break;
         }
+    } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        float worldX = (mouseX - (float) viewPort.w / 2) / zoom + x;
+        float worldY = (mouseY - (float) viewPort.h / 2) / zoom + y;
+        world->onClick(worldX, worldY);
     }
 }
 

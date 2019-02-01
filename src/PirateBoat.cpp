@@ -11,10 +11,11 @@ PirateBoat::PirateBoat(float x, float y) : Boat(x, y) {
     setRandomDirection();
     w = 50;
     h = 20;
+    color = {0, 0, 255, 255};
 }
 
 void PirateBoat::update() {
-    GameObject::update();
+    Boat::update();
     counter++;
     if (counter > 120) {
         counter = 0;

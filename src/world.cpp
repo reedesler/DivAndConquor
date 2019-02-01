@@ -5,6 +5,7 @@
 
 #include "world.h"
 #include "PirateBoat.h"
+#include "PlayerBoat.h"
 
 World::World(int w, int h, Camera *camera) : camera(camera)
 {
@@ -17,6 +18,8 @@ World::World(int w, int h, Camera *camera) : camera(camera)
     gameObjects.push_back(new PirateBoat(0, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
+    playerBoat = new PlayerBoat(0, 0);
+    gameObjects.push_back(playerBoat);
 }
 
 World::~World() = default;
@@ -30,13 +33,12 @@ void World::update() {
 
 void World::draw(DrawContext *dc) {
     camera->draw(dc);
-    for (int i = 0; i < 100; i++)
-    {
-        camera->drawRect({200 + 10 * (float)i, 200, 10, 10}, {0, 255, 255, 255});
-    }
-    camera->drawRect({50, 50, 100, 100}, {0, 255, 255, 255});
-    camera->drawRect({75, 0, 50, 50}, {0, 255, 0, 0});
     for (auto go : gameObjects) {
-        camera->drawRect({go->x, go->y, go->w, go->h}, {0, 0, 255, 255});
+        camera->drawRect({go->x, go->y, go->w, go->h}, go->color);
     }
+}
+
+void World::onClick(float x, float y) {
+    playerBoat->x = x;
+    playerBoat->y = y;
 }
