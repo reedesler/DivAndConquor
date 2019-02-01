@@ -8,6 +8,10 @@
 #include <SDL_pixels.h>
 #include "stdio.h"
 
+typedef struct Float_Point
+{
+    float x, y;
+} Float_Point;
 
 class GameObject {
 public:
@@ -17,6 +21,13 @@ public:
     float x, y;
     float velX, velY;
     SDL_Color color;
+
+    void moveInLine(float x, float y, int speed);
+private:
+    Float_Point moveStart;
+    Float_Point moveEnd;
+    int moveTimer;
+    int moveSpeed;
 };
 
 

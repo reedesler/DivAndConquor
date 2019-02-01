@@ -39,6 +39,5 @@ void World::draw(DrawContext *dc) {
 }
 
 void World::onClick(float x, float y) {
-    playerBoat->x = x;
-    playerBoat->y = y;
+    playerBoat->moveInLine(x, y, 60);
 }
