@@ -16,6 +16,7 @@
 const int TILE_SIDE = 100;
 const int TOTAL_SIDE = 500;
 const int TOTAL_TILE_TYPES = 3;
+const int TEX_LENGTH = 100;
 
 class Tile
 {
