@@ -7,9 +7,9 @@
 #include "PirateBoat.h"
 #include "PlayerBoat.h"
 
-World::World(int w, int h, Camera *camera) : camera(camera)
+World::World(std::vector<std::vector<Tile *>> *tilemap, Camera *camera) : camera(camera)
 {
-    this->tilemap.resize(w, std::vector<int>(h, 0));
+    this->tilemap = tilemap;
     gameObjects.push_back(new PirateBoat(0, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
     gameObjects.push_back(new PirateBoat(0, 0));
@@ -33,6 +33,9 @@ void World::update() {
 
 void World::draw(DrawContext *dc) {
     camera->draw(dc);
+    for (const auto &r: *tilemap)
+        for (auto t: r)
+            camera->drawTexture(t->getTex(),t->getBox());
     for (auto go : gameObjects) {
         camera->drawRect({go->x, go->y, go->w, go->h}, go->color);
     }

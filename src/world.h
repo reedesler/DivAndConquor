@@ -12,13 +12,14 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "PlayerBoat.h"
+#include "Tile.h"
 
 class Camera;
 
 class World : Drawable
 {
 public:
-  World(int w, int h, Camera *camera);
+  World(std::vector<std::vector<Tile *>> *tilemap, Camera *camera);
 
   ~World();
 
@@ -33,7 +34,7 @@ public:
   PlayerBoat* playerBoat;
 
 private:
-  std::vector<std::vector<int>> tilemap;
+  std::vector<std::vector<Tile *>> *tilemap;
   std::vector<std::string> savedFiles;
 
   std::vector<GameObject *> gameObjects;
