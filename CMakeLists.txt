@@ -22,6 +22,14 @@ else()
 endif()
 #target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 
+find_package(Boost 10.68.0)
+
+#Boost set up
+#uncomment if in need
+#if (Boost_FOUND)
+#    include_directories(${Boost_INCLUDE_DIRS})
+#endif()
+
 #find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
