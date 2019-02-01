@@ -6,8 +6,9 @@
 #include "world.h"
 #include "PirateBoat.h"
 #include "PlayerBoat.h"
+#include "game.h"
 
-World::World(std::vector<std::vector<Tile *>> *tilemap, Camera *camera) : camera(camera)
+World::World(TileMap *tilemap, Camera *camera) : camera(camera)
 {
     this->tilemap = tilemap;
     gameObjects.push_back(new PirateBoat(0, 0));

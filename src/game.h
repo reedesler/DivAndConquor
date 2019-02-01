@@ -12,6 +12,8 @@
 #include "Camera.h"
 #include "Tile.h"
 
+typedef std::vector<std::vector<Tile *>> TileMap;
+
 class Game {
 public:
     explicit Game(DrawContext *dc);
@@ -24,7 +26,7 @@ private:
     Camera camera;
     World world;
     DrawContext* dc;
-    std::vector<std::vector<Tile *>> tilemap;
+    TileMap tilemap;
     std::vector<SDL_Texture *> mapTex;
 public:
     void draw();
