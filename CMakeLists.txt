@@ -22,10 +22,9 @@ else()
 endif()
 #target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 
-find_package(Boost 10.68.0)
-
 #Boost set up
 #uncomment if in need
+#find_package(Boost 1.68.0)
 #if (Boost_FOUND)
 #    include_directories(${Boost_INCLUDE_DIRS})
 #endif()
