@@ -9,34 +9,26 @@
 #include <cmath>
 #include <queue>
 
-typedef struct
-{
-    uint32_t x;
-    uint32_t y;
-} GridLocation;
-
 Boat::Boat(float x, float y) : Unit(x, y)
 {
 }
 
-void Boat::move(uint32_t src_x, uint32_t src_y, uint32_t dest_x, uint32_t dest_y)
+void Boat::move(TileLocation src, TileLocation dest)
 {
-    std::vector<GridLocation> path;
+    std::vector<TileLocation> path;
 }
 
-inline double heuristic(GridLocation a, GridLocation b)
+inline double heuristic(TileLocation src, TileLocation dest)
 {
-    return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+    return std::abs(static_cast<int>(src.x - dest.x)) + std::abs(static_cast<int>(src.y - dest.y));
 }
 
-template <typename Location, typename Graph>
-void a_star_search(Graph graph,
-                   Location start,
-                   Location goal,
-                   std::unordered_map<Location, Location> &came_from,
-                   std::unordered_map<Location, double> &cost_so_far)
+/*
+void a_star_search(TileLocation start, TileLocation goal,
+                   std::unordered_map<TileLocation, TileLocation> &came_from,
+                   std::unordered_map<TileLocation, double> &cost_so_far)
 {
-    std::priority_queue<Location, double> frontier;
+    std::priority_queue<TileLocation, double> frontier;
     frontier.put(start, 0);
 
     came_from[start] = start;
@@ -44,14 +36,14 @@ void a_star_search(Graph graph,
 
     while (!frontier.empty())
     {
-        Location current = frontier.get();
+        TileLocation current = frontier.get();
 
         if (current == goal)
         {
             break;
         }
 
-        for (Location next : graph.neighbors(current))
+        for (TileLocation next : graph.neighbors(current))
         {
             double new_cost = cost_so_far[current] + graph.cost(current, next);
             if (cost_so_far.find(next) == cost_so_far.end() || new_cost < cost_so_far[next])
@@ -63,4 +55,4 @@ void a_star_search(Graph graph,
             }
         }
     }
-}
+}*/

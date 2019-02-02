@@ -4,7 +4,8 @@
 
 #include "Tile.h"
 
-Tile::Tile(int x, int y, int type, SDL_Texture *texture){
+Tile::Tile(int x, int y, int type, SDL_Texture *texture)
+{
     mbox.x = x;
     mbox.y = y;
     tType = type;
@@ -17,37 +18,42 @@ Tile::Tile(int x, int y, int type, SDL_Texture *texture){
 Tile::~Tile() = default;
 
 //getters
-int Tile::getType() {
+int Tile::getType()
+{
     return this->tType;
 }
 
-int Tile::isVisible() {
+int Tile::isVisible()
+{
     return this->tVisible;
 }
 
-SDL_Texture *Tile::getTex() {
+SDL_Texture *Tile::getTex()
+{
     return this->tTexture;
 }
 
-SDL_Rect *Tile::getBox() {
+SDL_Rect *Tile::getBox()
+{
     return &this->mbox;
 }
 
 //loading assets for the map.
 //here until we implement some asset management
 
-void buildMap(std::vector<std::vector<Tile *>> *map, std::vector<SDL_Texture *> *maptex, DrawContext *dc) {
+void buildMap(std::vector<std::vector<Tile *>> *map, std::vector<SDL_Texture *> *maptex, DrawContext *dc)
+{
 
     //creating textures
     //should be improved
     SDL_Surface *loadedSurface = SDL_LoadBMP("../assets/mapgen/water.bmp");
-    maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
+    maptex->push_back(SDL_CreateTextureFromSurface(dc->Renderer, loadedSurface));
     free(loadedSurface);
     loadedSurface = SDL_LoadBMP("../assets/mapgen/sand.bmp");
-    maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
+    maptex->push_back(SDL_CreateTextureFromSurface(dc->Renderer, loadedSurface));
     free(loadedSurface);
     loadedSurface = SDL_LoadBMP("../assets/mapgen/grass.bmp");
-    maptex->push_back(SDL_CreateTextureFromSurface( dc->Renderer, loadedSurface ));
+    maptex->push_back(SDL_CreateTextureFromSurface(dc->Renderer, loadedSurface));
     free(loadedSurface);
 
     //loading map txt
@@ -55,9 +61,11 @@ void buildMap(std::vector<std::vector<Tile *>> *map, std::vector<SDL_Texture *> 
 
     //initializing tiles
     int type;
-    for (int i = 0; i < TOTAL_SIDE; i++){
+    for (int i = 0; i < TOTAL_SIDE; i++)
+    {
         std::vector<Tile *> tmp;
-        for (int j = 0; j < TOTAL_SIDE; j++){
+        for (int j = 0; j < TOTAL_SIDE; j++)
+        {
             type = mapFile.get() - 48;
             if (type == 3)
                 type = 2;
@@ -66,4 +74,17 @@ void buildMap(std::vector<std::vector<Tile *>> *map, std::vector<SDL_Texture *> 
         mapFile.get();
         map->push_back(tmp);
     }
+}
+
+bool Tile::reveal(TileLocation center)
+{
+    const int RADIUS = 3;
+    for (int i = -RADIUS; i < RADIUS; i++)
+    {
+        for (int j = -RADIUS; j < RADIUS; j++)
+        {
+            this->tVisible = true;
+        }
+    }
+    return true;
 }

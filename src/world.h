@@ -14,6 +14,7 @@
 #include "PlayerBoat.h"
 #include "Tile.h"
 #include "Button.h"
+#include "Pirate.h"
 
 class Camera;
 
@@ -31,6 +32,8 @@ public:
   Camera *camera;
 
   void onClick(float x, float y);
+
+  Pirate *pirate;
 
   PlayerBoat *playerBoat;
 

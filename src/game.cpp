@@ -16,6 +16,7 @@ void Game::start() {
     //done here because textures require a renderer(from dc). talk to Dima about how dc works
     buildMap(&tilemap, &mapTex, dc);
 
+
     auto lastUpdate = 0;
     SDL_Event event;
     while (true) {

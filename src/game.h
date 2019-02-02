@@ -11,27 +11,28 @@
 #include "drawable.h"
 #include "Camera.h"
 #include "Tile.h"
+#include "Pirate.h"
 
-class Game {
-public:
+class Game
+{
+  public:
     explicit Game(DrawContext *dc);
 
     ~Game();
 
     void start();
 
-private:
+  private:
     Camera camera;
     World world;
-    DrawContext* dc;
-    std::vector<std::vector<Tile *>> tilemap;
+    DrawContext *dc;
+    TileMap tilemap;
     std::vector<SDL_Texture *> mapTex;
-public:
+    //Pirate pirate;
+  public:
     void draw();
 
     void update();
-
 };
-
 
 #endif //DIVCONQ_GAME_H

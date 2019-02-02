@@ -5,8 +5,11 @@
 #ifndef DIVCONQ_GAMEOBJECT_H
 #define DIVCONQ_GAMEOBJECT_H
 
+#include <cstdio>
+
 #include <SDL_pixels.h>
-#include "stdio.h"
+
+#include <Tile.h>
 
 typedef struct Float_Point
 {
