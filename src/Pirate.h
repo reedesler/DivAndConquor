@@ -6,6 +6,7 @@
 #define DIVCONQ_PIRATE_H
 
 #include <SDL_render.h>
+#include "draw_context.h"
 
 
 class Pirate {
@@ -13,13 +14,12 @@ class Pirate {
 public:
     static SDL_Surface * surface;
     static SDL_Texture * texture;
-    double posX;
-    double posY;
+    int posX;
+    int posY;
 
 
-    Pirate();
+    Pirate(int, int);
 
-    void renderPirate(SDL_Renderer renderer);
 
 
 private:
@@ -30,5 +30,6 @@ private:
 
 };
 
+void renderPirate(DrawContext *dc, Pirate *p);
 
 #endif //DIVCONQ_PIRATE_H

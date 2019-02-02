@@ -68,6 +68,7 @@ SDL_Rect Camera::transform(Float_Rect r) {
 void Camera::draw(DrawContext* dc) {
     dc->setViewport(viewPort);
     dc->drawRect({0, 0, viewPort.w, viewPort.h}, {255, 255, 255, 255});
+
 }
 
 void Camera::drawRect(Float_Rect rect, SDL_Color color) {

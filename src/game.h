@@ -29,7 +29,7 @@ private:
     DrawContext* dc;
     TileMap tilemap;
     std::vector<SDL_Texture *> mapTex;
-    Pirate pirate;
+    //Pirate pirate;
 public:
     void draw();
 

@@ -33,10 +33,7 @@ endif()
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories("/usr/local/Cellar/boost/1.68.0_1/include")
 
-add_executable(${PROJECT_NAME}  src/main.cpp src/game.cpp src/game.h src/world.cpp src/world.h src/
-        draw_context.cpp src/draw_context.h src/drawable.h src/Camera.cpp src/Camera.h src/GameObject.cpp src/
-        GameObject.h src/Unit.cpp src/Unit.h src/Boat.cpp src/Boat.h src/PirateBoat.cpp src/PirateBoat.h src/Pirate.cpp
-        src/Pirate.h src/GameArchive.cpp src/GameArchive.h src/PlayerBoat.cpp src/PlayerBoat.h src/Tile.cpp src/Tile.h)
+add_executable(${PROJECT_NAME}  src/main.cpp src/game.cpp src/game.h src/world.cpp src/world.h src/draw_context.cpp src/draw_context.h src/drawable.h src/Camera.cpp src/Camera.h src/GameObject.cpp src/GameObject.h src/Unit.cpp src/Unit.h src/Boat.cpp src/Boat.h src/PirateBoat.cpp src/PirateBoat.h src/Pirate.cpp src/Pirate.h src/GameArchive.cpp src/GameArchive.h src/PlayerBoat.cpp src/PlayerBoat.h src/Tile.cpp src/Tile.h)
 # Added this so policy CMP0065 doesn't scream
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
