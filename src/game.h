@@ -13,6 +13,8 @@
 #include "Tile.h"
 #include "Pirate.h"
 
+typedef std::vector<std::vector<Tile *>> TileMap;
+
 class Game {
 public:
     explicit Game(DrawContext *dc);
@@ -25,7 +27,7 @@ private:
     Camera camera;
     World world;
     DrawContext* dc;
-    std::vector<std::vector<Tile *>> tilemap;
+    TileMap tilemap;
     std::vector<SDL_Texture *> mapTex;
     Pirate pirate;
 public:

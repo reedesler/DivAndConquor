@@ -18,7 +18,8 @@ void DrawContext::present() {
 }
 
 void DrawContext::drawTexture(SDL_Texture* tex, SDL_Rect* src, SDL_Rect* dest) {
-    SDL_RenderCopy(this->Renderer, tex, src, dest);
+    SDL_Rect screenRect = screenToPixel(*dest);
+    SDL_RenderCopy(this->Renderer, tex, src, &screenRect);
 }
 
 void DrawContext::drawLine(int x1, int y1, int x2, int y2, SDL_Color color) {
