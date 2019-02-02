@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "PlayerBoat.h"
 #include "Tile.h"
+#include "Button.h"
 
 class Camera;
 
@@ -31,13 +32,14 @@ public:
 
   void onClick(float x, float y);
 
-  PlayerBoat* playerBoat;
+  PlayerBoat *playerBoat;
 
 private:
   std::vector<std::vector<Tile *>> *tilemap;
   std::vector<std::string> savedFiles;
 
   std::vector<GameObject *> gameObjects;
+  std::vector<Button *> clickables;
 };
 
 #endif //DIVCONQ_WORLD_H

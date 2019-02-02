@@ -4,5 +4,6 @@
 
 #include "Unit.h"
 
-Unit::Unit(float x, float y) : GameObject(x, y) {
+Unit::Unit(float x, float y) : GameObject(x, y)
+{
 }

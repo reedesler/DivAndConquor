@@ -13,8 +13,9 @@ typedef struct Float_Point
     float x, y;
 } Float_Point;
 
-class GameObject {
-public:
+class GameObject
+{
+  public:
     GameObject(float x, float y);
     virtual void update();
     float w, h;
@@ -23,12 +24,13 @@ public:
     SDL_Color color;
 
     void moveInLine(float x, float y, int speed);
-private:
+
+  private:
     Float_Point moveStart;
     Float_Point moveEnd;
     int moveTimer;
     int moveSpeed;
+    TileMap tileMap;
 };
-
 
 #endif //DIVCONQ_GAMEOBJECT_H
