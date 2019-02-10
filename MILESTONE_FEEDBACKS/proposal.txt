@@ -1,0 +1,17 @@
+TEAM 11 COMMENTS; GRADE: 74
+
+Grader: Chenxi
+
+STORY         -5
+Only the background story is provided, while the overall game structure is unclear.
+
+LOGIC            -8
+The description about the gameplay logic is vague. You need to break it down into different aspects, and design and clarify each of them. For instance, how is the player going to move? Can the player move to any tile? How is building gears going to happen? Do you have some time system or round system in the game?
+
+For the AI part, you only described A*, while we expect to see more complicated behaviors of the pirates. Please clarify that part.
+
+ADVANCED FEATURES -8
+The advanced element section needs to be written with more details. Also, to include priorities, impacts of features, and alternatives.
+
+CONCEPTS -5
+Note that you need to add citations for images not created by you. Also, the concept sketch is unclear and without text explanations.
