@@ -1,56 +1,36 @@
-//
-// Created by Dmitry on 2019-01-25.
-//
+#include "Game.h"
 
-#include "game.h"
-
-#define UPDATE_INTERVAL_MS 1000/144
-
-Game::Game(DrawContext *dc) : dc(dc), camera({0, 0, 1280, 800}, dc, &world), world(&tilemap, &camera) {
+void Game::init() {
+    world = new World();
 }
-
-void Game::start() {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-    //map loading
-    //done here because textures require a renderer(from dc). talk to Dima about how dc works
-    buildMap(&tilemap, &mapTex, dc);
-
-
-    auto lastUpdate = 0;
-    SDL_Event event;
-    while (true) {
-
-        while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                return;
-            } else {
-                camera.handleInput(event);
-            }
-        }
-
-        auto now = SDL_GetTicks();
-        auto updateDebt = now - lastUpdate;
-        // Call update one time for each interval we missed
-        while (updateDebt >= UPDATE_INTERVAL_MS) {
-            this->update();
-            updateDebt -= UPDATE_INTERVAL_MS;
-            lastUpdate = now;
-        }
-
-        this->draw();
-    }
-
-}
-
-void Game::draw() {
-    dc->clear({0, 0, 0, 255});
-    this->world.draw(dc);
-    dc->present();
-}
-
-Game::~Game() {}
 
 void Game::update() {
-    this->world.update();
+    world->update();
+}
+
+void Game::draw(const mat3& projection) {
+    world->draw(projection);
+}
+
+void Game::onKey(int key, int scancode, int action) {
+    vec2 cameraDir = {0, 0};
+    if (action == GLFW_PRESS) {
+        switch (key) {
+            case GLFW_KEY_UP: cameraDir.y -= 1; break;
+            case GLFW_KEY_DOWN: cameraDir.y += 1; break;
+            case GLFW_KEY_LEFT: cameraDir.x -= 1; break;
+            case GLFW_KEY_RIGHT: cameraDir.x += 1; break;
+            default: break;
+        }
+    } else if (action == GLFW_RELEASE) {
+        switch (key) {
+            case GLFW_KEY_UP: cameraDir.y += 1; break;
+            case GLFW_KEY_DOWN: cameraDir.y -= 1; break;
+            case GLFW_KEY_LEFT: cameraDir.x += 1; break;
+            case GLFW_KEY_RIGHT: cameraDir.x -= 1; break;
+            default: break;
+        }
+    }
+
+    world->moveCamera(cameraDir);
 }
