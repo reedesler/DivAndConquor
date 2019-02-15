@@ -1,3 +1,0 @@
-/home/mabole/Documents/cs436d/team11game/CMakeFiles/rebuild_cache.dir
-/home/mabole/Documents/cs436d/team11game/CMakeFiles/DivConq.dir
-/home/mabole/Documents/cs436d/team11game/CMakeFiles/edit_cache.dir
