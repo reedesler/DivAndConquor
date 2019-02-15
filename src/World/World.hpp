@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "GameObject.hpp"
+#include "Tilemap.h"
 
 class World {
 public:
@@ -18,6 +19,7 @@ private:
     vec2 cameraVel;
     float cameraZoomVel;
     float cameraZoom;
+    Tilemap tilemap;
 };
 
 

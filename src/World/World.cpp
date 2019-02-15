@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-World::World() {
+World::World() : tilemap(Tilemap("../data/maps/map1test.txt")) {
     gameObjects.push_back(new GameObject());
     cameraPos = {0, 0};
     cameraVel = {0, 0};
@@ -21,7 +21,8 @@ void World::update() {
 void World::draw(const mat3 &projection) {
     mat3 T = { { 1.f, 0.f, 0.f },{ 0.f, 1.f, 0.f },{ -cameraPos.x, -cameraPos.y, 1.f } };
     mat3 S = { { cameraZoom, 0.f, 0.f },{ 0.f, cameraZoom, 0.f },{ 0.f, 0.f, 1.f } };
-    mat3 newProjection = mul(mul(projection, T), S);
+    mat3 newProjection = mul(mul(projection, S), T);
+    tilemap.draw(newProjection);
     for (auto o : gameObjects) {
         o->draw(newProjection);
     }

@@ -8,21 +8,29 @@
 
 #include <vector>
 #include <Common.hpp>
+#include <Sprite.hpp>
 
-class Tilemap: public Renderable {
+struct Tile {
+    Tile();
+    Tile(float x, float y, unsigned int type);
+    float x, y;
+    Sprite sprite;
+    void draw(const mat3 &projection);
+    unsigned int type;
+};
+
+class Tilemap {
 public:
-    Tilemap(unsigned int **map, unsigned int w, unsigned int h);
+    Tilemap(std::string filepath);
 
     virtual ~Tilemap();
 
     unsigned int Width;
     unsigned int Height;
+    void draw(const mat3 &projection);
 
 private:
-    unsigned int** map;
-    Texture texture;
-
-    void draw(const mat3 &projection);
+    Tile** map;
 };
 
 

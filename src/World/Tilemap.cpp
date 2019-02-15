@@ -10,9 +10,27 @@
 #include <fstream>
 
 
-#define TILE_SIZE 64
+#define TILE_SIZE 100
 #define TILE_SRC_SIZE 32
-Tilemap LoadFromFile(std::string filepath) {
+
+void Tilemap::draw(const mat3 &projection)
+{
+    for (int x = 0; x < Width; ++x)
+        for (int y = 0; y < Height; ++y)
+        {
+            Tile t = map[y][x];
+            t.draw(projection);
+        }
+}
+Tilemap::~Tilemap() {
+    for(int i = 0; i < Width; ++i) {
+        delete [] map[i];
+    }
+    delete [] map;
+}
+
+
+Tilemap::Tilemap(std::string filepath) {
     std::ifstream infile;
     infile.open(filepath);
     if (!infile) {
@@ -29,59 +47,34 @@ Tilemap LoadFromFile(std::string filepath) {
         }
         temp.push_back(row);
     }
-    unsigned int w = temp[0].size();
-    unsigned int h = temp.size();
-    auto map = new unsigned int*[w];
-    for (unsigned int x = 0; x < w; ++x) {
-        map[x] = new unsigned int[h];
-        for (unsigned int y = 0; y < h; ++y){
-            map[x][y] = temp[y][x]; //transpose here, since we read it row-by-row
+    unsigned long w = temp[0].size();
+    unsigned long h = temp.size();
+    auto map = new Tile*[h];
+    for (unsigned int x = 0; x < h; ++x) {
+        map[x] = new Tile[w];
+        for (unsigned int y = 0; y < w; ++y){
+            map[x][y] = Tile(y * TILE_SIZE, x * TILE_SIZE, temp[x][y]); //transpose here, since we read it row-by-row
         }
     }
-
-    Tilemap t = Tilemap(map, w, h);
-    return t;
-
+    this->map = map;
+    this->Width = w;
+    this->Height = h;
 }
 
-void Tilemap::draw(const mat3 &projection)
-{
-    // TODO
-    for (int x = 0; x < Width; ++x)
-        for (int y = 0; y < Width; ++y)
-        {
-            unsigned int tilemap_n = map[x][y];
-            // oh boy
-
-
-        }
-
-
-}
-Tilemap::~Tilemap() {
-    for(int i = 0; i < Width; ++i) {
-        delete [] map[i];
+Tile::Tile(float x, float y, unsigned int type): x(x), y(y), type(type) {
+    const char* path;
+    switch (type) {
+        default:
+        case 0: path = textures_path("water.bmp"); break;
+        case 1: path = textures_path("sand.bmp"); break;
+        case 2: path = textures_path("grass.bmp"); break;
     }
-    delete [] map;
+    sprite.init(TILE_SIZE, TILE_SIZE, path);
 }
 
+void Tile::draw(const mat3 &projection) {
+    sprite.draw(projection, {x, y});
+}
 
-Tilemap::Tilemap(unsigned int** map, unsigned  int w, unsigned int h) : map(map),Width(w), Height(h) {
-    // Load shared texture
-    if (!texture.is_valid())
-    {
-        if (!texture.load_from_file(textures_path("tilemap.png")))
-        {
-            fprintf(stderr, "Failed to load map texture!");
-            exit(1);
-        }
-    }
-
-    // Loading shaders
-    if(!effect.load_from_file(shader_path("textured.vs.glsl"), shader_path("textured.fs.glsl")))
-    {
-
-        fprintf(stderr, "Failed to load map shaders!");
-        exit(1);
-    }
+Tile::Tile() {
 }
