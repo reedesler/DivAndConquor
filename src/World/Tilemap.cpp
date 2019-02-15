@@ -49,10 +49,12 @@ Tilemap Tilemap::LoadFromFile(std::string filepath) {
 void Tilemap::draw(const mat3 &projection) {
 
     // uncomment to enable wireframe debug mode:
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     // so it's getting drawn... but it's invisible in normal mode.
     // must be some texture heckery
+    transform_begin();
+    transform_end();
     
     // Setting shaders
     glUseProgram(effect.program);
@@ -86,7 +88,7 @@ void Tilemap::draw(const mat3 &projection) {
 
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *) &transform);
-    float color[] = {1.f, 0.f, 1.f};
+    float color[] = {1.f, 1.f, 1.f};
     glUniform3fv(color_uloc, 1, color);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *) &projection);
 
@@ -95,17 +97,17 @@ void Tilemap::draw(const mat3 &projection) {
 }
 
 Tilemap::~Tilemap() {
-    for (int i = 0; i < Width; ++i) {
+    for (int i = 0; i < width; ++i) {
         delete[] map[i];
     }
     delete[] map;
 }
 
 
-Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map), Width(w), Height(h) {
+Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map), width(w), height(h) {
     // Load shared texture
     if (!texture.is_valid()) {
-        if (!texture.load_from_file(textures_path("tilemap.png"))) {
+        if (!texture.load_from_file(textures_path("grass.bmp"))) {
             fprintf(stderr, "Failed to load map texture!");
             exit(1);
         }
@@ -122,16 +124,17 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
     std::vector<TexturedVertex> vertices;
     std::vector<uint16_t> indices;
 
-    for (int x = 0; x < Width; ++x)
-        for (int y = 0; y < Height; ++y) {
+    uint16_t idx = 0;
+
+    for (int x = 0; x < width; ++x)
+        for (int y = 0; y < height; ++y) {
             unsigned int tilemap_n = map[x][y];
-            if (tilemap_n == 1) {
+            if (tilemap_n == 2) {
                 float x0 = x * TILE_SIZE;
                 float y0 = y * TILE_SIZE;
                 float wr = TILE_SIZE * 0.5f;
                 float hr = TILE_SIZE * 0.5f;
 
-                uint16_t idx = vertices.size() / 4;
                 vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
                                                      {0.f,     1.f}});
                 vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
@@ -142,8 +145,8 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
                                                      {0.f,     0.f}});
                 indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
                                                (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
+                idx += 4;
             }
-
 
         }
     // Clearing errors
@@ -158,10 +161,8 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
     // Index Buffer creation
     glGenBuffers(1, &mesh.ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * 6, &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
     // Vertex Array (Container for Vertex + Index buffer)
     glGenVertexArrays(1, &mesh.vao);
-
-
 }

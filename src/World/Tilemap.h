@@ -9,6 +9,12 @@
 #include <vector>
 #include <Common.hpp>
 
+class Chunk {
+    unsigned int** map;
+    unsigned int width;
+    unsigned int height;
+};
+
 class Tilemap: public Renderable {
 public:
     Tilemap(unsigned int **map, unsigned int w, unsigned int h);
@@ -16,8 +22,8 @@ public:
 
     virtual ~Tilemap();
 
-    unsigned int Width;
-    unsigned int Height;
+    unsigned int width;
+    unsigned int height;
     void draw(const mat3 &projection);
 
 private:
