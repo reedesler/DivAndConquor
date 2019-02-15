@@ -30,21 +30,20 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CU
 # You can switch to use the file GLOB for simplicity but at your own risk
 # file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 set(SOURCE_FILES
-        src/main.cpp
-        src/common.cpp
-        src/Window.cpp
+        src/Main.cpp
+        src/Common.cpp
+        src/GameWindow.cpp
         src/Game.cpp
         src/Sprite.cpp
-        src/world/GameObject.cpp
-        src/world/World.cpp
-
-        src/project_path.hpp
-        src/common.hpp
-        src/Window.h
-        src/Game.h
-        src/Sprite.h
-        src/world/GameObject.h
-        src/world/World.h)
+        src/World/GameObject.cpp
+        src/World/World.cpp
+        src/ProjectPath.hpp
+        src/Common.hpp
+        src/GameWindow.hpp
+        src/Game.hpp
+        src/Sprite.hpp
+        src/World/GameObject.hpp
+        src/World/World.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
