@@ -12,17 +12,18 @@
 class Tilemap: public Renderable {
 public:
     Tilemap(unsigned int **map, unsigned int w, unsigned int h);
+    static Tilemap LoadFromFile(std::string filepath);
 
     virtual ~Tilemap();
 
     unsigned int Width;
     unsigned int Height;
+    void draw(const mat3 &projection);
 
 private:
     unsigned int** map;
     Texture texture;
 
-    void draw(const mat3 &projection);
 };
 
 

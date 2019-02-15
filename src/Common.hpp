@@ -17,6 +17,7 @@
 
 #define data_path PROJECT_SOURCE_DIR "./data"
 #define textures_path(name)  data_path "/textures/" name
+#define maps_path(name)  data_path "/maps/" name
 #define audio_path(name) data_path  "/audio/" name
 #define mesh_path(name) data_path  "/meshes/" name
 
@@ -77,6 +78,7 @@ struct Mesh
 	GLuint vao;
 	GLuint vbo;
 	GLuint ibo;
+	GLuint vertCount;
 };
 
 // Container for Vertex and Fragment shader, which are then put(linked) together in a

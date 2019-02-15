@@ -43,7 +43,7 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Sprite.hpp
         src/World/GameObject.hpp
-        src/World/World.hpp)
+        src/World/World.hpp src/World/Tilemap.cpp src/World/Tilemap.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
