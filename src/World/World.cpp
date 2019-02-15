@@ -1,7 +1,7 @@
 #include "World.hpp"
 #include "Tilemap.h"
 
-World::World() : t(Tilemap::LoadFromFile(maps_path("map1test.txt"))) {
+World::World() : tilemap(Tilemap::LoadFromFile(maps_path("map1test.txt"))) {
     gameObjects.push_back(new GameObject());
     cameraPos = {0, 0};
     cameraVel = {0, 0};
@@ -10,8 +10,8 @@ World::World() : t(Tilemap::LoadFromFile(maps_path("map1test.txt"))) {
 }
 
 void World::update() {
-    cameraPos.x += cameraVel.x;
-    cameraPos.y += cameraVel.y;
+    cameraPos.x += cameraVel.x / cameraZoom;
+    cameraPos.y += cameraVel.y / cameraZoom;
     if (cameraZoomVel > 0) {
         cameraZoom *= cameraZoomVel;
     } else if (cameraZoomVel < 0) {
@@ -22,12 +22,11 @@ void World::update() {
 void World::draw(const mat3 &projection) {
     mat3 T = { { 1.f, 0.f, 0.f },{ 0.f, 1.f, 0.f },{ -cameraPos.x, -cameraPos.y, 1.f } };
     mat3 S = { { cameraZoom, 0.f, 0.f },{ 0.f, cameraZoom, 0.f },{ 0.f, 0.f, 1.f } };
-    mat3 newProjection = mul(mul(projection, T), S);
-    t.draw(newProjection);
+    mat3 newProjection = mul(mul(projection, S), T);
+    tilemap.draw(newProjection);
     for (auto o : gameObjects) {
         o->draw(newProjection);
     }
-
 }
 
 void World::moveCamera(vec2 dir, int zoom) {

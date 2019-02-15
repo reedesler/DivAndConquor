@@ -1,11 +1,20 @@
 #include "Sprite.hpp"
 
-bool Sprite::init(float width, float height)
+std::map<const char*, Texture*> Sprite::textures;
+
+bool Sprite::init(float width, float height, const char* textureName)
 {
+    auto t = textures.find(textureName);
+    if (textures.count(textureName) > 0) {
+        texture = textures.at(textureName);
+    } else {
+        texture = new Texture();
+        textures[textureName] = texture;
+    }
     // Load shared texture
-    if (!texture.is_valid())
+    if (!texture->is_valid())
     {
-        if (!texture.load_from_file(textures_path("turtle.png")))
+        if (!texture->load_from_file(textureName))
         {
             fprintf(stderr, "Failed to load texture!");
             return false;
@@ -89,7 +98,7 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
 
     // Enabling and binding texture to slot 0
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.id);
+    glBindTexture(GL_TEXTURE_2D, texture->id);
 
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);

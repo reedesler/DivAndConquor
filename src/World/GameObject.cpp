@@ -2,7 +2,7 @@
 
 GameObject::GameObject()
 {
-    if (!sprite.init(150, 100))
+    if (!sprite.init(150, 100, textures_path("turtle.png")))
     {
         printf("ERROR initializing sprite\n");
     }

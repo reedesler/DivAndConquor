@@ -15,11 +15,11 @@ public:
 
 private:
     std::vector<GameObject *> gameObjects;
-    Tilemap t;
     vec2 cameraPos;
     vec2 cameraVel;
     float cameraZoomVel;
     float cameraZoom;
+    Tilemap tilemap;
 };
 
 
