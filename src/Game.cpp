@@ -1,15 +1,15 @@
 #include "Game.hpp"
 
-void Game::init() {
-    world = new World();
+void Game::init(vec2 screen) {
+    world = new World({0, 200, (GLint) screen.x, (GLint) screen.y - 200});
 }
 
 void Game::update() {
     world->update();
 }
 
-void Game::draw(const mat3& projection) {
-    world->draw(projection);
+void Game::draw(const mat3& projection, int pixelScale) {
+    world->draw(projection, pixelScale);
 }
 
 void Game::onKey(int key, int scancode, int action) {

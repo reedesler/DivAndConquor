@@ -28,8 +28,6 @@ int main()
 
     auto lastUpdate = Clock::now();
 
-    game.init();
-
     while (!window.shouldClose())
     {
         glfwPollEvents();

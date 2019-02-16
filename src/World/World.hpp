@@ -8,9 +8,9 @@
 
 class World {
 public:
-    World();
+    World(rect viewPort);
     void update();
-    void draw(const mat3& projection);
+    void draw(const mat3& projection, int pixelScale);
     void moveCamera(vec2 dir, int i);
 
 private:
@@ -20,6 +20,7 @@ private:
     float cameraZoomVel;
     float cameraZoom;
     Tilemap tilemap;
+    rect viewPort;
 };
 
 

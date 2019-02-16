@@ -26,6 +26,7 @@
 struct vec2 { float x, y; };
 struct vec3 { float x, y, z; };
 struct mat3 { vec3 c0, c1, c2; };
+struct rect { GLint x, y, w, h; };
 
 // Utility functions
 float dot(vec2 l, vec2 r);

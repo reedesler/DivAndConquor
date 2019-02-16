@@ -8,9 +8,9 @@
 class Game
 {
   public:
-    void init();
+    void init(vec2 screen);
     void update();
-    void draw(const mat3 &projection);
+    void draw(const mat3 &projection, int pixelScale);
     void onKey(int key, int scancode, int action);
 
   private:

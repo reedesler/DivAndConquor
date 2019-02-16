@@ -56,6 +56,8 @@ bool GameWindow::init(vec2 screen, Game* game) {
     glGenFramebuffers(1, &frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
+    game->init(screen);
+
     return true;
 }
 
@@ -92,7 +94,7 @@ void GameWindow::draw() {
                        {0.f, sy,  0.f},
                        {tx,  ty,  1.f}};
 
-    game->draw(projection_2D);
+    game->draw(projection_2D, static_cast<int>(w / screen.x));
 
     // Presenting
     glfwSwapBuffers(window);
