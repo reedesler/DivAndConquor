@@ -1,0 +1,15 @@
+Team 11
+Grade: 75
+Creative:
++15 Camera control.
++15 Map generation using noise patterns.
+
+Issues:
+-5 The camera can show the blank region outside the map. It should be avoided by detecting the current visible range and resetting the camera if it is outside.
+-5 The enemy can move outside the map. All possible movements of both player and enemies should be restricted to the game map to avoid undefined behaviors.
+-15 No interaction (e.g. collision) between the game characters and the map. This is an essential part and can be the bottleneck for many latter parts.
+
+Feedback:
+The progress is slightly worrying. Try to implement the interaction between the characters and the map as soon as possible. Once that is implemented, you can start working on game logics, which can be heavy for this type of games.
+
+Apart from that, you may also consider the plan for the UI, events, and other game systems. I also recommends considering an alternative plan and thinking about the scope of the game.
