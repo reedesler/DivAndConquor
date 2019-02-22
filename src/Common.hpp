@@ -79,7 +79,7 @@ struct Mesh
 	GLuint vao;
 	GLuint vbo;
 	GLuint ibo;
-	GLuint vertCount;
+    GLsizei vertCount;
 };
 
 // Container for Vertex and Fragment shader, which are then put(linked) together in a

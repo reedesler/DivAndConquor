@@ -47,12 +47,6 @@ Tilemap Tilemap::LoadFromFile(std::string filepath) {
 }
 
 void Tilemap::draw(const mat3 &projection) {
-
-    // uncomment to enable wireframe debug mode:
-    // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-    // so it's getting drawn... but it's invisible in normal mode.
-    // must be some texture heckery
     transform_begin();
     transform_end();
     
@@ -93,7 +87,7 @@ void Tilemap::draw(const mat3 &projection) {
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *) &projection);
 
     // Drawing!
-    glDrawElements(GL_TRIANGLES, mesh.vertCount, GL_UNSIGNED_SHORT, nullptr);
+    glDrawElements(GL_TRIANGLES, mesh.vertCount, GL_UNSIGNED_INT, nullptr);
 }
 
 Tilemap::~Tilemap() {
@@ -122,9 +116,9 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
     // The position corresponds to the center of the texture
 
     std::vector<TexturedVertex> vertices;
-    std::vector<uint16_t> indices;
+    std::vector<GLuint> indices;
 
-    uint16_t idx = 0;
+    GLuint idx = 0;
 
     for (int x = 0; x < width; ++x)
         for (int y = 0; y < height; ++y) {
@@ -135,52 +129,34 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
             float wr = TILE_SIZE * 0.5f;
             float hr = TILE_SIZE * 0.5f;
 
+            float textureLeft = 0;
+            float textureRight = 1;
+
             //grass added
             if (tilemap_n == 2) {
-
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
-                                                     {0.001f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
-                                                     {0.249f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
-                                                     {0.249f,     0.f}});
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
-                                                     {0.001f,     0.f}});
-                indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
-                                               (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
-                idx += 4;
+                textureLeft = 0.001f;
+                textureRight = 0.249f;
             }
             //sand added
             if (tilemap_n == 1) {
-
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
-                                                     {0.251f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
-                                                     {0.499f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
-                                                     {0.499f,     0.f}});
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
-                                                     {0.251f,     0.f}});
-                indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
-                                               (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
-                idx += 4;
+                textureLeft = 0.251f;
+                textureRight = 0.499f;
             }
-            //water added
-            /*
             if (tilemap_n == 0) {
+                textureLeft = 0.501f;
+                textureRight = 0.749f;
+            }
 
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
-                                                     {0.501f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
-                                                     {0.749f,     1.f}});
-                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
-                                                     {0.749f,     0.f}});
-                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
-                                                     {0.501f,     0.f}});
-                indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
-                                               (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
-                idx += 4;
-            }*/
+            vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
+                                                 {textureLeft,     1.f}});
+            vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
+                                                 {textureRight,     1.f}});
+            vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
+                                                 {textureRight,     0.f}});
+            vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
+                                                 {textureLeft,     0.f}});
+            indices.insert(indices.end(), {idx, 3 + idx, 1 + idx, 1 + idx, 3 + idx, 2 + idx});
+            idx += 4;
 
         }
     // Clearing errors
@@ -188,7 +164,7 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
 
     // multiplied by two to get the entire map rendered
     // does not help if water added.
-    mesh.vertCount = vertices.size() * 2;
+    mesh.vertCount = idx;
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
@@ -197,8 +173,11 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
     // Index Buffer creation
     glGenBuffers(1, &mesh.ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * indices.size(), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
     // Vertex Array (Container for Vertex + Index buffer)
     glGenVertexArrays(1, &mesh.vao);
+    if (gl_has_errors()) {
+        printf("ERROR initializing tilemap mesh\n");
+    }
 }
