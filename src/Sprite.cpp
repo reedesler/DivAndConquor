@@ -1,13 +1,19 @@
 #include "Sprite.hpp"
 
-std::map<const char*, Texture*> Sprite::textures;
+std::map<const char *, Texture *> Sprite::textures;
 
-bool Sprite::init(float width, float height, const char* textureName)
+bool Sprite::init(float width, float height, const char *textureName)
 {
+    this->height = height;
+    this->width = width;
+
     auto t = textures.find(textureName);
-    if (textures.count(textureName) > 0) {
+    if (textures.count(textureName) > 0)
+    {
         texture = textures.at(textureName);
-    } else {
+    }
+    else
+    {
         texture = new Texture();
         textures[textureName] = texture;
     }
