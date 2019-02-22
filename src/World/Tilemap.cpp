@@ -10,7 +10,7 @@
 #include <fstream>
 
 
-#define TILE_SIZE 150
+#define TILE_SIZE 100
 #define TILE_SRC_SIZE 32
 
 
@@ -107,7 +107,7 @@ Tilemap::~Tilemap() {
 Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map), width(w), height(h) {
     // Load shared texture
     if (!texture.is_valid()) {
-        if (!texture.load_from_file(textures_path("grass.bmp"))) {
+        if (!texture.load_from_file(textures_path("tilemap1.png"))) {
             fprintf(stderr, "Failed to load map texture!");
             exit(1);
         }
@@ -129,30 +129,66 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
     for (int x = 0; x < width; ++x)
         for (int y = 0; y < height; ++y) {
             unsigned int tilemap_n = map[x][y];
+
+            float x0 = x * TILE_SIZE;
+            float y0 = y * TILE_SIZE;
+            float wr = TILE_SIZE * 0.5f;
+            float hr = TILE_SIZE * 0.5f;
+
+            //grass added
             if (tilemap_n == 2) {
-                float x0 = x * TILE_SIZE;
-                float y0 = y * TILE_SIZE;
-                float wr = TILE_SIZE * 0.5f;
-                float hr = TILE_SIZE * 0.5f;
 
                 vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
-                                                     {0.f,     1.f}});
+                                                     {0.001f,     1.f}});
                 vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
-                                                     {1.f,     1.f}});
+                                                     {0.249f,     1.f}});
                 vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
-                                                     {1.f,     0.f}});
+                                                     {0.249f,     0.f}});
                 vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
-                                                     {0.f,     0.f}});
+                                                     {0.001f,     0.f}});
                 indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
                                                (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
                 idx += 4;
             }
+            //sand added
+            if (tilemap_n == 1) {
+
+                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
+                                                     {0.251f,     1.f}});
+                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
+                                                     {0.499f,     1.f}});
+                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
+                                                     {0.499f,     0.f}});
+                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
+                                                     {0.251f,     0.f}});
+                indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
+                                               (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
+                idx += 4;
+            }
+            //water added
+            /*
+            if (tilemap_n == 0) {
+
+                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
+                                                     {0.501f,     1.f}});
+                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
+                                                     {0.749f,     1.f}});
+                vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
+                                                     {0.749f,     0.f}});
+                vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
+                                                     {0.501f,     0.f}});
+                indices.insert(indices.end(), {idx, (uint16_t) (3 + idx), (uint16_t) (1 + idx), (uint16_t) (1 + idx),
+                                               (uint16_t) (3 + idx), (uint16_t) (2 + idx)});
+                idx += 4;
+            }*/
 
         }
     // Clearing errors
     gl_flush_errors();
 
-    mesh.vertCount = vertices.size();
+    // multiplied by two to get the entire map rendered
+    // does not help if water added.
+    mesh.vertCount = vertices.size() * 2;
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
