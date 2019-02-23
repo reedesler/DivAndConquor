@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map1test.txt"))), camera(Camera(viewPort)) {
+World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))), camera(Camera(viewPort)) {
     gameObjects.push_back(new GameObject());
 }
 
