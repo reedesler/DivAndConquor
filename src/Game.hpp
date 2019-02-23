@@ -7,6 +7,7 @@
 #include "Common.hpp"
 #include "World/World.hpp"
 
+// ButtonOnClickFunc has a parameter list of {int button, int action, double xpos, double ypos}
 typedef void (*ButtonOnClickFunc)(int, int, double, double);
 
 class Game
@@ -16,8 +17,8 @@ public:
   void update();
   void draw(const mat3 &projection, int pixelScale);
   void onKey(int key, int scancode, int action);
-  bool registerButton(Sprite btn, vec2 location, ButtonOnClickFunc callback);
-  bool removeButton(Sprite btn);
+  bool registerButton(Sprite *btn, vec2 location, ButtonOnClickFunc callback);
+  bool removeButton(Sprite *btn);
   void onClick(int button, int action, double xpos, double ypos);
 
 private:

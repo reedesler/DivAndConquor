@@ -54,8 +54,12 @@ bool GameWindow::init(vec2 screen, Game *game)
     auto cursor_pos_redirect = [](GLFWwindow *wnd, double _0, double _1) {
         ((GameWindow *)glfwGetWindowUserPointer(wnd))->onMouseMove(wnd, _0, _1);
     };
+    auto mouse_click_redirect = [](GLFWwindow *wnd, int _0, int _1, int _2) {
+        ((GameWindow *)glfwGetWindowUserPointer(wnd))->onMouseClick(wnd, _0, _1, _2);
+    };
     glfwSetKeyCallback(window, key_redirect);
     glfwSetCursorPosCallback(window, cursor_pos_redirect);
+    glfwSetMouseButtonCallback(window, mouse_click_redirect);
 
     // Create a frame buffer
     frameBuffer = 0;

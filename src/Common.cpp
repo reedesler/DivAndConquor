@@ -62,9 +62,9 @@ float dot(vec3 l, vec3 r)
 
 mat3 mul(const mat3 &l, const mat3 &r)
 {
-	mat3 l_t = {{l.c0.x, l.c1.x, l.c2.x},
-				{l.c0.y, l.c1.y, l.c2.y},
-				{l.c0.z, l.c1.z, l.c2.z}};
+	mat3 l_t = {vec3{l.c0.x, l.c1.x, l.c2.x},
+				vec3{l.c0.y, l.c1.y, l.c2.y},
+				vec3{l.c0.z, l.c1.z, l.c2.z}};
 
 	mat3 ret;
 	ret.c0.x = dot(l_t.c0, r.c0);
