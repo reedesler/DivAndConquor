@@ -5,22 +5,18 @@
 #include <vector>
 #include "GameObject.hpp"
 #include "Tilemap.h"
+#include "Camera.hpp"
 
 class World {
 public:
-    World(rect viewPort);
+    explicit World(rect viewPort);
     void update();
-    void draw(const mat3& projection, int pixelScale);
-    void moveCamera(vec2 dir, int i);
+    void draw(int pixelScale);
+    Camera camera;
 
 private:
     std::vector<GameObject *> gameObjects;
-    vec2 cameraPos;
-    vec2 cameraVel;
-    float cameraZoomVel;
-    float cameraZoom;
     Tilemap tilemap;
-    rect viewPort;
 };
 
 

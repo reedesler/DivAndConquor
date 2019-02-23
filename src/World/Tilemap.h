@@ -9,6 +9,8 @@
 #include <vector>
 #include <Common.hpp>
 
+#define TILE_SIZE 100
+
 class Chunk {
     unsigned int** map;
     unsigned int width;

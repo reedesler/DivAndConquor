@@ -5,12 +5,9 @@
 //
 
 #include "Tilemap.h"
-#include <string>
 #include <iostream>
-#include <fstream>
 
 
-#define TILE_SIZE 100
 #define TILE_SRC_SIZE 32
 
 
@@ -33,7 +30,7 @@ Tilemap Tilemap::LoadFromFile(std::string filepath) {
     }
     unsigned int w = temp[0].size();
     unsigned int h = temp.size();
-    auto map = new unsigned int *[w];
+    auto map = new unsigned int* [w];
     for (unsigned int x = 0; x < w; ++x) {
         map[x] = new unsigned int[h];
         for (unsigned int y = 0; y < h; ++y) {
@@ -49,7 +46,7 @@ Tilemap Tilemap::LoadFromFile(std::string filepath) {
 void Tilemap::draw(const mat3 &projection) {
     transform_begin();
     transform_end();
-    
+
     // Setting shaders
     glUseProgram(effect.program);
 
@@ -73,18 +70,18 @@ void Tilemap::draw(const mat3 &projection) {
     GLint in_texcoord_loc = glGetAttribLocation(effect.program, "in_texcoord");
     glEnableVertexAttribArray(in_position_loc);
     glEnableVertexAttribArray(in_texcoord_loc);
-    glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void *) 0);
-    glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void *) sizeof(vec3));
+    glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void*) 0);
+    glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void*) sizeof(vec3));
 
     // Enabling and binding texture to slot 0
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture.id);
 
     // Setting uniform values to the currently bound program
-    glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *) &transform);
+    glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float*) &transform);
     float color[] = {1.f, 1.f, 1.f};
     glUniform3fv(color_uloc, 1, color);
-    glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *) &projection);
+    glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float*) &projection);
 
     // Drawing!
     glDrawElements(GL_TRIANGLES, mesh.vertCount, GL_UNSIGNED_INT, nullptr);
@@ -98,7 +95,7 @@ Tilemap::~Tilemap() {
 }
 
 
-Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map), width(w), height(h) {
+Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : map(map), width(w), height(h) {
     // Load shared texture
     if (!texture.is_valid()) {
         if (!texture.load_from_file(textures_path("tilemap1.png"))) {
@@ -147,14 +144,14 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
                 textureRight = 0.749f;
             }
 
-            vertices.emplace_back(TexturedVertex{{x0 - wr, y0 + hr, -0.02f},
-                                                 {textureLeft,     1.f}});
-            vertices.emplace_back(TexturedVertex{{x0 + wr, y0 + hr, -0.02f},
-                                                 {textureRight,     1.f}});
-            vertices.emplace_back(TexturedVertex{{x0 + wr, y0 - hr, -0.02f},
-                                                 {textureRight,     0.f}});
-            vertices.emplace_back(TexturedVertex{{x0 - wr, y0 - hr, -0.02f},
-                                                 {textureLeft,     0.f}});
+            vertices.emplace_back(TexturedVertex{{x0 - wr,      y0 + hr, -0.02f},
+                                                 {textureLeft,  1.f}});
+            vertices.emplace_back(TexturedVertex{{x0 + wr,      y0 + hr, -0.02f},
+                                                 {textureRight, 1.f}});
+            vertices.emplace_back(TexturedVertex{{x0 + wr,      y0 - hr, -0.02f},
+                                                 {textureRight, 0.f}});
+            vertices.emplace_back(TexturedVertex{{x0 - wr,      y0 - hr, -0.02f},
+                                                 {textureLeft,  0.f}});
             indices.insert(indices.end(), {idx, 3 + idx, 1 + idx, 1 + idx, 3 + idx, 2 + idx});
             idx += 4;
 
@@ -164,7 +161,7 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
 
     // multiplied by two to get the entire map rendered
     // does not help if water added.
-    mesh.vertCount = indices.size();
+    mesh.vertCount = static_cast<GLsizei>(indices.size());
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
