@@ -10,6 +10,8 @@ void Game::init(vec2 screen)
         printf("ERROR initializing sprite\n");
     }
 
+    balance = 5000;
+
     registerButton(button, {20.f, 30.f}, nullptr);
 }
 
@@ -53,6 +55,14 @@ void Game::onClick(int button, int action, double xpos, double ypos)
                 ypos > buttonPositions[it.first].y &&
                 ypos < buttonPositions[it.first].y + it.first->height)
             {
+                if (selectedSprites.find(it.first) == selectedSprites.end())
+                {
+                    selectedSprites.insert(it.first);
+                }
+                else
+                {
+                    selectedSprites.erase(it.first);
+                }
                 (it.second)(button, action, xpos, ypos);
             }
         }

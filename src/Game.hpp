@@ -1,7 +1,7 @@
 #ifndef DIVCONQ_GAME_H
 #define DIVCONQ_GAME_H
 
-#include <vector>
+#include <unordered_set>
 #include <unordered_map>
 
 #include "Common.hpp"
@@ -24,7 +24,9 @@ private:
   World *world;
   std::unordered_map<Sprite *, vec2> buttonPositions;
   std::unordered_map<Sprite *, ButtonOnClickFunc> buttonCallbacks;
-  std::vector<Sprite *> selectedSprites;
+  std::unordered_set<Sprite *> selectedSprites;
+
+  int64_t balance;
 };
 
 #endif //DIVCONQ_GAME_H
