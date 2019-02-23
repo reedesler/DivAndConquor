@@ -130,7 +130,7 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : map(map),
             float textureRight = 1;
 
             //grass added
-            if (tilemap_n >= 2) {
+            if (tilemap_n == 2) {
                 textureLeft = 0.001f;
                 textureRight = 0.249f;
             }
