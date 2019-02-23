@@ -164,7 +164,7 @@ Tilemap::Tilemap(unsigned int **map, unsigned int w, unsigned int h) : map(map),
 
     // multiplied by two to get the entire map rendered
     // does not help if water added.
-    mesh.vertCount = idx;
+    mesh.vertCount = indices.size();
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);

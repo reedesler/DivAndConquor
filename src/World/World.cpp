@@ -1,7 +1,7 @@
 #include "World.hpp"
 #include "Tilemap.h"
 
-World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map1.txt"))), viewPort(viewPort) {
+World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map1test.txt"))), viewPort(viewPort) {
     gameObjects.push_back(new GameObject());
     cameraPos = {0, 0};
     cameraVel = {0, 0};
