@@ -1,6 +1,7 @@
 #include "World.hpp"
 
-World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))), camera(Camera(viewPort)) {
+World::World(rect viewPort) : camera(Camera(viewPort)),
+                              tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))) {
     gameObjects.push_back(new GameObject());
 }
 
@@ -14,4 +15,9 @@ void World::draw(int pixelScale) {
     for (auto o : gameObjects) {
         o->draw(projection);
     }
+}
+
+void World::onClick(int button, int action, float xpos, float ypos) {
+    vec2 worldCoords = camera.viewToWorld({xpos, ypos});
+    printf("WORLD  %f   %f\n", worldCoords.x, worldCoords.y);
 }

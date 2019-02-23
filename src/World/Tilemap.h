@@ -11,12 +11,6 @@
 
 #define TILE_SIZE 100
 
-class Chunk {
-    unsigned int** map;
-    unsigned int width;
-    unsigned int height;
-};
-
 class Tilemap: public Renderable {
 public:
     Tilemap(unsigned int **map, unsigned int w, unsigned int h);

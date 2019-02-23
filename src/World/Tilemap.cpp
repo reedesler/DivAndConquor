@@ -95,7 +95,7 @@ Tilemap::~Tilemap() {
 }
 
 
-Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : map(map), width(w), height(h) {
+Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w), height(h), map(map) {
     // Load shared texture
     if (!texture.is_valid()) {
         if (!texture.load_from_file(textures_path("tilemap1.png"))) {

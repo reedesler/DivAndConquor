@@ -28,6 +28,8 @@ private:
   std::unordered_set<Sprite *> selectedSprites;
 
   int64_t balance;
+
+  vec2 screen;
 };
 
 #endif //DIVCONQ_GAME_H

@@ -11,12 +11,13 @@ public:
     void move(vec2 dir, int zoom);
     mat3 getProjection(int pixelScale);
     bounds getCameraBounds();
+    vec2 viewToWorld(vec2 pos);
+    rect viewPort;
 private:
     vec2 pos;
     vec2 vel;
     float zoomVel;
     float zoom;
-    rect viewPort;
 };
 
 
