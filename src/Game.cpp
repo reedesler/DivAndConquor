@@ -26,7 +26,7 @@ void Game::init(vec2 screen) {
     balance = 5000;
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
-    registerButton(hire_sailors_button, {80.f, 200.f}, invokeHireSailors);
+    registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
 }
 
 void Game::update() {
@@ -34,8 +34,10 @@ void Game::update() {
 }
 
 void Game::draw(const mat3 &projection, int pixelScale) {
-
     world->draw(pixelScale);
+    glViewport(0,0,screen.x, screen.y); // reset viewport
+    // buttons probably shouldnt have their own viewport
+    // after all, what if we want alert boxes or some menu that involves buttons over the world
     for (auto &it : buttons) {
         it.Draw(projection);
     }
