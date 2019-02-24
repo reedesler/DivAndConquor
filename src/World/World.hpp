@@ -18,6 +18,8 @@ public:
 private:
     std::vector<GameObject *> gameObjects;
     Tilemap tilemap;
+
+    GameObject* selectedObject = nullptr;
 };
 
 

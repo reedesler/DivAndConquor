@@ -290,3 +290,7 @@ void Renderable::transform_end()
 {
 	//
 }
+
+bool inBounds(bounds b, vec2 pos) {
+	return pos.x >= b.left && pos.x <= b.right && pos.y >= b.top && pos.y <= b.bottom;
+}

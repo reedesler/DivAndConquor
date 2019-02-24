@@ -18,6 +18,18 @@ void World::draw(int pixelScale) {
 }
 
 void World::onClick(int button, int action, float xpos, float ypos) {
-    vec2 worldCoords = camera.viewToWorld({xpos, ypos});
-    printf("WORLD  %f   %f\n", worldCoords.x, worldCoords.y);
+    if (action == GLFW_PRESS) {
+        vec2 worldCoords = camera.viewToWorld({xpos, ypos});
+        for (auto o : gameObjects) {
+            bounds b = o->getBounds();
+            if (inBounds(b, worldCoords)) {
+                selectedObject = o;
+                return;
+            }
+        }
+
+        if (selectedObject != nullptr) {
+            selectedObject->move(worldCoords);
+        }
+    }
 }
