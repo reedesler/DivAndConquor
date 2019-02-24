@@ -52,6 +52,7 @@ float dot(vec2 l, vec2 r);
 float dot(vec3 l, vec3 r);
 mat3 mul(const mat3 &l, const mat3 &r);
 vec2 normalize(vec2 v);
+long currentTimeMs();
 
 // OpenGL utilities
 // cleans error buffer
