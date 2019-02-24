@@ -28,6 +28,8 @@ private:
   std::unordered_set<Sprite *> selectedSprites;
 
   int64_t balance;
+  uint64_t sailors;
+  std::unordered_set<int> sailingShips;
 };
 
 #endif //DIVCONQ_GAME_H
