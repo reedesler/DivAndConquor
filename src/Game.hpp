@@ -9,7 +9,6 @@
 #include <cassert>
 #include "Button.hpp"
 
-
 class Game
 {
 public:
@@ -23,11 +22,12 @@ public:
 
 private:
   World *world;
-  std::vector<Button> buttons; //TODO: generalize this to UI elements?
+  std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
   std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
 
   int64_t balance;
-
+  uint64_t sailors;
+  std::unordered_set<int> sailingShips;
   vec2 screen;
 };
 
