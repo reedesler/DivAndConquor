@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <chrono>
 
 void gl_flush_errors()
 {
@@ -289,4 +290,15 @@ void Renderable::transform_translate(vec2 offset)
 void Renderable::transform_end()
 {
 	//
+}
+
+bool inBounds(bounds b, vec2 pos) {
+	return pos.x >= b.left && pos.x <= b.right && pos.y >= b.top && pos.y <= b.bottom;
+}
+
+// https://stackoverflow.com/a/19555298
+long currentTimeMs(){
+	return std::chrono::duration_cast< std::chrono::milliseconds >(
+    	std::chrono::system_clock::now().time_since_epoch()
+	).count();
 }
