@@ -1,11 +1,12 @@
 #include "Game.hpp"
 
-void invokeBuildShip(int button, int action, double xpos, double ypos)
+void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
-    printf("invokeBuildShip!\n");
+    printf("invokeBuildShip! \n");
+    game->buildShip();
 }
 
-void invokeHireSailors(int button, int action, double xpos, double ypos)
+void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("hireSailors!\n");
 }
@@ -14,6 +15,13 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
 {
     printf("Starting a journey from a to b!\n");
     // find the two selected settlements that represent the src and dst
+}
+
+void Game::buildShip()
+{
+    this->balance -= 500;
+    printf("balance %d\n", balance);
+    this->fleet.insert(new Ship(proa));
 }
 
 void Game::init(vec2 screen)
@@ -37,7 +45,7 @@ void Game::init(vec2 screen)
     balance = 5000;
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
-    registerButton(hire_sailors_button, {80.f, 200.f}, invokeHireSailors);
+    registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
 }
 
 void Game::update()
@@ -47,8 +55,10 @@ void Game::update()
 
 void Game::draw(const mat3 &projection, int pixelScale)
 {
-
     world->draw(pixelScale);
+    glViewport(0, 0, screen.x, screen.y); // reset viewport
+    // buttons probably shouldnt have their own viewport
+    // after all, what if we want alert boxes or some menu that involves buttons over the world
     for (auto &it : buttons)
     {
         it.Draw(projection);
@@ -78,7 +88,7 @@ void Game::onClick(int button, int action, double xpos, double ypos)
 
             if (it.InBounds({(float)xpos, (float)ypos}))
             {
-                it.OnClick(0, xpos, ypos);
+                it.OnClick(this, 0, xpos, ypos);
                 if (selectedSprites.find(&it.sprite) == selectedSprites.end())
                 {
                     selectedSprites.insert(&it.sprite);
