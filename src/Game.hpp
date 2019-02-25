@@ -9,6 +9,33 @@
 #include <cassert>
 #include "Button.hpp"
 
+struct Settlement
+{
+  uint16_t gold;
+  uint16_t timber;
+  uint16_t iron;
+  vec2 location;
+  uint16_t influence;
+};
+
+struct Ship
+{
+  uint16_t capacity, maxWeight;
+  uint16_t sailors;
+  uint16_t maxSpeed;
+  uint16_t firearm;
+};
+
+struct Journey
+{
+  Settlement src, dst;
+  Ship vessel;
+  uint16_t gold;
+  uint16_t timber;
+  uint16_t iron;
+  float progress; // from 0.f to 100.f, we should be able to determine the location of the ship based on this
+};
+
 class Game
 {
 public:
@@ -27,7 +54,7 @@ private:
 
   int64_t balance;
   uint64_t sailors;
-  std::unordered_set<int> sailingShips;
+  std::unordered_set<Journey> sailingShips;
   vec2 screen;
 };
 
