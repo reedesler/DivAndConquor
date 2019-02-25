@@ -296,6 +296,11 @@ bool inBounds(bounds b, vec2 pos) {
 	return pos.x >= b.left && pos.x <= b.right && pos.y >= b.top && pos.y <= b.bottom;
 }
 
+bool inRadius(vec2 pos, float radius, vec2 target) {
+	vec2 dif = {pos.x - target.x, pos.y - target.y};
+	return dif.x * dif.x + dif.y * dif.y <= radius * radius;
+}
+
 // https://stackoverflow.com/a/19555298
 long currentTimeMs(){
 	return std::chrono::duration_cast< std::chrono::milliseconds >(

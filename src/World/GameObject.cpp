@@ -1,7 +1,6 @@
 #include "GameObject.hpp"
 
-GameObject::GameObject()
-{
+GameObject::GameObject(World* world) : world(world) {
     w = 75;
     h = 50;
     if (!sprite.init(w, h, textures_path("turtle.png")))
@@ -24,4 +23,8 @@ bounds GameObject::getBounds() {
 
 void GameObject::move(vec2 pos) {
     position = pos;
+}
+
+void GameObject::update() {
+    world->setExplored(position, 7 * TILE_SIZE);
 }

@@ -2,11 +2,14 @@
 
 World::World(rect viewPort) : camera(Camera(viewPort)),
                               tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))) {
-    gameObjects.push_back(new GameObject());
+    gameObjects.push_back(new GameObject(this));
 }
 
 void World::update() {
     camera.update(tilemap.width, tilemap.height, TILE_SIZE);
+    for (auto o : gameObjects) {
+        o->update();
+    }
 }
 
 void World::draw(int pixelScale) {
@@ -32,4 +35,8 @@ void World::onClick(int button, int action, float xpos, float ypos) {
             selectedObject->move(worldCoords);
         }
     }
+}
+
+void World::setExplored(vec2 pos, float radius) {
+    tilemap.setExplored(pos, radius);
 }

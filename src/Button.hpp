@@ -3,7 +3,6 @@
 
 #include "Sprite.hpp"
 #include "Common.hpp"
-#include "World/GameObject.hpp"
 #include <chrono>
 
 class Game;
