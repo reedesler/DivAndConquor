@@ -9,6 +9,7 @@
 
 #include <vector>
 #include "Tilemap.h"
+#include "Ship.hpp"
 #include "Camera.hpp"
 
 class World {
@@ -21,6 +22,7 @@ public:
     void setExplored(vec2 pos, float radius);
 private:
     std::vector<GameObject *> gameObjects;
+    std::vector<Ship *> ships;
     Tilemap tilemap;
 
     GameObject* selectedObject = nullptr;
