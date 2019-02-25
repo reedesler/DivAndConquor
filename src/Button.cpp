@@ -1,46 +1,43 @@
-//
-// Created by David Ma on 2019-01-30.
-//
+#include "Button.hpp"
 
-#include "Button.h"
+#define BUTTON_FLASH_MS 200
 
-Button::Button(int x, int y, int w, int h, std::string text)
+Button::Button(Sprite &btn, vec2 location, Button::OnClickFunc callback) : callback(callback), lastPressMs(0), pos(location), sprite(std::move(btn))
 {
-    //Set the button's attributes
-    box.x = x;
-    box.y = y;
-    box.w = w;
-    box.h = h;
-
-    displayText = text;
-
-    // Set the default sprite
-    // clip = &clips[CLIP_MOUSEOUT];
 }
 
-void Button::handle_events(SDL_Event event)
+void Button::OnClick(Game *game, int action, double xpos, double ypos)
 {
-    //The mouse offsets
-    int x = 0, y = 0;
+    callback(game, -1, action, xpos, ypos);
+    this->lastPressMs = currentTimeMs();
+}
 
-    //If the mouse moved
-    if (event.type == SDL_MOUSEMOTION)
+void Button::Draw(const mat3 &projection)
+{
+    float flash = 0.8f;
+    if (lastPressMs > 0)
     {
-        //Get the mouse offsets
-        x = event.motion.x;
-        y = event.motion.y;
-
-        //If the mouse is over the button
-        if ((x > box.x) && (x < box.x + box.w) && (y > box.y) && (y < box.y + box.h))
-        {
-            //Set the button sprite
-            // clip = &clips[CLIP_MOUSEOVER];
-        }
-        //If not
-        else
-        {
-            //Set the button sprite
-            // clip = &clips[CLIP_MOUSEOUT];
-        }
+        auto now = currentTimeMs();
+        auto delta = BUTTON_FLASH_MS - (now - lastPressMs);
+        auto clamped = delta > 0 ? delta : 0;
+        flash += 0.4f * (clamped / (float)BUTTON_FLASH_MS);
     }
+    sprite.tint = {flash, flash, flash};
+    sprite.draw(projection, pos);
+}
+bool Button::InBounds(vec2 point)
+{
+    float x0 = pos.x - sprite.width / 2.f;
+    float x1 = pos.x + sprite.width / 2.f;
+    float y0 = pos.y - sprite.height / 2.f;
+    float y1 = pos.y + sprite.height / 2.f;
+    bool hit = (point.x > x0 &&
+                point.x < x1 &&
+                point.y > y0 &&
+                point.y < y1);
+    return hit;
+}
+
+Button::~Button()
+{
 }

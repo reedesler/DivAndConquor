@@ -1,14 +1,17 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.1)
 project(DivConq)
 
-set(CMAKE_CXX_STANDARD 17)
-set(SDL2_PATH ${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl)
-set(SDL2_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl/include/SDL/)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/build)
-
+# Set c++11
+# https://stackoverflow.com/questions/10851247/how-to-activate-c-11-in-cmake
+if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)
+endif ()
+set (CMAKE_CXX_STANDARD 11)
 
 # nice hierarchichal structure in MSVC
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 
 #Find OS
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -20,27 +23,61 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 else()
     message(FATAL_ERROR "OS ${CMAKE_SYSTEM_NAME} was not recognized")
 endif()
-#target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 
-#Boost set up
-#uncomment if in need
-#find_package(Boost 1.68.0)
-#if (Boost_FOUND)
-#    include_directories(${Boost_INCLUDE_DIRS})
-#endif()
+# Create executable target
 
-#find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-include_directories("/usr/local/Cellar/boost/1.68.0_1/include")
+# Generate the shader folder location to the header
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
-add_executable(${PROJECT_NAME}  src/main.cpp src/game.cpp src/game.h src/world.cpp src/world.h src/draw_context.cpp src/draw_context.h src/drawable.h src/Camera.cpp src/Camera.h src/GameObject.cpp src/GameObject.h src/Unit.cpp src/Unit.h src/Boat.cpp src/Boat.h src/PirateBoat.cpp src/PirateBoat.h src/Pirate.cpp src/Pirate.h src/GameArchive.cpp src/GameArchive.h src/PlayerBoat.cpp src/PlayerBoat.h src/Tile.cpp src/Tile.h)
+# You can switch to use the file GLOB for simplicity but at your own risk
+# file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
+set(SOURCE_FILES
+        src/Main.cpp
+        src/Common.cpp
+        src/GameWindow.cpp
+        src/Game.cpp
+        src/Button.cpp
+        src/Sprite.cpp
+        src/World/GameObject.cpp
+        src/World/World.cpp
+        src/World/Tilemap.cpp
+        src/World/Camera.cpp
+
+        src/ProjectPath.hpp
+        src/Common.hpp
+        src/GameWindow.hpp
+        src/Game.hpp
+        src/Button.hpp
+        src/Sprite.hpp
+        src/World/GameObject.hpp
+        src/World/World.hpp
+        src/World/Tilemap.h
+        src/World/Camera.hpp)
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+target_include_directories(${PROJECT_NAME} PUBLIC src/)
+
 # Added this so policy CMP0065 doesn't scream
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 
 # External header-only libraries in the ext/
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
+
+# so policy CMP0072 doesn't scream either
+set(OpenGL_GL_PREFERENCE GLVND)
+# Find OpenGL
+find_package(OpenGL REQUIRED)
+
+if (OPENGL_FOUND)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
+endif()
+
+# glfw, sdl could be precompiled (on windows) or installed by a package manager (on OSX and Linux)
+
 if (IS_OS_LINUX OR IS_OS_MAC)
     # Try to find packages rather than to use the precompiled ones
     # Since we're on OSX or Linux, we can just use pkgconfig.
