@@ -16,24 +16,43 @@
 #define shader_path(name) PROJECT_SOURCE_DIR "./shaders/" name
 
 #define data_path PROJECT_SOURCE_DIR "./data"
-#define textures_path(name)  data_path "/textures/" name
-#define maps_path(name)  data_path "/maps/" name
-#define audio_path(name) data_path  "/audio/" name
-#define mesh_path(name) data_path  "/meshes/" name
+#define textures_path(name) data_path "/textures/" name
+#define buttons_path(name) data_path "/buttons/" name
+#define maps_path(name) data_path "/maps/" name
+#define audio_path(name) data_path "/audio/" name
+#define mesh_path(name) data_path "/meshes/" name
 
 // Not much math is needed and there are already way too many libraries linked (:
 // If you want to do some overloads..
-struct vec2 { float x, y; };
-struct vec3 { float x, y, z; };
-struct mat3 { vec3 c0, c1, c2; };
-struct rect { GLint x, y, w, h; };
-struct bounds { float left, right, top, bottom; };
+struct vec2
+{
+	float x, y;
+};
+struct vec3
+{
+	float x, y, z;
+};
+struct mat3
+{
+	vec3 c0, c1, c2;
+};
+struct rect
+{
+	GLint x, y, w, h;
+};
+struct bounds
+{
+	float left, right, top, bottom;
+};
+
+bool inBounds(bounds b, vec2 pos);
 
 // Utility functions
 float dot(vec2 l, vec2 r);
 float dot(vec3 l, vec3 r);
-mat3  mul(const mat3& l, const mat3& r);
-vec2  normalize(vec2 v);
+mat3 mul(const mat3 &l, const mat3 &r);
+vec2 normalize(vec2 v);
+long currentTimeMs();
 
 // OpenGL utilities
 // cleans error buffer
@@ -64,30 +83,30 @@ struct Texture
 	GLuint depth_render_buffer_id;
 	int width;
 	int height;
-	
+
 	// Loads texture from file specified by path
-	bool load_from_file(const char* path);
+	bool load_from_file(const char *path);
 	// Screen texture
-	bool create_from_screen(GLFWwindow const * const window);
-	bool is_valid()const; // True if texture is valid
+	bool create_from_screen(GLFWwindow const *const window);
+	bool is_valid() const; // True if texture is valid
 };
 
 // A Mesh is a collection of a VertexBuffer and an IndexBuffer. A VAO
-// represents a Vertex Array Object and is the container for 1 or more Vertex Buffers and 
+// represents a Vertex Array Object and is the container for 1 or more Vertex Buffers and
 // an Index Buffer
 struct Mesh
 {
 	GLuint vao;
 	GLuint vbo;
 	GLuint ibo;
-    GLsizei vertCount;
+	GLsizei vertCount;
 };
 
 // Container for Vertex and Fragment shader, which are then put(linked) together in a
 // single program that is then bound to the pipeline.
 struct Effect
 {
-	bool load_from_file(const char* vs_path, const char* fs_path);
+	bool load_from_file(const char *vs_path, const char *fs_path);
 	void release();
 
 	GLuint vertex;

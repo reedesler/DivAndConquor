@@ -11,6 +11,8 @@ set (CMAKE_CXX_STANDARD 11)
 # nice hierarchichal structure in MSVC
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+
 #Find OS
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(IS_OS_MAC 1)
@@ -34,6 +36,7 @@ set(SOURCE_FILES
         src/Common.cpp
         src/GameWindow.cpp
         src/Game.cpp
+        src/Button.cpp
         src/Sprite.cpp
         src/World/GameObject.cpp
         src/World/World.cpp
@@ -44,6 +47,7 @@ set(SOURCE_FILES
         src/Common.hpp
         src/GameWindow.hpp
         src/Game.hpp
+        src/Button.hpp
         src/Sprite.hpp
         src/World/GameObject.hpp
         src/World/World.hpp
@@ -62,6 +66,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
 
+# so policy CMP0072 doesn't scream either
+set(OpenGL_GL_PREFERENCE GLVND)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 

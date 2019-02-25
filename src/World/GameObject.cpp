@@ -2,11 +2,12 @@
 
 GameObject::GameObject()
 {
-    if (!sprite.init(150, 100, textures_path("turtle.png")))
+    w = 75;
+    h = 50;
+    if (!sprite.init(w, h, textures_path("turtle.png")))
     {
         printf("ERROR initializing sprite\n");
     }
-
     position = {200, 200};
     rotation = 0;
     scale = {1.f, 1.f};
@@ -15,4 +16,12 @@ GameObject::GameObject()
 void GameObject::draw(const mat3 &projection)
 {
     sprite.draw(projection, position, rotation, scale);
+}
+
+bounds GameObject::getBounds() {
+    return {position.x - w / 2, position.x + w / 2, position.y - h / 2, position.y + h / 2};
+}
+
+void GameObject::move(vec2 pos) {
+    position = pos;
 }

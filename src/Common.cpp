@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <chrono>
 
 void gl_flush_errors()
 {
@@ -62,9 +63,9 @@ float dot(vec3 l, vec3 r)
 
 mat3 mul(const mat3 &l, const mat3 &r)
 {
-	mat3 l_t = {{l.c0.x, l.c1.x, l.c2.x},
-				{l.c0.y, l.c1.y, l.c2.y},
-				{l.c0.z, l.c1.z, l.c2.z}};
+	mat3 l_t = {vec3{l.c0.x, l.c1.x, l.c2.x},
+				vec3{l.c0.y, l.c1.y, l.c2.y},
+				vec3{l.c0.z, l.c1.z, l.c2.z}};
 
 	mat3 ret;
 	ret.c0.x = dot(l_t.c0, r.c0);
@@ -289,4 +290,15 @@ void Renderable::transform_translate(vec2 offset)
 void Renderable::transform_end()
 {
 	//
+}
+
+bool inBounds(bounds b, vec2 pos) {
+	return pos.x >= b.left && pos.x <= b.right && pos.y >= b.top && pos.y <= b.bottom;
+}
+
+// https://stackoverflow.com/a/19555298
+long currentTimeMs(){
+	return std::chrono::duration_cast< std::chrono::milliseconds >(
+    	std::chrono::system_clock::now().time_since_epoch()
+	).count();
 }

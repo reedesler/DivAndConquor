@@ -12,11 +12,14 @@ public:
     explicit World(rect viewPort);
     void update();
     void draw(int pixelScale);
+    void onClick(int button, int action, float xpos, float ypos);
     Camera camera;
 
 private:
     std::vector<GameObject *> gameObjects;
     Tilemap tilemap;
+
+    GameObject* selectedObject = nullptr;
 };
 
 

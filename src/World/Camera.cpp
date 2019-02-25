@@ -83,3 +83,7 @@ bounds Camera::getCameraBounds() {
     float bottom = pos.y + viewPort.h / 2.f / zoom;
     return {left, right, top, bottom};
 }
+
+vec2 Camera::viewToWorld(vec2 mouse) {
+    return {pos.x + (-viewPort.w / 2.f + mouse.x) / zoom, pos.y + (-viewPort.h / 2.f + mouse.y) / zoom};
+}
