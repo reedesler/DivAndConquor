@@ -47,6 +47,8 @@ struct bounds
 
 bool inBounds(bounds b, vec2 pos);
 
+bool inRadius(vec2 pos, float radius, vec2 target);
+
 // Utility functions
 float dot(vec2 l, vec2 r);
 float dot(vec3 l, vec3 r);

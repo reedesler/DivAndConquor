@@ -6,10 +6,8 @@
 
 #include "Tilemap.h"
 #include <iostream>
-
-
-#define TILE_SRC_SIZE 32
-
+#include <math.h>
+#include <algorithm>
 
 Tilemap Tilemap::LoadFromFile(std::string filepath) {
     std::ifstream infile;
@@ -30,11 +28,13 @@ Tilemap Tilemap::LoadFromFile(std::string filepath) {
     }
     unsigned int w = temp[0].size();
     unsigned int h = temp.size();
-    auto map = new unsigned int* [w];
+    auto map = new Tile* [w];
     for (unsigned int x = 0; x < w; ++x) {
-        map[x] = new unsigned int[h];
+        map[x] = new Tile[h];
         for (unsigned int y = 0; y < h; ++y) {
-            map[x][y] = temp[y][x]; //transpose here, since we read it row-by-row
+            Tile t = Tile();
+            t.type = static_cast<unsigned char>(temp[y][x]);
+            map[x][y] = t; //transpose here, since we read it row-by-row
         }
     }
 
@@ -63,15 +63,21 @@ void Tilemap::draw(const mat3 &projection) {
     // Setting vertices and indices
     glBindVertexArray(mesh.vao);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(TileVertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
+
+
 
     // Input data location as in the vertex buffer
     GLint in_position_loc = glGetAttribLocation(effect.program, "in_position");
     GLint in_texcoord_loc = glGetAttribLocation(effect.program, "in_texcoord");
+    GLint in_explored_loc = glGetAttribLocation(effect.program, "in_explored");
     glEnableVertexAttribArray(in_position_loc);
     glEnableVertexAttribArray(in_texcoord_loc);
-    glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void*) 0);
-    glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), (void*) sizeof(vec3));
+    glEnableVertexAttribArray(in_explored_loc);
+    glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) 0);
+    glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) sizeof(vec3));
+    glVertexAttribIPointer(in_explored_loc, 1, GL_INT, sizeof(TileVertex), (void*) (sizeof(vec3) + sizeof(vec2)));
 
     // Enabling and binding texture to slot 0
     glActiveTexture(GL_TEXTURE0);
@@ -95,7 +101,7 @@ Tilemap::~Tilemap() {
 }
 
 
-Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w), height(h), map(map) {
+Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(h), map(map) {
     // Load shared texture
     if (!texture.is_valid()) {
         if (!texture.load_from_file(textures_path("tilemap1.png"))) {
@@ -105,21 +111,19 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w),
     }
 
     // Loading shaders
-    if (!effect.load_from_file(shader_path("textured.vs.glsl"), shader_path("textured.fs.glsl"))) {
+    if (!effect.load_from_file(shader_path("tilemap.vs.glsl"), shader_path("tilemap.fs.glsl"))) {
 
         fprintf(stderr, "Failed to load map shaders!");
         exit(1);
     }   // TODO
     // The position corresponds to the center of the texture
-
-    std::vector<TexturedVertex> vertices;
     std::vector<GLuint> indices;
 
     GLuint idx = 0;
 
     for (int x = 0; x < width; ++x)
         for (int y = 0; y < height; ++y) {
-            unsigned int tilemap_n = map[x][y];
+            Tile& t = map[x][y];
 
             float x0 = x * TILE_SIZE;
             float y0 = y * TILE_SIZE;
@@ -130,28 +134,34 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w),
             float textureRight = 1;
 
             //grass added
-            if (tilemap_n == 2) {
+            if (t.type == 2) {
                 textureLeft = 0.001f;
                 textureRight = 0.249f;
             }
             //sand added
-            if (tilemap_n == 1) {
+            if (t.type == 1) {
                 textureLeft = 0.251f;
                 textureRight = 0.499f;
             }
-            if (tilemap_n == 0) {
+            if (t.type == 0) {
                 textureLeft = 0.501f;
                 textureRight = 0.749f;
             }
 
-            vertices.emplace_back(TexturedVertex{{x0 - wr,      y0 + hr, -0.02f},
-                                                 {textureLeft,  1.f}});
-            vertices.emplace_back(TexturedVertex{{x0 + wr,      y0 + hr, -0.02f},
-                                                 {textureRight, 1.f}});
-            vertices.emplace_back(TexturedVertex{{x0 + wr,      y0 - hr, -0.02f},
-                                                 {textureRight, 0.f}});
-            vertices.emplace_back(TexturedVertex{{x0 - wr,      y0 - hr, -0.02f},
-                                                 {textureLeft,  0.f}});
+            t.vertexIndex = static_cast<unsigned int>(vertices.size());
+
+            vertices.emplace_back(TileVertex{{x0 - wr,      y0 + hr, -0.02f},
+                                             {textureLeft,  1.f},
+                                             false});
+            vertices.emplace_back(TileVertex{{x0 + wr,      y0 + hr, -0.02f},
+                                             {textureRight, 1.f},
+                                             false});
+            vertices.emplace_back(TileVertex{{x0 + wr,      y0 - hr, -0.02f},
+                                             {textureRight, 0.f},
+                                             false});
+            vertices.emplace_back(TileVertex{{x0 - wr,      y0 - hr, -0.02f},
+                                             {textureLeft,  0.f},
+                                             false});
             indices.insert(indices.end(), {idx, 3 + idx, 1 + idx, 1 + idx, 3 + idx, 2 + idx});
             idx += 4;
 
@@ -165,7 +175,7 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w),
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(TileVertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
 
     // Index Buffer creation
     glGenBuffers(1, &mesh.ibo);
@@ -178,8 +188,30 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : width(w),
         printf("ERROR initializing tilemap mesh\n");
     }
 }
-//returns cell type from world coordinates
-//0-water, 1-sand, 2-grass
-int Tilemap::getCellType(int x, int y) {
-    return this->map[x/100][y/100];
+
+Tile Tilemap::getTile(float x, float y) {
+    int newX = static_cast<int>(floor(x / TILE_SIZE + 0.5f));
+    int newY = static_cast<int>(floor(y / TILE_SIZE + 0.5f));
+    return this->map[newX][newY];
+}
+
+void Tilemap::setExplored(vec2 pos, float radius) {
+    int minX = std::max(static_cast<int>(floor((pos.x - radius) / TILE_SIZE + 0.5f)), 0);
+    int maxX = std::min(static_cast<unsigned int>(floor((pos.x + radius) / TILE_SIZE + 0.5f)), width);
+    int minY = std::max(static_cast<int>(floor((pos.y - radius) / TILE_SIZE + 0.5f)), 0);
+    int maxY = std::min(static_cast<unsigned int>(floor((pos.y + radius) / TILE_SIZE + 0.5f)), height);
+
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)})) {
+                map[x][y].setExplored(vertices);
+            }
+        }
+    }
+}
+
+void Tile::setExplored(std::vector<TileVertex>& vertices) {
+    for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
+        vertices[i].explored = true;
+    }
 }

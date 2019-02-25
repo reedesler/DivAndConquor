@@ -11,9 +11,26 @@
 
 #define TILE_SIZE 100
 
+// Single Vertex Buffer element for textured sprites (textured.vs.glsl)
+struct TileVertex
+{
+    vec3 position;
+    vec2 texcoord;
+    bool explored;
+};
+
+class Tile {
+public:
+    unsigned char type;
+    void setExplored(std::vector<TileVertex>& vertices);
+    unsigned int vertexIndex;
+private:
+    bool explored = false;
+};
+
 class Tilemap: public Renderable {
 public:
-    Tilemap(unsigned int **map, unsigned int w, unsigned int h);
+    Tilemap(Tile **map, unsigned int w, unsigned int h);
     static Tilemap LoadFromFile(std::string filepath);
 
     virtual ~Tilemap();
@@ -21,11 +38,13 @@ public:
     unsigned int width;
     unsigned int height;
     void draw(const mat3 &projection);
-    int getCellType(int x, int y);
+    Tile getTile(float x, float y);
+    void setExplored(vec2 pos, float radius);
 
 private:
-    unsigned int** map;
+    Tile** map;
     Texture texture;
+    std::vector<TileVertex> vertices;
 
 };
 
