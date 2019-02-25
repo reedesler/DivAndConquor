@@ -178,3 +178,8 @@ Tilemap::Tilemap(unsigned int** map, unsigned int w, unsigned int h) : map(map),
         printf("ERROR initializing tilemap mesh\n");
     }
 }
+//returns cell type from world coordinates
+//0-water, 1-sand, 2-grass
+int Tilemap::getCellType(int x, int y) {
+    return this->map[x/100][y/100];
+}

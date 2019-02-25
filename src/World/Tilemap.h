@@ -27,6 +27,7 @@ public:
     unsigned int width;
     unsigned int height;
     void draw(const mat3 &projection);
+    int getCellType(int x, int y);
 
 private:
     unsigned int** map;
