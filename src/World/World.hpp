@@ -28,6 +28,8 @@ class World
     Camera camera;
     Pirate pirate;
     Tilemap tilemap;
+    long int w;
+    long int h;
 
   private:
     std::vector<GameObject *> gameObjects;
