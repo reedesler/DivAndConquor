@@ -50,6 +50,8 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Button.hpp
         src/Sprite.hpp
+        src/Pirate.cpp
+        src/Pirate.h
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h

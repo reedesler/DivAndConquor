@@ -20,10 +20,10 @@ class GameObject
 
   protected:
     bool selected;
+
     Sprite sprite;
 
     float w, h;
-
     vec2 position;  // Window coordinates
     vec2 scale;     // 1.f in each dimension. 1.f is as big as the associated texture
     float rotation; // in radians
