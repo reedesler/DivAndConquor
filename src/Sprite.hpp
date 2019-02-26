@@ -15,6 +15,7 @@ public:
   void draw(const mat3 &projection, vec2 position, float rotation = 0, vec2 scale = {1.f, 1.f});
   float width, height;
   std::array<GLfloat,3 > tint;
+  bool selected;
 };
 
 #endif //DIVCONQ_SPRITE_H

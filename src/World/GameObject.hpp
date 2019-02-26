@@ -16,8 +16,10 @@ class GameObject
     void update();
     bounds getBounds();
     void move(vec2 pos);
+    void setSelected();
 
   protected:
+    bool selected;
     Sprite sprite;
 
     float w, h;

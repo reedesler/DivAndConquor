@@ -27,7 +27,11 @@ void World::onClick(int button, int action, float xpos, float ypos) {
         for (auto o : gameObjects) {
             bounds b = o->getBounds();
             if (inBounds(b, worldCoords)) {
-                selectedObject = o;
+                if (selectedObject == o)
+                    selectedObject = nullptr;
+                else
+                    selectedObject = o;
+                o->setSelected();
                 return;
             }
         }
