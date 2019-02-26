@@ -43,7 +43,6 @@ public:
     void setExplored(std::vector<TileVertex>& vertices);
     void setVisible(std::vector<TileVertex>& vertices, bool visible);
     unsigned int vertexIndex;
-private:
     bool explored = false;
     bool visible = false;
 };
@@ -59,11 +58,12 @@ public:
     unsigned int height;
     void draw(const mat3 &projection);
     Tile getTile(float x, float y);
+    static TilePos getTilePos(float x, float y);
     void setExplored(VisibleSet& tiles);
     void clearVisible(VisibleSet& tiles);
+    Tile** map;
 
 private:
-    Tile** map;
     Texture texture;
     std::vector<TileVertex> vertices;
 

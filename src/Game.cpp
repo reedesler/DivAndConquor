@@ -30,6 +30,8 @@ void invokeBuildShip(Game *game, int button, int action, double xpos, double ypo
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
+
+    game->world->pirate.init();
     printf("hireSailors!\n");
     //    mat3 pos = {{1.f, 0.f, (float)xpos},
     //                {0.f, 1.f, (float)ypos},
@@ -45,6 +47,8 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
 
 void Game::buildShip(vec2 location)
 {
+   
+
     (this->world)->addShip(new ShipObject(this->world, location));
 }
 

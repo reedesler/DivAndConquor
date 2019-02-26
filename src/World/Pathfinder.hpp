@@ -4,11 +4,28 @@
 
 #ifndef DIVCONQ_PATHFINDING_H
 #define DIVCONQ_PATHFINDING_H
+#ifndef DIVCONQ_PATHFINDING_H_DEFINED
+    #define DIVCONQ_PATHFINDING_H_DEFINED
+    class Pathfinder;
+
+    class PF_Tile;
+
+#include <list>
+typedef struct{
+    std::list<PF_Tile> path;
+    double cost;
+
+    void clear(){
+        path.clear();
+        cost = 0.0;
+    }
+
+} Path;
+#endif
 
 #include <math.h>
 #include <stack>
 #include <queue>
-#include <list>
 #include <ext/hash_map>
 #include "World.hpp"
 
@@ -85,20 +102,9 @@ typedef hash_map<PF_Tile, cellInfo, PF_TileHash, equal_to<PF_Tile> > CellHash;
 typedef hash_map<PF_Tile, ivec2, PF_TileHash, equal_to<PF_Tile> > OpenHash;
 typedef priority_queue<PF_Tile, vector<PF_Tile>, greater<PF_Tile> > OpenQueue;
 
-typedef struct{
-    list<PF_Tile> path;
-    double cost;
-
-    void clear(){
-        path.clear();
-        cost = 0.0;
-    }
-
-} Path;
-
-class Pathfinding {
+class Pathfinder {
 public:
-    explicit Pathfinding(World world);
+    explicit Pathfinder(World* world);
     void   init(int sX, int sY, int gX, int gY);
     void   updateCell(int x, int y, double val);
     void   updateStart(int x, int y);
@@ -109,7 +115,7 @@ public:
 
 private:
 
-    World world;
+    World* world;
 
     Path path;
 

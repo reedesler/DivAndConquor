@@ -6,7 +6,7 @@ World::World(rect viewPort) : camera(Camera(viewPort)),
     gameObjects.push_back(new GameObject(this));
     gameObjects.push_back(new ShipObject(this, {300, 300}));
 
-    pirate.init();
+    pathRenderer = new PathRenderer();
 }
 
 void World::addShip(ShipObject *ship)
@@ -38,6 +38,7 @@ void World::draw(int pixelScale)
         o->draw(projection);
     }
     pirate.draw(projection);
+    pathRenderer->draw(projection);
 }
 
 void World::onClick(int button, int action, float xpos, float ypos)
@@ -66,6 +67,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
         if (selectedObject != nullptr)
         {
             selectedObject->move(worldCoords);
+            pathRenderer->init(selectedObject->path);
         }
     }
 }

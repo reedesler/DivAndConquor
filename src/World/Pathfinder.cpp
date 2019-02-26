@@ -1,11 +1,11 @@
 #include "Pathfinder.hpp"
 
-Pathfinding::Pathfinding(World world) : world(world) {
+Pathfinder::Pathfinder(World* world) : world(world) {
     maxSteps = 80000;
     defaultCost = 1;
 }
 
-void Pathfinding::init(int sX, int sY, int gX, int gY) {
+void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
     cellHash.clear();
     path.clear();
@@ -14,17 +14,31 @@ void Pathfinding::init(int sX, int sY, int gX, int gY) {
 
     k_m = 0;
 
+    cellInfo tmp{};
+
+    for (int x = 0; x < world->tilemap.width; x++) {
+        for (int y = 0; y < world->tilemap.height; y++) {
+            Tile& t = world->tilemap.map[x][y];
+            if (t.explored) {
+                PF_Tile tile;
+                tile.x = x;
+                tile.y = y;
+
+                tmp.rhs = INFINITY;
+                tmp.g = INFINITY;
+                tmp.cost = t.type == 0 ? defaultCost : -1;
+
+                cellHash[tile] = tmp;
+            }
+        }
+    }
+
     s_start.x = sX;
     s_start.y = sY;
+
     s_goal.x = gX;
     s_goal.y = gY;
-
-    cellInfo tmp{};
-    tmp.rhs = 0;
-    tmp.g = INFINITY;
-    tmp.cost = defaultCost;
-
-    cellHash[s_goal] = tmp;
+    setRHS(s_goal, 0);
     insert(s_goal);
 
     tmp.g = tmp.rhs = INFINITY; //heuristic(s_start,s_goal);
@@ -35,7 +49,7 @@ void Pathfinding::init(int sX, int sY, int gX, int gY) {
     s_last = s_start;
 }
 
-bool Pathfinding::queuePop() {
+bool Pathfinder::queuePop() {
     PF_Tile u = openList.top();
     openList.pop();
     OpenHash::iterator cur = openHash.find(u);
@@ -57,11 +71,11 @@ bool Pathfinding::queuePop() {
 
 }
 
-Path &Pathfinding::getPath() {
+Path &Pathfinder::getPath() {
     return path;
 }
 
-bool Pathfinding::occupied(const PF_Tile &u) const {
+bool Pathfinder::occupied(const PF_Tile &u) const {
 
     CellHash::const_iterator cur = cellHash.find(u);
 
@@ -69,7 +83,7 @@ bool Pathfinding::occupied(const PF_Tile &u) const {
     return (cur->second.cost < 0);
 }
 
-void Pathfinding::makeNewCell(const PF_Tile &u) {
+void Pathfinder::makeNewCell(const PF_Tile &u) {
 
     if (cellHash.find(u) != cellHash.end()) return;
 
@@ -80,7 +94,7 @@ void Pathfinding::makeNewCell(const PF_Tile &u) {
 
 }
 
-double Pathfinding::getG(const PF_Tile &u) const {
+double Pathfinder::getG(const PF_Tile &u) const {
 
     CellHash::const_iterator cur = cellHash.find(u);
     if (cur == cellHash.end())
@@ -88,24 +102,24 @@ double Pathfinding::getG(const PF_Tile &u) const {
     return cur->second.g;
 }
 
-double Pathfinding::getRHS(const PF_Tile &u) const {
+double Pathfinder::getRHS(const PF_Tile &u) const {
     CellHash::const_iterator cur = cellHash.find(u);
     if (cur == cellHash.end())
         return INFINITY; //heuristic(u,s_goal);
     return cur->second.rhs;
 }
 
-void Pathfinding::setG(const PF_Tile &u, double g) {
+void Pathfinder::setG(const PF_Tile &u, double g) {
     makeNewCell(u);
     cellHash[u].g = g;
 }
 
-void Pathfinding::setRHS(const PF_Tile &u, double rhs) {
+void Pathfinder::setRHS(const PF_Tile &u, double rhs) {
     makeNewCell(u);
     cellHash[u].rhs = rhs;
 }
 
-double Pathfinding::eightCondist(const PF_Tile &a, const PF_Tile &b) const {
+double Pathfinder::eightCondist(const PF_Tile &a, const PF_Tile &b) const {
     double temp;
     double min = abs(a.x - b.x);
     double max = abs(a.y - b.y);
@@ -117,11 +131,11 @@ double Pathfinding::eightCondist(const PF_Tile &a, const PF_Tile &b) const {
     return ((M_SQRT2 - 1.0) * min + max);
 }
 
-bool Pathfinding::isConsistent(const PF_Tile &u) {
+bool Pathfinder::isConsistent(const PF_Tile &u) {
     return (getRHS(u) == getG(u));
 }
 
-int Pathfinding::computeShortestPath() {
+int Pathfinder::computeShortestPath() {
     list<PF_Tile> s;
     list<PF_Tile>::iterator i;
 
@@ -177,14 +191,14 @@ int Pathfinding::computeShortestPath() {
     return 0;
 }
 
-bool Pathfinding::near(double x, double y) const {
+bool Pathfinder::near(double x, double y) const {
 
     if (isinf(x) && isinf(y)) return true;
     return (fabs(x - y) < eps);
 
 }
 
-void Pathfinding::updateVertex(PF_Tile &u) {
+void Pathfinder::updateVertex(PF_Tile &u) {
     list<PF_Tile> s;
     list<PF_Tile>::iterator i;
 
@@ -205,7 +219,7 @@ void Pathfinding::updateVertex(PF_Tile &u) {
 
 }
 
-void Pathfinding::insert(PF_Tile u) {
+void Pathfinder::insert(PF_Tile u) {
     OpenHash::iterator cur;
     cur = openHash.find(u);
     int num;
@@ -226,23 +240,23 @@ void Pathfinding::insert(PF_Tile u) {
     openList.push(u);
 }
 
-void Pathfinding::remove(const PF_Tile &u) {
+void Pathfinder::remove(const PF_Tile &u) {
     OpenHash::iterator cur = openHash.find(u);
     if (cur == openHash.end()) return;
     else cur->second.v[1]++; // inc most recent flag
 }
 
-double Pathfinding::trueDist(const PF_Tile &a, const PF_Tile &b) const {
+double Pathfinder::trueDist(const PF_Tile &a, const PF_Tile &b) const {
     float x = a.x - b.x;
     float y = a.y - b.y;
     return x * x + y * y;
 }
 
-double Pathfinding::heuristic(const PF_Tile &a, const PF_Tile &b) const {
+double Pathfinder::heuristic(const PF_Tile &a, const PF_Tile &b) const {
     return eightCondist(a, b) * defaultCost;
 }
 
-PF_Tile &Pathfinding::calculateKey(PF_Tile &u) const {
+PF_Tile &Pathfinder::calculateKey(PF_Tile &u) const {
 
     double val = fmin(getRHS(u), getG(u));
 
@@ -253,7 +267,7 @@ PF_Tile &Pathfinding::calculateKey(PF_Tile &u) const {
 
 }
 
-double Pathfinding::cost(const PF_Tile &a, const PF_Tile &b) const {
+double Pathfinder::cost(const PF_Tile &a, const PF_Tile &b) const {
 
     int xd = abs(a.x - b.x);
     int yd = abs(a.y - b.y);
@@ -267,7 +281,7 @@ double Pathfinding::cost(const PF_Tile &a, const PF_Tile &b) const {
     return scale * (cur->second).cost;
 }
 
-void Pathfinding::updateCell(int x, int y, double val) {
+void Pathfinder::updateCell(int x, int y, double val) {
 
     PF_Tile u;
 
@@ -286,72 +300,86 @@ void Pathfinding::updateCell(int x, int y, double val) {
     updateVertex(u);
 }
 
-void Pathfinding::getSucc(PF_Tile u, list<PF_Tile> &s) const {
+void Pathfinder::getSucc(PF_Tile u, list<PF_Tile> &s) const {
 
     s.clear();
     u.key.first = -1;
     u.key.second = -1;
+
+    PF_Tile v = u;
 
     if (occupied(u)) return;
 
-    u.x += 1;
-    s.push_front(u);
-    u.y += 1;
-    s.push_front(u);
-    u.x -= 1;
-    s.push_front(u);
-    u.x -= 1;
-    s.push_front(u);
-    u.y -= 1;
-    s.push_front(u);
-    u.y -= 1;
-    s.push_front(u);
-    u.x += 1;
-    s.push_front(u);
-    u.x += 1;
-    s.push_front(u);
-
+    for (int x = -1; x < 2; x++) {
+        v.x = u.x + x;
+        if (v.x >= 0 && v.x < world->tilemap.width) {
+            for (int y = -1; y < 2; y++) {
+                v.y = u.y + y;
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                    if (x != 0 && y != 0) {
+                        PF_Tile w = v;
+                        w.x = u.x;
+                        if (occupied(w)) continue;
+                        w.x = v.x;
+                        w.y = u.y;
+                        if (occupied(w)) continue;
+                    }
+                    s.push_front(v);
+                }
+            }
+        }
+    }
 }
 
-void Pathfinding::getPred(PF_Tile u, list<PF_Tile> &s) const {
+void Pathfinder::getPred(PF_Tile u, list<PF_Tile> &s) const {
 
     s.clear();
     u.key.first = -1;
     u.key.second = -1;
 
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
+    PF_Tile v = u;
 
+    if (occupied(u)) return;
+
+    for (int x = -1; x < 2; x++) {
+        v.x = u.x + x;
+        if (v.x >= 0 && v.x < world->tilemap.width) {
+            for (int y = -1; y < 2; y++) {
+                v.y = u.y + y;
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                    if (x != 0 && y != 0) {
+                        PF_Tile w = v;
+                        w.x = u.x;
+                        if (occupied(w)) continue;
+                        w.x = v.x;
+                        w.y = u.y;
+                        if (occupied(w)) continue;
+                    }
+                    s.push_front(v);
+                }
+            }
+        }
+    }
 }
 
-void Pathfinding::updateStart(int x, int y) {
+void Pathfinder::updateStart(int x, int y) {
 
     s_start.x = x;
     s_start.y = y;
 
     k_m += heuristic(s_last, s_start);
 
-    setRHS(s_start, INFINITY);
-    setG(s_start, INFINITY);
+    CellHash::const_iterator cur = cellHash.find(s_start);
+    if (cur == cellHash.end()) {
+        setRHS(s_start, INFINITY);
+        setG(s_start, INFINITY);
+    }
+
     s_start = calculateKey(s_start);
     s_last = s_start;
 }
 
-void Pathfinding::updateGoal(int x, int y) {
+void Pathfinder::updateGoal(int x, int y) {
 
     list<pair<ipoint2, double> > toAdd;
     pair<ipoint2, double> tp;
@@ -400,7 +428,7 @@ void Pathfinding::updateGoal(int x, int y) {
 
 }
 
-bool Pathfinding::replan() {
+bool Pathfinder::replan() {
 
     path.clear();
 
@@ -437,10 +465,6 @@ bool Pathfinding::replan() {
             return false;
         }
 
-        // choose the next node in the path by selecting the one with smallest
-        // g() + cost. Break ties by choosing the neighbour that is closest
-        // to the line between start and goal (i.e. smallest sum of Euclidean
-        // distances to start and goal).
         double cmin = INFINITY;
         double tmin = INFINITY;
         PF_Tile smin = cur;

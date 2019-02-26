@@ -195,9 +195,16 @@ Tile Tilemap::getTile(float x, float y) {
     return this->map[newX][newY];
 }
 
+TilePos Tilemap::getTilePos(float x, float y) {
+    int newX = static_cast<int>(floor(x / TILE_SIZE + 0.5f));
+    int newY = static_cast<int>(floor(y / TILE_SIZE + 0.5f));
+    return {newX, newY};
+}
+
+
 void Tilemap::setExplored(VisibleSet& tiles) {
     for (auto t : tiles) {
-        Tile tile = map[t.x][t.y];
+        Tile& tile = map[t.x][t.y];
         tile.setExplored(vertices);
         tile.setVisible(vertices, true);
     }
@@ -205,18 +212,20 @@ void Tilemap::setExplored(VisibleSet& tiles) {
 
 void Tilemap::clearVisible(VisibleSet& tiles) {
     for (auto t : tiles) {
-        Tile tile = map[t.x][t.y];
+        Tile& tile = map[t.x][t.y];
         tile.setVisible(vertices, false);
     }
 }
-
 void Tile::setExplored(std::vector<TileVertex>& vertices) {
+    explored = true;
+    visible = true;
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
         vertices[i].explored = 1;
     }
 }
 
 void Tile::setVisible(std::vector<TileVertex> &vertices, bool visible) {
+    this->visible = visible;
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
         vertices[i].explored = visible ? 1 : EXPLORED_BUT_NOT_VISIBLE;
     }

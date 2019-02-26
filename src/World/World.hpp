@@ -12,6 +12,9 @@ class World;
 #include "Tilemap.h"
 #include "Camera.hpp"
 #include "Pirate.h"
+#include "PathRenderer.hpp"
+
+class PathRenderer;
 
 class ShipObject;
 
@@ -26,8 +29,15 @@ class World
     void addShip(ShipObject *ship);
 
     Camera camera;
-    Pirate pirate;
+    std::vector<Pirate *> pirates;
+   Pirate pirate;
     Tilemap tilemap;
+
+    Pirate * selected = nullptr;
+private:
+    void on_key(int, int key, int, int action);
+
+    void on_key2(int, int key, int scancode, int action);
 
   private:
     std::vector<GameObject *> gameObjects;
@@ -39,6 +49,7 @@ class World
     GameObject *selectedObject = nullptr;
 
     VisibleSet visibleTiles;
+    PathRenderer* pathRenderer;
 };
 
 #endif //DIVCONQ_WORLD_H
