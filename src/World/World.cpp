@@ -37,7 +37,7 @@ void World::draw(int pixelScale)
     {
         o->draw(projection);
     }
-    pirate.draw(projection);
+    //pirate.draw(projection);
     pathRenderer->draw(projection);
 }
 

@@ -104,7 +104,7 @@ Tilemap::~Tilemap() {
 Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(h), map(map) {
     // Load shared texture
     if (!texture.is_valid()) {
-        if (!texture.load_from_file(textures_path("tilemap1.png"))) {
+        if (!texture.load_from_file(textures_path("tilemap.png"))) {
             fprintf(stderr, "Failed to load map texture!");
             exit(1);
         }
@@ -134,16 +134,16 @@ Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(
             float textureRight = 1;
 
             //grass added
-            if (t.type == 2) {
+            if (t.type == 0) {
                 textureLeft = 0.001f;
                 textureRight = 0.249f;
             }
             //sand added
-            if (t.type == 1) {
+            if (t.type == 2) {
                 textureLeft = 0.251f;
                 textureRight = 0.499f;
             }
-            if (t.type == 0) {
+            if (t.type == 1) {
                 textureLeft = 0.501f;
                 textureRight = 0.749f;
             }
@@ -151,10 +151,10 @@ Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(
             t.vertexIndex = static_cast<unsigned int>(vertices.size());
 
             vertices.emplace_back(TileVertex{{x0 - wr,      y0 + hr, -0.02f},
-                                             {textureLeft,  1.f},
+                                             {textureLeft,  0.25f},
                                              0});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 + hr, -0.02f},
-                                             {textureRight, 1.f},
+                                             {textureRight, 0.25},
                                              0});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 - hr, -0.02f},
                                              {textureRight, 0.f},
