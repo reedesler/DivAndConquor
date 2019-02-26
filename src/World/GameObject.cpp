@@ -16,6 +16,7 @@ GameObject::GameObject(World* world) : world(world) {
 void GameObject::draw(const mat3 &projection)
 {
     sprite.draw(projection, position, rotation, scale);
+
 }
 
 bounds GameObject::getBounds() {
