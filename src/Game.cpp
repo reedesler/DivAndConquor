@@ -164,6 +164,8 @@ void invokeBuildShip(Game *game, int button, int action, double xpos, double ypo
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
+
+    game->world->pirate.init();
     printf("hireSailors!\n");
     //    mat3 pos = {{1.f, 0.f, (float)xpos},
     //                {0.f, 1.f, (float)ypos},
@@ -182,6 +184,8 @@ void Game::buildShip()
     this->balance -= 500;
     printf("balance %d\n", balance);
     this->fleet.insert(new Ship(proa));
+
+
 }
 
 void Game::init(vec2 screen)

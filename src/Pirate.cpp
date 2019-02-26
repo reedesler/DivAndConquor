@@ -12,6 +12,9 @@ float ANIMATION_FRAME_H = 0.75f;
 float ANIMATION_FRAME_W = 0.33f;
 float Frame = 0.5f;
 
+//Pirate::Pirate(){
+//    this->init();
+//}
 
 bool Pirate::init() {
     // Load shared texture

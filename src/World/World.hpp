@@ -23,18 +23,19 @@ public:
     void setExplored(vec2 pos, float radius);
     void onClick2(int button, int action, float xpos, float ypos);
     Camera camera;
-    Pirate pirate;
+    std::vector<Pirate *> pirates;
+   Pirate pirate;
     Tilemap tilemap;
 
+    Pirate * selected = nullptr;
 private:
     void on_key(int, int key, int, int action);
+
     void on_key2(int, int key, int scancode, int action);
+private:
 
-        private:
     std::vector<GameObject *> gameObjects;
-
     GameObject* selectedObject = nullptr;
-     Pirate * selected = nullptr;
     rect viewPort;
 
 

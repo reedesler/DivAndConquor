@@ -72,8 +72,8 @@ public:
   void buildShip();
 
     void onKey2(int key, int scancode, int action);
+    World *world;
 private:
-  World *world;
   std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
   std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
 

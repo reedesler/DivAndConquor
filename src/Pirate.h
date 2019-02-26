@@ -13,6 +13,7 @@ class Pirate : public Renderable {
     static Texture pirate_texture;
 
 public:
+    //Pirate();
     // Creates all the associated render resources and default transform
     bool init();
 

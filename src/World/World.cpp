@@ -5,8 +5,6 @@ World::World(rect viewPort) : camera(Camera(viewPort)),
     gameObjects.push_back(new GameObject(this));
     gameObjects.push_back(new ShipObject(this, {300, 300}));
 
-    pirate.init();
-
 }
 
 void World::update(float time) {
