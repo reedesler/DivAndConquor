@@ -51,14 +51,6 @@ void Game::init(vec2 screen)
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
-
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft))
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-    FT_Face face;
-    if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
-        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 }
 
 void Game::update()
