@@ -54,7 +54,6 @@ static const Ship proa = {10, 10, 2, 4, 100, 0},
 
 // type forwarding since we have circular includes
 class Button;
-class Game;
 
 // ButtonOnClickFunc has a parameter list of {Game *game, int button, int action, double xpos, double ypos}
 typedef void (*ButtonOnClickFunc)(Game *, int, int, double, double);
