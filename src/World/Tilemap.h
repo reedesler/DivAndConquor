@@ -7,25 +7,45 @@
 
 
 #include <vector>
+#include <unordered_set>
 #include <Common.hpp>
 
 #define TILE_SIZE 100
+#define EXPLORED_BUT_NOT_VISIBLE 0.7f
 
 // Single Vertex Buffer element for textured sprites (textured.vs.glsl)
 struct TileVertex
 {
     vec3 position;
     vec2 texcoord;
-    bool explored;
+    float explored;
 };
+
+struct TilePos {
+    int x, y;
+    bool operator == (const TilePos &s2) const {
+        return ((x == s2.x) && (y == s2.y));
+    }
+};
+
+class TilePosHash {
+public:
+    size_t operator()(const TilePos &s) const {
+        return s.x + 34245*s.y;
+    }
+};
+
+typedef std::unordered_set<TilePos, TilePosHash> VisibleSet;
 
 class Tile {
 public:
     unsigned char type;
     void setExplored(std::vector<TileVertex>& vertices);
+    void setVisible(std::vector<TileVertex>& vertices, bool visible);
     unsigned int vertexIndex;
 private:
     bool explored = false;
+    bool visible = false;
 };
 
 class Tilemap: public Renderable {
@@ -39,7 +59,8 @@ public:
     unsigned int height;
     void draw(const mat3 &projection);
     Tile getTile(float x, float y);
-    void setExplored(vec2 pos, float radius);
+    void setExplored(VisibleSet& tiles);
+    void clearVisible(VisibleSet& tiles);
 
 private:
     Tile** map;

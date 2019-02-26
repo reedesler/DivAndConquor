@@ -132,12 +132,6 @@ void GameWindow::onKey(GLFWwindow *, int key, int scancode, int action, int mod)
     game->onKey(key, scancode, action);
 }
 
-void GameWindow::onKey2(GLFWwindow *, int key, int scancode, int action, int mod)
-{
-    game->onKey2(key, scancode, action);
-    //game->on_key2(key, scancode, action);
-}
-
 
 void GameWindow::onMouseMove(GLFWwindow *window, double xpos, double ypos)
 {

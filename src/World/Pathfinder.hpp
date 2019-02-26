@@ -1,87 +1,149 @@
-#ifndef DIVCONQ_PATHFINDER_HPP
-#define DIVCONQ_PATHFINDER_HPP
+/* Dstar.h
+ * James Neufeld (neufeld@cs.ualberta.ca)
+ */
 
+#ifndef DIVCONQ_PATHFINDING_H
+#define DIVCONQ_PATHFINDING_H
 
-#include "World.hpp"
-#include <unordered_map>
+#include <math.h>
+#include <stack>
 #include <queue>
+#include <list>
+#include <ext/hash_map>
+#include "World.hpp"
 
 #define eps (10e-10)
 
+using namespace std;
+using namespace __gnu_cxx;
+
 class PF_Tile {
+
 public:
-    int x, y;
-    double estimate, lookahead;
-    double cost;
+    int x;
+    int y;
+    pair<double,double> key;
     int num;
 
-    std::pair<double,double> key;
-
-    bool operator == (const PF_Tile &t) const {
-        return ((x == t.x) && (y == t.y));
+    bool operator == (const PF_Tile &s2) const {
+        return ((x == s2.x) && (y == s2.y));
     }
 
-    bool operator != (const PF_Tile &t) const {
-        return ((x != t.x) || (y != t.y));
+    bool operator != (const PF_Tile &s2) const {
+        return ((x != s2.x) || (y != s2.y));
     }
 
-    bool operator > (const PF_Tile &t) const {
-        if (key.first - eps > t.key.first) return true;
-        else if (key.first < t.key.first - eps) return false;
-        return key.second > t.key.second;
+    bool operator > (const PF_Tile &s2) const {
+        if (key.first-eps > s2.key.first) return true;
+        else if (key.first < s2.key.first-eps) return false;
+        return key.second > s2.key.second;
     }
 
-    bool operator <= (const PF_Tile &t) const {
-        if (key.first < t.key.first) return true;
-        else if (key.first > t.key.first) return false;
-        return key.second < t.key.second + eps;
+    bool operator <= (const PF_Tile &s2) const {
+        if (key.first < s2.key.first) return true;
+        else if (key.first > s2.key.first) return false;
+        return key.second < s2.key.second + eps;
     }
 
-    bool operator < (const PF_Tile &t) const {
-        if (key.first + eps < t.key.first) return true;
-        else if (key.first - eps > t.key.first) return false;
-        return key.second < t.key.second;
+
+    bool operator < (const PF_Tile &s2) const {
+        if (key.first + eps < s2.key.first) return true;
+        else if (key.first - eps > s2.key.first) return false;
+        return key.second < s2.key.second;
     }
+
 };
 
-//typedef __gnu_cxx::hash_map<state, ivec2, state_hash, equal_to<state> > ds_oh;
-//typedef __gnu_cxx::priority_queue<state, vector<state>, greater<state> > ds_pq;
-
-class TileHash {
-public:
-    size_t operator()(const PF_Tile &t) const {
-        return t.x + 34245 * t.y;
-    }
+struct ipoint2 {
+    int x,y;
 };
 
-struct tileData {
+struct ivec2 {
     int v[2];
 };
 
-typedef std::unordered_map<PF_Tile, tileData, TileHash> TileSet;
-typedef std::priority_queue<PF_Tile, std::vector<PF_Tile>, std::greater<PF_Tile> > TileQueue;
 
-class Pathfinder {
+
+struct cellInfo {
+
+    double g;
+    double rhs;
+    double cost;
+
+
+};
+
+class PF_TileHash {
 public:
-    explicit Pathfinder(World world);
-    void init(int startX, int startY, int goalX, int goalY);
-private:
-    World world;
-    int maxSteps;
-    double defaultCost;
-
-    PF_Tile start, goal, last;
-    double k_m;
-
-    TileSet openSet;
-    TileQueue openList;
-    void insert(PF_Tile t);
-
-    PF_Tile& calculateKey(PF_Tile& t) const;
-
-    double heuristic(const PF_Tile &a, const PF_Tile &b) const;
-    double eightCondist(const PF_Tile &a, const PF_Tile &b) const;
+    size_t operator()(const PF_Tile &s) const {
+        return s.x + 34245*s.y;
+    }
 };
 
 
-#endif //DIVCONQ_PATHFINDER_HPP
+typedef hash_map<PF_Tile, cellInfo, PF_TileHash, equal_to<PF_Tile> > CellHash;
+typedef hash_map<PF_Tile, ivec2, PF_TileHash, equal_to<PF_Tile> > OpenHash;
+typedef priority_queue<PF_Tile, vector<PF_Tile>, greater<PF_Tile> > OpenQueue;
+
+typedef struct{
+    list<PF_Tile> path;
+    double cost;
+
+    void clear(){
+        path.clear();
+        cost = 0.0;
+    }
+
+} Path;
+
+class Pathfinding {
+public:
+    explicit Pathfinding(World world);
+    void   init(int sX, int sY, int gX, int gY);
+    void   updateCell(int x, int y, double val);
+    void   updateStart(int x, int y);
+    void   updateGoal(int x, int y);
+    bool   replan();
+
+    Path &getPath();
+
+private:
+
+    World world;
+
+    Path path;
+
+    double defaultCost;
+    double k_m;
+    PF_Tile s_start, s_goal, s_last;
+    int maxSteps;
+
+    PF_Tile qstate;
+
+    OpenQueue openList;
+    CellHash cellHash;
+    OpenHash openHash;
+
+    bool   near(double x, double y) const;
+    void   makeNewCell(const PF_Tile &u);
+    double getG(const PF_Tile &u) const;
+    double getRHS(const PF_Tile &u) const;
+    void   setG(const PF_Tile &u, double g);
+    void   setRHS(const PF_Tile &u, double rhs);
+    double eightCondist(const PF_Tile &a, const PF_Tile &b) const;
+    int    computeShortestPath();
+    void   updateVertex(PF_Tile &u);
+    void   insert(PF_Tile u);
+    void   remove(const PF_Tile &u);
+    double trueDist(const PF_Tile &a, const PF_Tile &b) const;
+    double heuristic(const PF_Tile &a, const PF_Tile &b) const;
+    PF_Tile  &calculateKey(PF_Tile &u) const;
+    void   getSucc(PF_Tile u, list<PF_Tile> &s) const;
+    void   getPred(PF_Tile u, list<PF_Tile> &s) const;
+    double cost(const PF_Tile &a, const PF_Tile &b) const;
+    bool   occupied(const PF_Tile &u) const;
+    bool   queuePop();
+    bool   isConsistent(const PF_Tile &u);
+};
+
+#endif

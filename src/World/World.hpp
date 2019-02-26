@@ -8,6 +8,7 @@
 
 
 #include <vector>
+#include <unordered_set>
 #include "GameObject.hpp"
 #include "Tilemap.h"
 #include "Camera.hpp"
@@ -21,24 +22,16 @@ public:
     void draw(int pixelScale);
     void onClick(int button, int action, float xpos, float ypos);
     void setExplored(vec2 pos, float radius);
-    void onClick2(int button, int action, float xpos, float ypos);
     Camera camera;
     Pirate pirate;
     Tilemap tilemap;
 
 private:
-    void on_key(int, int key, int, int action);
-    void on_key2(int, int key, int scancode, int action);
-
-        private:
     std::vector<GameObject *> gameObjects;
 
     GameObject* selectedObject = nullptr;
-     Pirate * selected = nullptr;
-    rect viewPort;
 
-
-
+    VisibleSet visibleTiles;
 };
 
 

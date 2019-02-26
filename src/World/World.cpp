@@ -10,23 +10,16 @@ World::World(rect viewPort) : camera(Camera(viewPort)),
 }
 
 void World::update(float time) {
+    tilemap.clearVisible(visibleTiles);
+    visibleTiles.clear();
+
     camera.update(tilemap.width, tilemap.height, TILE_SIZE);
     for (auto o : gameObjects) {
         o->update();
     }
     pirate.update(time);
 
-//=======
-//    cameraPos.x += cameraVel.x / cameraZoom;
-//    cameraPos.y += cameraVel.y / cameraZoom;
-//    if (cameraZoomVel > 0) {
-//        cameraZoom *= cameraZoomVel;
-//    } else if (cameraZoomVel < 0) {
-//        cameraZoom /= -cameraZoomVel;
-//    }
-//
-//
-//>>>>>>> Stashed changes
+    tilemap.setExplored(visibleTiles);
 }
 
 void World::draw(int pixelScale) {
@@ -35,14 +28,7 @@ void World::draw(int pixelScale) {
     for (auto o : gameObjects) {
         o->draw(projection);
     }
-
-//    vec2 cameraPos2 = {210, 210};
-//    mat3 T1 = { { 1.f, 0.f, 0.f },{ 0.f, 1.f, 0.f },{ -cameraPos2.x, -cameraPos2.y, 1.f } };
-//    mat3 S1 = { { 1.f, 0.f, 0.f },{ 0.f, 1.f, 0.f },{ 0.f, 0.f, 1.f } };
-//    mat3 camT1 = { { 1.f, 0.f, 0.f },{ 0.f, 1.f, 0.f },{ viewPort.w / 2.f, viewPort.h / 2.f, 1.f } };
-//    mat3 newProjection1 = mul(mul(mul(projection_2D, camT1), S1), T1);
     pirate.draw(projection);
-
 }
 
 void World::onClick(int button, int action, float xpos, float ypos) {
@@ -70,61 +56,17 @@ void World::onClick(int button, int action, float xpos, float ypos) {
 }
 
 void World::setExplored(vec2 pos, float radius) {
-    tilemap.setExplored(pos, radius);
-}
-void World::onClick2(int button, int action, float xpos, float ypos) {
-    if (action == GLFW_PRESS) {
-        vec2 worldCoords = camera.viewToWorld({xpos, ypos});
-            bounds b = pirate.getBounds();
-            if (inBounds(b, worldCoords)) {
-                selected = &pirate;
-                return;
+    int minX = std::max(static_cast<int>(floor((pos.x - radius) / TILE_SIZE + 0.5f)), 0);
+    int maxX = std::min(static_cast<unsigned int>(floor((pos.x + radius) / TILE_SIZE + 0.5f)), tilemap.width - 1);
+    int minY = std::max(static_cast<int>(floor((pos.y - radius) / TILE_SIZE + 0.5f)), 0);
+    int maxY = std::min(static_cast<unsigned int>(floor((pos.y + radius) / TILE_SIZE + 0.5f)), tilemap.height - 1);
+
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)})) {
+                //map[x][y].setExplored(vertices);
+                visibleTiles.insert(TilePos{x, y});
             }
-
-
-        if (selected != nullptr) {
-            selected->moveToPos(worldCoords);
         }
     }
 }
-
-//void World::on_key(int button, int key, int, int action) {
-//
-//
-//    if (action == GLFW_PRESS && key == GLFW_KEY_D) {
-//
-//        pirate.moveRight = true;
-//
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_D) {
-//
-//        pirate.moveRight = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_A) {
-//
-//        pirate.moveLeft = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_A) {
-//
-//        pirate.moveLeft = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_W) {
-//
-//        pirate.moveUp = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_W) {
-//
-//        pirate.moveUp = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_S) {
-//
-//        pirate.moveDown = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_S) {
-//
-//        pirate.moveDown = false;
-//
-//    }
-//}
-
-

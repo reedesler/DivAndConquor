@@ -229,22 +229,6 @@ bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callba
     return true;
 }
 
-/*
-bool Game::removeButton(Sprite* btn) {
-    buttonCallbacks.erase(btn);
-=======
-bool Game::registerButton(Sprite btn, vec2 location, ButtonOnClickFunc callback) {
-    buttonCallbacks[&btn] = callback;
-    buttonPositions[&btn] = location;
-    return true;
-}
-
-bool Game::removeButton(Sprite btn) {
-    buttonCallbacks.erase(&btn);
->>>>>>> Stashed changes
-    return true;
-}
-*/
 // TODO: this doesn't seem to account for viewport size... y positions seem a bit off
 void Game::onClick(int button, int action, double xpos, double ypos)
 {
@@ -277,9 +261,6 @@ void Game::onClick(int button, int action, double xpos, double ypos)
     if (viewX >= 0 && viewX <= viewPort.w && viewY >= 0 && viewY <= viewPort.h)
     {
         world->onClick(button, action, viewX, viewY);
-        world->onClick2(button, action, viewX, viewY);
-        //world->on_key(button,action, viewX, viewY);
-        // world->on_key2(button,action,viewX,viewY);
     }
 }
 
@@ -366,124 +347,3 @@ void Game::onKey(int key, int scancode, int action)
 
     world->camera.move(cameraDir, cameraZoom);
 }
-
-void Game::onKey2(int key, int scancode, int action)
-{
-    vec2 movDir = {0, 0};
-
-    if (action == GLFW_PRESS)
-    {
-
-        switch (key)
-        {
-        case GLFW_KEY_W:
-            movDir.y -= 10;
-            break;
-        case GLFW_KEY_S:
-            movDir.y += 10;
-            break;
-        case GLFW_KEY_A:
-            movDir.x -= 10;
-            break;
-        case GLFW_KEY_D:
-            movDir.x += 10;
-            break;
-        default:
-            break;
-        }
-    }
-    else if (action == GLFW_RELEASE)
-    {
-        switch (key)
-        {
-        case GLFW_KEY_W:
-            movDir.y += 10;
-            break;
-        case GLFW_KEY_S:
-            movDir.y -= 10;
-            break;
-        case GLFW_KEY_A:
-            movDir.x += 10;
-            break;
-        case GLFW_KEY_D:
-            movDir.x -= 10;
-            break;
-        default:
-            break;
-        }
-    }
-    pirate.movement(movDir);
-}
-
-//void Game::on_key2(int key, int scancode, int action) {
-//    if (action == GLFW_PRESS) {
-//
-//        switch (key) {
-//            case GLFW_KEY_W:
-//                pirate.p_position.y -= 1;
-//                break;
-//            case GLFW_KEY_S:
-//                pirate.p_position.y += 1;
-//                break;
-//            case GLFW_KEY_A:
-//                pirate.p_position.x -= 1;
-//                break;
-//            case GLFW_KEY_D:
-//                pirate.p_position.x += 1;
-//                break;
-//            default:
-//                break;
-//        }
-//    } else if (action == GLFW_RELEASE) {
-//        switch (key) {
-//            case GLFW_KEY_W:
-//                pirate.p_position.y += 1;
-//                break;
-//            case GLFW_KEY_S:
-//                pirate.p_position.y -= 1;
-//                break;
-//            case GLFW_KEY_A:
-//                pirate.p_position.x += 1;
-//                break;
-//            case GLFW_KEY_D:
-//                pirate.p_position.x -= 1;
-//                break;
-//            default:
-//                break;
-//        }
-//    if (action == GLFW_PRESS && key == GLFW_KEY_D) {
-//
-//        pirate.moveRight = true;
-//
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_D) {
-//
-//        pirate.moveRight = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_A) {
-//
-//        pirate.moveLeft = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_A) {
-//
-//        pirate.moveLeft = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_W) {
-//
-//        pirate.moveUp = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_W) {
-//
-//        pirate.moveUp = false;
-//
-//    } else if (action == GLFW_PRESS && key == GLFW_KEY_S) {
-//
-//        pirate.moveDown = true;
-//
-//    } else if (action == GLFW_RELEASE && key == GLFW_KEY_S) {
-//
-//        pirate.moveDown = false;
-//
-//    }
-//    }
-//}

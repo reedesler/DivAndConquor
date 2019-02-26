@@ -77,7 +77,7 @@ void Tilemap::draw(const mat3 &projection) {
     glEnableVertexAttribArray(in_explored_loc);
     glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) 0);
     glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) sizeof(vec3));
-    glVertexAttribIPointer(in_explored_loc, 1, GL_INT, sizeof(TileVertex), (void*) (sizeof(vec3) + sizeof(vec2)));
+    glVertexAttribPointer(in_explored_loc, 1, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) (sizeof(vec3) + sizeof(vec2)));
 
     // Enabling and binding texture to slot 0
     glActiveTexture(GL_TEXTURE0);
@@ -152,16 +152,16 @@ Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(
 
             vertices.emplace_back(TileVertex{{x0 - wr,      y0 + hr, -0.02f},
                                              {textureLeft,  1.f},
-                                             false});
+                                             0});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 + hr, -0.02f},
                                              {textureRight, 1.f},
-                                             false});
+                                             0});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 - hr, -0.02f},
                                              {textureRight, 0.f},
-                                             false});
+                                             0});
             vertices.emplace_back(TileVertex{{x0 - wr,      y0 - hr, -0.02f},
                                              {textureLeft,  0.f},
-                                             false});
+                                             0});
             indices.insert(indices.end(), {idx, 3 + idx, 1 + idx, 1 + idx, 3 + idx, 2 + idx});
             idx += 4;
 
@@ -195,23 +195,29 @@ Tile Tilemap::getTile(float x, float y) {
     return this->map[newX][newY];
 }
 
-void Tilemap::setExplored(vec2 pos, float radius) {
-    int minX = std::max(static_cast<int>(floor((pos.x - radius) / TILE_SIZE + 0.5f)), 0);
-    int maxX = std::min(static_cast<unsigned int>(floor((pos.x + radius) / TILE_SIZE + 0.5f)), width - 1);
-    int minY = std::max(static_cast<int>(floor((pos.y - radius) / TILE_SIZE + 0.5f)), 0);
-    int maxY = std::min(static_cast<unsigned int>(floor((pos.y + radius) / TILE_SIZE + 0.5f)), height - 1);
+void Tilemap::setExplored(VisibleSet& tiles) {
+    for (auto t : tiles) {
+        Tile tile = map[t.x][t.y];
+        tile.setExplored(vertices);
+        tile.setVisible(vertices, true);
+    }
+}
 
-    for (int x = minX; x <= maxX; x++) {
-        for (int y = minY; y <= maxY; y++) {
-            if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)})) {
-                map[x][y].setExplored(vertices);
-            }
-        }
+void Tilemap::clearVisible(VisibleSet& tiles) {
+    for (auto t : tiles) {
+        Tile tile = map[t.x][t.y];
+        tile.setVisible(vertices, false);
     }
 }
 
 void Tile::setExplored(std::vector<TileVertex>& vertices) {
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
-        vertices[i].explored = true;
+        vertices[i].explored = 1;
+    }
+}
+
+void Tile::setVisible(std::vector<TileVertex> &vertices, bool visible) {
+    for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
+        vertices[i].explored = visible ? 1 : EXPLORED_BUT_NOT_VISIBLE;
     }
 }
