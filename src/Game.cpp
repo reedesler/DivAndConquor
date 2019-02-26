@@ -7,13 +7,23 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+struct vec2ui
+{
+    uint32_t x, y;
+};
+
+struct vec2i
+{
+    int32_t x, y;
+};
+
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character
 {
     GLuint TextureID; // ID handle of the glyph texture
-    vec2 Size;        // Size of glyph
-    vec2 Bearing;     // Offset from baseline to left/top of glyph
-    GLuint Advance;   // Horizontal offset to advance to next glyph
+    vec2ui Size;      // Size of glyph
+    vec2i Bearing;    // Offset from baseline to left/top of glyph
+    long Advance;     // Horizontal offset to advance to next glyph
 };
 
 GLuint VAO, VBO;
@@ -69,8 +79,8 @@ std::map<GLchar, Character> loadFont(const char *filename)
         // Now store character for later use
         Character character = {
             texture,
-            vec2{face->glyph->bitmap.width, face->glyph->bitmap.rows},
-            vec2{face->glyph->bitmap_left, face->glyph->bitmap_top},
+            vec2ui{face->glyph->bitmap.width, face->glyph->bitmap.rows},
+            vec2i{face->glyph->bitmap_left, face->glyph->bitmap_top},
             face->glyph->advance.x};
         Characters.insert(std::pair<GLchar, Character>(c, character));
     }
@@ -209,7 +219,8 @@ void Game::init(vec2 screen)
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
 
     auto characters = loadFont("data/fonts/MathJax_Typewriter-Regular.otf");
-    renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
+    //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
+    renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 }
 
 bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
