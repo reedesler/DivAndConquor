@@ -38,7 +38,7 @@ void ShipObject::update() {
                 }
                 else
                         this->sprite.state = 0;
-                //printf ("%f\n", rotation);
+                //printf ("%f : %f\n", position.x, position.y);
         }
 }
 
