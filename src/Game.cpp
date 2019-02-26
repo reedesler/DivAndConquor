@@ -24,6 +24,7 @@ void Game::draw(const mat3 &projection, int pixelScale)
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("invokeBuildShip! \n");
+
     game->buildShip(vec2{(float)xpos, (float)ypos});
 }
 
@@ -66,8 +67,16 @@ void Game::init(vec2 screen)
         printf("ERROR initializing sprite\n");
     }
 
+    Sprite build_settlement_button = Sprite();
+    if (!build_settlement_button.init(120, 90, buttons_path("build_settlement.png")))
+    {
+
+        printf("ERROR initializing sprite\n");
+    }
+
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
+    registerButton(build_settlement_button, {80.f, 300.f}, invokeHireSailors);
 
     //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
 
