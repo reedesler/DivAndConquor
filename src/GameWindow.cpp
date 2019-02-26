@@ -51,6 +51,9 @@ bool GameWindow::init(vec2 screen, Game *game)
     auto key_redirect = [](GLFWwindow *wnd, int _0, int _1, int _2, int _3) {
         ((GameWindow *)glfwGetWindowUserPointer(wnd))->onKey(wnd, _0, _1, _2, _3);
     };
+    auto key_redirect_p = [](GLFWwindow *wnd, int _0, int _1, int _2, int _3) {
+        ((GameWindow *)glfwGetWindowUserPointer(wnd))->onKey2(wnd, _0, _1, _2, _3);
+    };
     auto cursor_pos_redirect = [](GLFWwindow *wnd, double _0, double _1) {
         ((GameWindow *)glfwGetWindowUserPointer(wnd))->onMouseMove(wnd, _0, _1);
     };
@@ -58,6 +61,8 @@ bool GameWindow::init(vec2 screen, Game *game)
         ((GameWindow *)glfwGetWindowUserPointer(wnd))->onMouseClick(wnd, _0, _1, _2);
     };
     glfwSetKeyCallback(window, key_redirect);
+    //glfwSetKeyCallback(window, key_redirect_p);
+
     glfwSetCursorPosCallback(window, cursor_pos_redirect);
     glfwSetMouseButtonCallback(window, mouse_click_redirect);
 
@@ -126,6 +131,7 @@ void GameWindow::onKey(GLFWwindow *, int key, int scancode, int action, int mod)
 {
     game->onKey(key, scancode, action);
 }
+
 
 void GameWindow::onMouseMove(GLFWwindow *window, double xpos, double ypos)
 {

@@ -42,6 +42,7 @@ set(SOURCE_FILES
         src/World/World.cpp
         src/World/Tilemap.cpp
         src/World/Camera.cpp
+        src/World/ShipObject.cpp
 
         src/ProjectPath.hpp
         src/Common.hpp
@@ -49,10 +50,12 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Button.hpp
         src/Sprite.hpp
+        src/Pirate.cpp
+        src/Pirate.h
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
-        src/World/Camera.hpp)
+        src/World/Camera.hpp src/World/Pathfinder.cpp src/World/Pathfinder.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
@@ -70,10 +73,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
 set(OpenGL_GL_PREFERENCE GLVND)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+# Find Freetype
+find_package(Freetype REQUIRED)
 
 if (OPENGL_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
+endif()
+
+if (FREETYPE_FOUND)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 endif()
 
 # glfw, sdl could be precompiled (on windows) or installed by a package manager (on OSX and Linux)

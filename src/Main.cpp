@@ -13,6 +13,7 @@ using Clock = std::chrono::high_resolution_clock;
 
 GameWindow window;
 Game game;
+Pirate pirate;
 const int width = 1200;
 const int height = 800;
 
@@ -26,6 +27,7 @@ int main()
         return EXIT_FAILURE;
     }
 
+
     auto lastUpdate = Clock::now();
 
     while (!window.shouldClose())
@@ -37,12 +39,13 @@ int main()
             (float)(std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate)).count() / 1000;
         while (updateDebt >= UPDATE_INTERVAL_MS)
         {
-            game.update();
+            game.update(updateDebt);
             updateDebt -= UPDATE_INTERVAL_MS;
             lastUpdate = now;
         }
 
         window.draw();
+       // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     window.destroy();

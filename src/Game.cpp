@@ -1,14 +1,40 @@
 #include "Game.hpp"
+#include "Common.hpp"
+
+#include <iostream>
+#include <string>
+
+void Game::update(float time)
+{
+    world->update(time);
+}
+
+void Game::draw(const mat3 &projection, int pixelScale)
+{
+    world->draw(pixelScale);
+    glViewport(0, 0, screen.x, screen.y); // reset viewport
+    // buttons probably shouldnt have their own viewport
+    // after all, what if we want alert boxes or some menu that involves buttons over the world
+    for (auto &it : buttons)
+    {
+        it.Draw(projection);
+    }
+}
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("invokeBuildShip! \n");
-    game->buildShip();
+
+    game->buildShip(vec2{(float)xpos, (float)ypos});
 }
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("hireSailors!\n");
+    //    mat3 pos = {{1.f, 0.f, (float)xpos},
+    //                {0.f, 1.f, (float)ypos},
+    //                {0.f,0.f,1.f}};
+    //    p.draw(pos);
 }
 
 void invokeSubmitJourney(int button, int action, double xpos, double ypos)
@@ -17,11 +43,9 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
     // find the two selected settlements that represent the src and dst
 }
 
-void Game::buildShip()
+void Game::buildShip(vec2 location)
 {
-    this->balance -= 500;
-    printf("balance %d\n", balance);
-    this->fleet.insert(new Ship(proa));
+    (this->world)->addShip(new ShipObject(this->world, location));
 }
 
 void Game::init(vec2 screen)
@@ -39,30 +63,25 @@ void Game::init(vec2 screen)
     Sprite hire_sailors_button = Sprite();
     if (!hire_sailors_button.init(120, 90, buttons_path("hire_sailors.png")))
     {
+
         printf("ERROR initializing sprite\n");
     }
 
-    balance = 5000;
+    Sprite build_settlement_button = Sprite();
+    if (!build_settlement_button.init(120, 90, buttons_path("build_settlement.png")))
+    {
+
+        printf("ERROR initializing sprite\n");
+    }
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
-}
+    registerButton(build_settlement_button, {80.f, 300.f}, invokeHireSailors);
 
-void Game::update()
-{
-    world->update();
-}
+    //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
 
-void Game::draw(const mat3 &projection, int pixelScale)
-{
-    world->draw(pixelScale);
-    glViewport(0, 0, screen.x, screen.y); // reset viewport
-    // buttons probably shouldnt have their own viewport
-    // after all, what if we want alert boxes or some menu that involves buttons over the world
-    for (auto &it : buttons)
-    {
-        it.Draw(projection);
-    }
+    //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
+    //renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 }
 
 bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
@@ -71,12 +90,6 @@ bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callba
     return true;
 }
 
-/*
-bool Game::removeButton(Sprite* btn) {
-    buttonCallbacks.erase(btn);
-    return true;
-}
-*/
 // TODO: this doesn't seem to account for viewport size... y positions seem a bit off
 void Game::onClick(int button, int action, double xpos, double ypos)
 {
@@ -138,6 +151,18 @@ void Game::onKey(int key, int scancode, int action)
         case GLFW_KEY_PERIOD:
             cameraZoom += 1;
             break;
+        case GLFW_KEY_W:
+            world->pirate.moveUp = true;
+            break;
+        case GLFW_KEY_S:
+            world->pirate.moveDown = true;
+            break;
+        case GLFW_KEY_A:
+            world->pirate.moveLeft = true;
+            break;
+        case GLFW_KEY_D:
+            world->pirate.moveRight = true;
+            break;
         default:
             break;
         }
@@ -163,6 +188,18 @@ void Game::onKey(int key, int scancode, int action)
             break;
         case GLFW_KEY_PERIOD:
             cameraZoom -= 1;
+            break;
+        case GLFW_KEY_W:
+            world->pirate.moveUp = false;
+            break;
+        case GLFW_KEY_S:
+            world->pirate.moveDown = false;
+            break;
+        case GLFW_KEY_A:
+            world->pirate.moveLeft = false;
+            break;
+        case GLFW_KEY_D:
+            world->pirate.moveRight = false;
             break;
         default:
             break;
