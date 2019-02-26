@@ -28,16 +28,6 @@ struct Ship
   uint16_t firearm;
 };
 
-struct Journey
-{
-  Settlement src, dst;
-  Ship vessel;
-  uint16_t gold;
-  uint16_t timber;
-  uint16_t iron;
-  float progress; // from 0.f to 100.f, we should be able to determine the location of the ship based on this
-};
-
 static const Ship proa = {10, 10, 2, 4, 100, 0},
                   catboat = {15, 15, 2, 6, 200, 0},
                   sloop = {30, 30, 4, 10, 400, 1},
@@ -69,21 +59,17 @@ public:
   // bool removeButton(Sprite *btn);
   void onClick(int button, int action, double xpos, double ypos);
 
-  void buildShip();
+  void buildShip(vec2 location);
 
-    void onKey2(int key, int scancode, int action);
+  void onKey2(int key, int scancode, int action);
+
+    World *world;
 private:
-  World *world;
   std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
   std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
 
-  int64_t balance;
-  uint64_t sailors;
-  std::unordered_set<Journey *> sailingShips;
-  std::unordered_set<Ship *> fleet;
   vec2 screen;
   Pirate pirate;
-
 };
 
 #endif //DIVCONQ_GAME_H

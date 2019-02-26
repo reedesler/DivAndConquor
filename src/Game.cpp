@@ -4,76 +4,6 @@
 #include <iostream>
 #include <string>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-struct vec2ui
-{
-    uint32_t x, y;
-};
-
-struct vec2i
-{
-    int32_t x, y;
-};
-
-/// Holds all state information relevant to a character as loaded using FreeType
-struct Character
-{
-    GLuint TextureID; // ID handle of the glyph texture
-    vec2ui Size;      // Size of glyph
-    vec2i Bearing;    // Offset from baseline to left/top of glyph
-    long Advance;     // Horizontal offset to advance to next glyph
-};
-
-GLuint VAO, VBO;
-
-void renderText(std::map<GLchar, Character> characters, std::string text, vec2 location, GLfloat scale, vec3 color)
-{
-    Effect effect;
-    // Activate corresponding render state
-    effect.load_from_file(shader_path("label.vs.glsl"), shader_path("label.fs.glsl"));
-    glUseProgram(effect.program);
-    glUniform3f(glGetUniformLocation(effect.program, "textColor"), color.x, color.y, color.z);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(VAO);
-
-    // Iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
-    {
-        Character ch = characters[*c];
-
-        GLfloat xpos = location.x + ch.Bearing.x * scale;
-        GLfloat ypos = location.y - (ch.Size.y - ch.Bearing.y) * scale;
-
-        GLfloat w = ch.Size.x * scale;
-        GLfloat h = ch.Size.y * scale;
-        // Update VBO for each character
-        GLfloat vertices[6][4] = {
-            {xpos, ypos + h, 0.0, 0.0},
-            {xpos, ypos, 0.0, 1.0},
-            {xpos + w, ypos, 1.0, 1.0},
-
-            {xpos, ypos + h, 0.0, 0.0},
-            {xpos + w, ypos, 1.0, 1.0},
-            {xpos + w, ypos + h, 1.0, 0.0}};
-        // Render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // Update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // Render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        location.x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
-        printf("%f\n", location.x);
-    }
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 void Game::update(float time)
 {
     world->update(time);
@@ -94,11 +24,14 @@ void Game::draw(const mat3 &projection, int pixelScale)
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("invokeBuildShip! \n");
-    game->buildShip();
+
+    game->buildShip(vec2{(float)xpos, (float)ypos});
 }
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
+
+    game->world->pirate.init();
     printf("hireSailors!\n");
     //    mat3 pos = {{1.f, 0.f, (float)xpos},
     //                {0.f, 1.f, (float)ypos},
@@ -112,11 +45,11 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
     // find the two selected settlements that represent the src and dst
 }
 
-void Game::buildShip()
+void Game::buildShip(vec2 location)
 {
-    this->balance -= 500;
-    printf("balance %d\n", balance);
-    this->fleet.insert(new Ship(proa));
+   
+
+    (this->world)->addShip(new ShipObject(this->world, location));
 }
 
 void Game::init(vec2 screen)
@@ -138,10 +71,21 @@ void Game::init(vec2 screen)
         printf("ERROR initializing sprite\n");
     }
 
-    balance = 5000;
+    Sprite build_settlement_button = Sprite();
+    if (!build_settlement_button.init(120, 90, buttons_path("build_settlement.png")))
+    {
+
+        printf("ERROR initializing sprite\n");
+    }
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
+    registerButton(build_settlement_button, {80.f, 300.f}, invokeHireSailors);
+
+    //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
+
+    //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
+    //renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 }
 
 bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
