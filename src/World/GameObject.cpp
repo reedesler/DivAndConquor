@@ -10,7 +10,6 @@ GameObject::GameObject(World* world) : world(world) {
     position = {200, 200};
     rotation = 0;
     scale = {1.f, 1.f};
-    selected = false;
 }
 
 void GameObject::draw(const mat3 &projection)

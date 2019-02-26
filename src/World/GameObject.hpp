@@ -7,20 +7,19 @@
 #endif
 
 #include "Sprite.hpp"
+#include "math.h"
 
 class GameObject
 {
   public:
     GameObject(World* world);
     void draw(const mat3 &projection);
-    void update();
+    virtual void update();
     bounds getBounds();
-    void move(vec2 pos);
+    virtual void move(vec2 pos);
     void setSelected();
 
   protected:
-    bool selected;
-
     Sprite sprite;
 
     float w, h;
@@ -35,6 +34,8 @@ class ShipObject : public GameObject{
 public:
     ShipObject(World* world, vec2 loc);
     void travel();
+    void update();
+    void move(vec2 pos);
     void setDestination(vec2 dst);
     void setVelocity(float vel);
 private:
