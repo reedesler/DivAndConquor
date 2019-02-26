@@ -13,6 +13,9 @@
 #include "Tilemap.h"
 #include "Camera.hpp"
 #include "Pirate.h"
+#include "PathRenderer.hpp"
+
+class PathRenderer;
 
 
 class World {
@@ -32,6 +35,7 @@ private:
     GameObject* selectedObject = nullptr;
 
     VisibleSet visibleTiles;
+    PathRenderer* pathRenderer;
 };
 
 
