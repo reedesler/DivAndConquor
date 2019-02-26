@@ -15,7 +15,7 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
     k_m = 0;
 
     cellInfo tmp{};
-    
+
     for (int x = 0; x < world->tilemap.width; x++) {
         for (int y = 0; y < world->tilemap.height; y++) {
             Tile& t = world->tilemap.map[x][y];
@@ -35,13 +35,10 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
     s_start.x = sX;
     s_start.y = sY;
+
     s_goal.x = gX;
     s_goal.y = gY;
-    tmp.rhs = 0;
-    tmp.g = INFINITY;
-    tmp.cost = defaultCost;
-
-    cellHash[s_goal] = tmp;
+    setRHS(s_goal, 0);
     insert(s_goal);
 
     tmp.g = tmp.rhs = INFINITY; //heuristic(s_start,s_goal);
@@ -309,25 +306,29 @@ void Pathfinder::getSucc(PF_Tile u, list<PF_Tile> &s) const {
     u.key.first = -1;
     u.key.second = -1;
 
+    PF_Tile v = u;
+
     if (occupied(u)) return;
 
-    u.x += 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.y += 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.x -= 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.x -= 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.y -= 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.y -= 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.x += 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-    u.x += 1;
-    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
-
+    for (int x = -1; x < 2; x++) {
+        v.x = u.x + x;
+        if (v.x >= 0 && v.x < world->tilemap.width) {
+            for (int y = -1; y < 2; y++) {
+                v.y = u.y + y;
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                    if (x != 0 && y != 0) {
+                        PF_Tile w = v;
+                        w.x = u.x;
+                        if (occupied(w)) continue;
+                        w.x = v.x;
+                        w.y = u.y;
+                        if (occupied(w)) continue;
+                    }
+                    s.push_front(v);
+                }
+            }
+        }
+    }
 }
 
 void Pathfinder::getPred(PF_Tile u, list<PF_Tile> &s) const {
@@ -336,23 +337,29 @@ void Pathfinder::getPred(PF_Tile u, list<PF_Tile> &s) const {
     u.key.first = -1;
     u.key.second = -1;
 
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.y -= 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
-    u.x += 1;
-    if (!occupied(u)) s.push_front(u);
+    PF_Tile v = u;
 
+    if (occupied(u)) return;
+
+    for (int x = -1; x < 2; x++) {
+        v.x = u.x + x;
+        if (v.x >= 0 && v.x < world->tilemap.width) {
+            for (int y = -1; y < 2; y++) {
+                v.y = u.y + y;
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                    if (x != 0 && y != 0) {
+                        PF_Tile w = v;
+                        w.x = u.x;
+                        if (occupied(w)) continue;
+                        w.x = v.x;
+                        w.y = u.y;
+                        if (occupied(w)) continue;
+                    }
+                    s.push_front(v);
+                }
+            }
+        }
+    }
 }
 
 void Pathfinder::updateStart(int x, int y) {
@@ -458,10 +465,6 @@ bool Pathfinder::replan() {
             return false;
         }
 
-        // choose the next node in the path by selecting the one with smallest
-        // g() + cost. Break ties by choosing the neighbour that is closest
-        // to the line between start and goal (i.e. smallest sum of Euclidean
-        // distances to start and goal).
         double cmin = INFINITY;
         double tmin = INFINITY;
         PF_Tile smin = cur;
