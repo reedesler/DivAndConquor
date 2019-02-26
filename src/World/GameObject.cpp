@@ -10,6 +10,8 @@ GameObject::GameObject(World* world) : world(world) {
     position = {200, 200};
     rotation = 0;
     scale = {1.f, 1.f};
+
+    pathfinder = new Pathfinder(world);
 }
 
 void GameObject::draw(const mat3 &projection)
@@ -23,7 +25,16 @@ bounds GameObject::getBounds() {
 }
 
 void GameObject::move(vec2 pos) {
-    position = pos;
+    //position = pos;
+    TilePos start = Tilemap::getTilePos(position.x, position.y);
+    TilePos goal = Tilemap::getTilePos(pos.x, pos.y);
+    pathfinder->init(start.x, start.y, goal.x, goal.y);
+    pathfinder->replan();
+    path = pathfinder->getPath();
+    printf("================================================\n");
+    for (auto i : path.path) {
+        printf("%d  %d\n", i.x, i.y);
+    }
 }
 
 void GameObject::update() {

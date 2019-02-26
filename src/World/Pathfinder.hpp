@@ -4,6 +4,10 @@
 
 #ifndef DIVCONQ_PATHFINDING_H
 #define DIVCONQ_PATHFINDING_H
+#ifndef DIVCONQ_PATHFINDING_H_DEFINED
+    #define DIVCONQ_PATHFINDING_H_DEFINED
+    class Pathfinder;
+#endif
 
 #include <math.h>
 #include <stack>
@@ -96,9 +100,9 @@ typedef struct{
 
 } Path;
 
-class Pathfinding {
+class Pathfinder {
 public:
-    explicit Pathfinding(World world);
+    explicit Pathfinder(World* world);
     void   init(int sX, int sY, int gX, int gY);
     void   updateCell(int x, int y, double val);
     void   updateStart(int x, int y);
@@ -109,7 +113,7 @@ public:
 
 private:
 
-    World world;
+    World* world;
 
     Path path;
 

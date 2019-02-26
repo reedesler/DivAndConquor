@@ -59,6 +59,7 @@ public:
     unsigned int height;
     void draw(const mat3 &projection);
     Tile getTile(float x, float y);
+    static TilePos getTilePos(float x, float y);
     void setExplored(VisibleSet& tiles);
     void clearVisible(VisibleSet& tiles);
 

@@ -38,11 +38,13 @@ set(SOURCE_FILES
         src/Game.cpp
         src/Button.cpp
         src/Sprite.cpp
+        src/World/Pathfinder.cpp
         src/World/GameObject.cpp
         src/World/World.cpp
         src/World/Tilemap.cpp
         src/World/Camera.cpp
         src/World/ShipObject.cpp
+
 
         src/ProjectPath.hpp
         src/Common.hpp
@@ -55,7 +57,8 @@ set(SOURCE_FILES
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
-        src/World/Camera.hpp src/World/Pathfinder.cpp src/World/Pathfinder.hpp)
+        src/World/Camera.hpp
+        src/World/Pathfinder.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)

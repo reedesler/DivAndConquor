@@ -195,6 +195,13 @@ Tile Tilemap::getTile(float x, float y) {
     return this->map[newX][newY];
 }
 
+TilePos Tilemap::getTilePos(float x, float y) {
+    int newX = static_cast<int>(floor(x / TILE_SIZE + 0.5f));
+    int newY = static_cast<int>(floor(y / TILE_SIZE + 0.5f));
+    return {newX, newY};
+}
+
+
 void Tilemap::setExplored(VisibleSet& tiles) {
     for (auto t : tiles) {
         Tile tile = map[t.x][t.y];
@@ -209,7 +216,6 @@ void Tilemap::clearVisible(VisibleSet& tiles) {
         tile.setVisible(vertices, false);
     }
 }
-
 void Tile::setExplored(std::vector<TileVertex>& vertices) {
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
         vertices[i].explored = 1;

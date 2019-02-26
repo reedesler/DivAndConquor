@@ -8,6 +8,7 @@
 
 #include "Sprite.hpp"
 #include "math.h"
+#include "Pathfinder.hpp"
 
 class GameObject
 {
@@ -29,6 +30,9 @@ class GameObject
     float rotation; // in radians
 
     World* world;
+
+    Pathfinder* pathfinder;
+    Path path;
 };
 
 class ShipObject : public GameObject{
