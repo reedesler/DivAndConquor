@@ -18,6 +18,7 @@ class GameObject
     bounds getBounds();
     virtual void move(vec2 pos);
     void setSelected();
+    bool onTerrain(vec2 loc, int type);
 
   protected:
     Sprite sprite;

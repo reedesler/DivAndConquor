@@ -24,6 +24,7 @@ public:
     void onClick2(int button, int action, float xpos, float ypos);
     Camera camera;
     Pirate pirate;
+    Tilemap tilemap;
 
 private:
     void on_key(int, int key, int, int action);
@@ -31,7 +32,6 @@ private:
 
         private:
     std::vector<GameObject *> gameObjects;
-    Tilemap tilemap;
 
     GameObject* selectedObject = nullptr;
      Pirate * selected = nullptr;
