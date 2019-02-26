@@ -42,9 +42,17 @@ void GameObject::setSelected() {
 }
 
 bool GameObject::onTerrain(vec2 pos, int type){
-    int rT = world->tilemap.getTile(pos.x + w/2, pos.y).type;
-    int lT = world->tilemap.getTile(pos.x - w/2, pos.y).type;
+
+    int rT = world->tilemap.getTile(pos.x + w/2, pos.y - h/2).type;
+    int lT = world->tilemap.getTile(pos.x - w/2, pos.y - h/2).type;
     int rB = world->tilemap.getTile(pos.x + w/2, pos.y + h/2).type;
     int lB = world->tilemap.getTile(pos.x - w/2, pos.y + h/2).type;
-    return rT == type && lT == type && type == rB && lB == type;
+    bool res = false;
+    if (rT == type && (pos.x + w/2) < world->w - 1)
+        if (rB == type && (pos.y + h/2) < world->h - 1)
+            if (lB == type && (pos.x - w/2) >= 0)
+                if (lT == type && (pos.y - h/2) >= 0)
+                    res = true;
+
+    return res;
 }

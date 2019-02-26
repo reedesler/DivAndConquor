@@ -2,12 +2,13 @@
 
 std::map<const char *, Texture *> Sprite::textures;
 
-bool Sprite::init(float width, float height, const char *textureName)
+bool Sprite::init(float width, float height, const char *textureName, vec2 texPiece)
 {
     this->height = height;
     this->width = width;
     this->tint = {1.f, 1.f, 1.f};
     this->selected = false;
+    this->state = 0;
     auto t = textures.find(textureName);
     if (textures.count(textureName) > 0)
     {
@@ -27,6 +28,7 @@ bool Sprite::init(float width, float height, const char *textureName)
             return false;
         }
     }
+    this->texPiece = texPiece;
 
     // The position corresponds to the center of the texture
     float wr = width * 0.5f;
@@ -34,11 +36,11 @@ bool Sprite::init(float width, float height, const char *textureName)
 
     TexturedVertex vertices[4];
     vertices[0].position = {-wr, +hr, -0.02f};
-    vertices[0].texcoord = {0.f, 1.f};
+    vertices[0].texcoord = {0.f, texPiece.y};
     vertices[1].position = {+wr, +hr, -0.02f};
-    vertices[1].texcoord = {1.f, 1.f};
+    vertices[1].texcoord = {texPiece.x, texPiece.y};
     vertices[2].position = {+wr, -hr, -0.02f};
-    vertices[2].texcoord = {1.f, 0.f};
+    vertices[2].texcoord = {texPiece.x, 0.f};
     vertices[3].position = {-wr, -hr, -0.02f};
     vertices[3].texcoord = {0.f, 0.f};
 
@@ -89,6 +91,7 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
     GLint transform_uloc = glGetUniformLocation(effect.program, "transform");
     GLint color_uloc = glGetUniformLocation(effect.program, "fcolor");
     GLint projection_uloc = glGetUniformLocation(effect.program, "projection");
+    GLint shift_uloc = glGetUniformLocation(effect.program, "shift");
 
     // Setting vertices and indices
     glBindVertexArray(mesh.vao);
@@ -114,6 +117,7 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
     else
         tint = {1.f, 1.f, 1.f};
     glUniform3fv(color_uloc, 1, tint.data());
+    glUniform2f(shift_uloc, texPiece.x * state, texPiece.y * state);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);
 
     // Drawing!

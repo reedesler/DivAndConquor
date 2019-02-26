@@ -11,10 +11,12 @@ class Sprite : public Renderable
   static std::map<const char *, Texture *> textures;
 
 public:
-  bool init(float width, float height, const char *textureName);
+  bool init(float width, float height, const char *textureName, vec2 texPiece = {1.f,1.});
   void draw(const mat3 &projection, vec2 position, float rotation = 0, vec2 scale = {1.f, 1.f});
   float width, height;
+  vec2 texPiece;
   std::array<GLfloat,3 > tint;
+  int state;
   bool selected;
 };
 

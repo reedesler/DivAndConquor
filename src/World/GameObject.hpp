@@ -39,19 +39,19 @@ class ShipObject : public GameObject
 {
 public:
   ShipObject(World *world, vec2 loc);
-  void travel();
+  void travel(vec2 dir);
   void update();
   void move(vec2 pos);
-  void setDestination(vec2 dst);
-  void setVelocity(float vel);
+  //void setDestination(vec2 dst);
+  //void setVelocity(float vel);
 
 private:
   float velocity;
   vec2 destination;
 
-  uint16_t gold;
-  uint16_t timber;
-  uint16_t iron;
+  //uint16_t gold;
+  //uint16_t timber;
+  //uint16_t iron;
 };
 
 #endif //DIVCONQ_GAMEOBJECT_H

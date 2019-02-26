@@ -32,6 +32,8 @@ class World
     std::vector<Pirate *> pirates;
    Pirate pirate;
     Tilemap tilemap;
+    long int w;
+    long int h;
 
     Pirate * selected = nullptr;
 private:
