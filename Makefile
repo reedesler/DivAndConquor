@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/Cellar/cmake/3.13.2/bin/cmake
+CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/Cellar/cmake/3.13.2/bin/cmake -E remove -f
+RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/tomertorgeman/Desktop/team11/team11game
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/Cellar/cmake/3.13.2/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,8 +69,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/local/Cellar/cmake/3.13.2/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -366,6 +366,33 @@ src/World/GameObject.cpp.s:
 	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/GameObject.cpp.s
 .PHONY : src/World/GameObject.cpp.s
 
+src/World/Pathfinder.o: src/World/Pathfinder.cpp.o
+
+.PHONY : src/World/Pathfinder.o
+
+# target to build an object file
+src/World/Pathfinder.cpp.o:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.o
+.PHONY : src/World/Pathfinder.cpp.o
+
+src/World/Pathfinder.i: src/World/Pathfinder.cpp.i
+
+.PHONY : src/World/Pathfinder.i
+
+# target to preprocess a source file
+src/World/Pathfinder.cpp.i:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.i
+.PHONY : src/World/Pathfinder.cpp.i
+
+src/World/Pathfinder.s: src/World/Pathfinder.cpp.s
+
+.PHONY : src/World/Pathfinder.s
+
+# target to generate assembly for a file
+src/World/Pathfinder.cpp.s:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.s
+.PHONY : src/World/Pathfinder.cpp.s
+
 src/World/ShipObject.o: src/World/ShipObject.cpp.o
 
 .PHONY : src/World/ShipObject.o
@@ -483,6 +510,9 @@ help:
 	@echo "... src/World/GameObject.o"
 	@echo "... src/World/GameObject.i"
 	@echo "... src/World/GameObject.s"
+	@echo "... src/World/Pathfinder.o"
+	@echo "... src/World/Pathfinder.i"
+	@echo "... src/World/Pathfinder.s"
 	@echo "... src/World/ShipObject.o"
 	@echo "... src/World/ShipObject.i"
 	@echo "... src/World/ShipObject.s"

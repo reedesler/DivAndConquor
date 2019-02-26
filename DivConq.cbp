@@ -138,6 +138,12 @@
 		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/GameObject.hpp">
 			<Option target="DivConq"/>
 		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Pathfinder.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Pathfinder.hpp">
+			<Option target="DivConq"/>
+		</Unit>
 		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/ShipObject.cpp">
 			<Option target="DivConq"/>
 		</Unit>
