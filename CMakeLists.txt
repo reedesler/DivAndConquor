@@ -70,10 +70,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
 set(OpenGL_GL_PREFERENCE GLVND)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+# Find Freetype
+find_package(Freetype REQUIRED)
 
 if (OPENGL_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
+endif()
+
+if (FREETYPE_FOUND)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 endif()
 
 # glfw, sdl could be precompiled (on windows) or installed by a package manager (on OSX and Linux)
