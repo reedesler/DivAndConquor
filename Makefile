@@ -366,6 +366,33 @@ src/World/GameObject.cpp.s:
 	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/GameObject.cpp.s
 .PHONY : src/World/GameObject.cpp.s
 
+src/World/Pathfinder.o: src/World/Pathfinder.cpp.o
+
+.PHONY : src/World/Pathfinder.o
+
+# target to build an object file
+src/World/Pathfinder.cpp.o:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.o
+.PHONY : src/World/Pathfinder.cpp.o
+
+src/World/Pathfinder.i: src/World/Pathfinder.cpp.i
+
+.PHONY : src/World/Pathfinder.i
+
+# target to preprocess a source file
+src/World/Pathfinder.cpp.i:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.i
+.PHONY : src/World/Pathfinder.cpp.i
+
+src/World/Pathfinder.s: src/World/Pathfinder.cpp.s
+
+.PHONY : src/World/Pathfinder.s
+
+# target to generate assembly for a file
+src/World/Pathfinder.cpp.s:
+	$(MAKE) -f CMakeFiles/DivConq.dir/build.make CMakeFiles/DivConq.dir/src/World/Pathfinder.cpp.s
+.PHONY : src/World/Pathfinder.cpp.s
+
 src/World/ShipObject.o: src/World/ShipObject.cpp.o
 
 .PHONY : src/World/ShipObject.o
@@ -483,6 +510,9 @@ help:
 	@echo "... src/World/GameObject.o"
 	@echo "... src/World/GameObject.i"
 	@echo "... src/World/GameObject.s"
+	@echo "... src/World/Pathfinder.o"
+	@echo "... src/World/Pathfinder.i"
+	@echo "... src/World/Pathfinder.s"
 	@echo "... src/World/ShipObject.o"
 	@echo "... src/World/ShipObject.i"
 	@echo "... src/World/ShipObject.s"

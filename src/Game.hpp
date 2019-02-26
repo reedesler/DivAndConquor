@@ -59,7 +59,7 @@ public:
   // bool removeButton(Sprite *btn);
   void onClick(int button, int action, double xpos, double ypos);
 
-  void buildShip();
+  void buildShip(vec2 location);
 
   void onKey2(int key, int scancode, int action);
 
@@ -68,10 +68,6 @@ private:
   std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
   std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
 
-  int64_t balance;
-  uint64_t sailors;
-  std::unordered_set<ShipObject *> sailingShips;
-  std::unordered_set<Ship *> fleet;
   vec2 screen;
   Pirate pirate;
 };

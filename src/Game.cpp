@@ -24,7 +24,7 @@ void Game::draw(const mat3 &projection, int pixelScale)
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
     printf("invokeBuildShip! \n");
-    game->buildShip();
+    game->buildShip(vec2{(float)xpos, (float)ypos});
 }
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
@@ -42,11 +42,9 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
     // find the two selected settlements that represent the src and dst
 }
 
-void Game::buildShip()
+void Game::buildShip(vec2 location)
 {
-    this->balance -= 500;
-    printf("balance %d\n", balance);
-    this->fleet.insert(new Ship(proa));
+    (this->world)->addShip(new ShipObject(this->world, location));
 }
 
 void Game::init(vec2 screen)
@@ -67,8 +65,6 @@ void Game::init(vec2 screen)
 
         printf("ERROR initializing sprite\n");
     }
-
-    balance = 5000;
 
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
