@@ -1,20 +1,12 @@
-#version 330
-// From vertex shader
-in vec2 texcoord;
-in float explored;
+#version 330 core
+in vec2 TexCoords;
+out vec4 color;
 
-// Application data
-uniform sampler2D sampler0;
-uniform vec3 fcolor;
-
-// Output color
-layout(location = 0) out  vec4 color;
+uniform sampler2D text;
+uniform vec3 textColor;
 
 void main()
-{
-    if (explored > 0) {
-	    color = vec4(fcolor, 1.0) * texture(sampler0, vec2(texcoord.x, texcoord.y));
-    } else {
-	    color = vec4(0, 0, 0, 1.0);
-    }
-}
+{    
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
+    color = vec4(textColor, 1.0) * sampled;
+}  

@@ -2,62 +2,10 @@
 #include "Common.hpp"
 
 #include <iostream>
+#include <string>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
-void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
-{
-    printf("invokeBuildShip! \n");
-    game->buildShip();
-}
-
-void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
-{
-    printf("hireSailors!\n");
-    //    mat3 pos = {{1.f, 0.f, (float)xpos},
-    //                {0.f, 1.f, (float)ypos},
-    //                {0.f,0.f,1.f}};
-    //    p.draw(pos);
-}
-
-void invokeSubmitJourney(int button, int action, double xpos, double ypos)
-{
-    printf("Starting a journey from a to b!\n");
-    // find the two selected settlements that represent the src and dst
-}
-
-void Game::buildShip()
-{
-    this->balance -= 500;
-    printf("balance %d\n", balance);
-    this->fleet.insert(new Ship(proa));
-}
-
-void Game::init(vec2 screen)
-{
-    this->screen = screen;
-
-    world = new World({0, 200, (GLint)screen.x, (GLint)screen.y - 200});
-
-    Sprite build_ship_button = Sprite();
-    if (!build_ship_button.init(120, 90, buttons_path("build_ship.png")))
-    {
-        printf("ERROR initializing sprite\n");
-    }
-
-    Sprite hire_sailors_button = Sprite();
-    if (!hire_sailors_button.init(120, 90, buttons_path("hire_sailors.png")))
-    {
-
-        printf("ERROR initializing sprite\n");
-    }
-
-    balance = 5000;
-
-    registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
-    registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
-}
 
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character
@@ -70,7 +18,7 @@ struct Character
 
 GLuint VAO, VBO;
 
-std::map<GLchar, Character> loadFont()
+std::map<GLchar, Character> loadFont(const char *filename)
 {
     std::map<GLchar, Character> Characters;
     // FreeType
@@ -81,7 +29,7 @@ std::map<GLchar, Character> loadFont()
 
     // Load font as face
     FT_Face face;
-    if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
+    if (FT_New_Face(ft, filename, 0, &face))
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
     // Set size to load glyphs as
@@ -149,9 +97,9 @@ void renderText(std::map<GLchar, Character> characters, std::string text, vec2 l
 {
     Effect effect;
     // Activate corresponding render state
-    effect.load_from_file(shader_path("textured.vs.glsl"), shader_path("textured.fs.glsl"));
+    effect.load_from_file(shader_path("label.vs.glsl"), shader_path("label.fs.glsl"));
     glUseProgram(effect.program);
-    // glUniform3f(glGetUniformLocation(s.Program, "textColor"), color.x, color.y, color.z);
+    glUniform3f(glGetUniformLocation(effect.program, "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -185,6 +133,7 @@ void renderText(std::map<GLchar, Character> characters, std::string text, vec2 l
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         location.x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+        printf("%f\n", location.x);
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -205,6 +154,62 @@ void Game::draw(const mat3 &projection, int pixelScale)
     {
         it.Draw(projection);
     }
+}
+
+void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
+{
+    printf("invokeBuildShip! \n");
+    game->buildShip();
+}
+
+void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
+{
+    printf("hireSailors!\n");
+    //    mat3 pos = {{1.f, 0.f, (float)xpos},
+    //                {0.f, 1.f, (float)ypos},
+    //                {0.f,0.f,1.f}};
+    //    p.draw(pos);
+}
+
+void invokeSubmitJourney(int button, int action, double xpos, double ypos)
+{
+    printf("Starting a journey from a to b!\n");
+    // find the two selected settlements that represent the src and dst
+}
+
+void Game::buildShip()
+{
+    this->balance -= 500;
+    printf("balance %d\n", balance);
+    this->fleet.insert(new Ship(proa));
+}
+
+void Game::init(vec2 screen)
+{
+    this->screen = screen;
+
+    world = new World({0, 200, (GLint)screen.x, (GLint)screen.y - 200});
+
+    Sprite build_ship_button = Sprite();
+    if (!build_ship_button.init(120, 90, buttons_path("build_ship.png")))
+    {
+        printf("ERROR initializing sprite\n");
+    }
+
+    Sprite hire_sailors_button = Sprite();
+    if (!hire_sailors_button.init(120, 90, buttons_path("hire_sailors.png")))
+    {
+
+        printf("ERROR initializing sprite\n");
+    }
+
+    balance = 5000;
+
+    registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
+    registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
+
+    auto characters = loadFont("data/fonts/MathJax_Typewriter-Regular.otf");
+    renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
 }
 
 bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
