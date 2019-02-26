@@ -2,7 +2,7 @@
 // Input attributes
 in vec3 in_position;
 in vec2 in_texcoord;
-in int in_explored;
+in float in_explored;
 
 // Passed to fragment shader
 out vec2 texcoord;

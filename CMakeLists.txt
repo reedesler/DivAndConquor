@@ -55,7 +55,7 @@ set(SOURCE_FILES
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
-        src/World/Camera.hpp)
+        src/World/Camera.hpp src/World/Pathfinder.cpp src/World/Pathfinder.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
