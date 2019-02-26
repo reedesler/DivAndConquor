@@ -7,6 +7,7 @@ bool Sprite::init(float width, float height, const char *textureName)
     this->height = height;
     this->width = width;
     this->tint = {1.f, 1.f, 1.f};
+    this->selected = false;
     auto t = textures.find(textureName);
     if (textures.count(textureName) > 0)
     {
@@ -108,6 +109,10 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
 
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
+    if (selected)
+        tint = {0.7f, 1.f, 0.7f};
+    else
+        tint = {1.f, 1.f, 1.f};
     glUniform3fv(color_uloc, 1, tint.data());
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);
 

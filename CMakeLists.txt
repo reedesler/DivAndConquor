@@ -42,6 +42,7 @@ set(SOURCE_FILES
         src/World/World.cpp
         src/World/Tilemap.cpp
         src/World/Camera.cpp
+        src/World/ShipObject.cpp
 
         src/ProjectPath.hpp
         src/Common.hpp
@@ -49,6 +50,8 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Button.hpp
         src/Sprite.hpp
+        src/Pirate.cpp
+        src/Pirate.h
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h

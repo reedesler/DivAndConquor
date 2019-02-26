@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="DivConq"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\src\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/tomertorgeman/Desktop/team11/team11game"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/tomertorgeman/Desktop/team11/team11game"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/tomertorgeman/Desktop/team11/team11game"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DivConq">
+				<Option output="/Users/tomertorgeman/Desktop/team11/team11game/DivConq" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/tomertorgeman/Desktop/team11/team11game"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/src"/>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/ext/stb_image"/>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/ext/gl3w"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/OpenGL.framework"/>
+					<Add directory="/Library/Frameworks/Mono.framework/Headers"/>
+					<Add directory="/usr/local/include/freetype2"/>
+					<Add directory="/usr/local/Cellar/glfw/3.2.1/include"/>
+					<Add directory="/usr/local/include/SDL2"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 DivConq"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DivConq/fast">
+				<Option output="/Users/tomertorgeman/Desktop/team11/team11game/DivConq" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/tomertorgeman/Desktop/team11/team11game"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/src"/>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/ext/stb_image"/>
+					<Add directory="/Users/tomertorgeman/Desktop/team11/team11game/ext/gl3w"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/OpenGL.framework"/>
+					<Add directory="/Library/Frameworks/Mono.framework/Headers"/>
+					<Add directory="/usr/local/include/freetype2"/>
+					<Add directory="/usr/local/Cellar/glfw/3.2.1/include"/>
+					<Add directory="/usr/local/include/SDL2"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 DivConq/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/tomertorgeman/Desktop/team11/team11game/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Button.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Button.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Common.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Common.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Game.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Game.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/GameWindow.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/GameWindow.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Main.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Pirate.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Pirate.h">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/ProjectPath.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Sprite.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/Sprite.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Camera.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Camera.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/GameObject.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/GameObject.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/ShipObject.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Tilemap.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/Tilemap.h">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/World.cpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/World/World.hpp">
+			<Option target="DivConq"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/tomertorgeman/Desktop/team11/team11game/src/project_path.hpp.in">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

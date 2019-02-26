@@ -62,7 +62,7 @@ class Game
 {
 public:
   void init(vec2 screen);
-  void update();
+  void update(float time);
   void draw(const mat3 &projection, int pixelScale);
   void onKey(int key, int scancode, int action);
   bool registerButton(Sprite &btn, vec2 location, ButtonOnClickFunc callback);
@@ -71,6 +71,7 @@ public:
 
   void buildShip();
 
+    void onKey2(int key, int scancode, int action);
 private:
   World *world;
   std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
@@ -81,6 +82,8 @@ private:
   std::unordered_set<Journey *> sailingShips;
   std::unordered_set<Ship *> fleet;
   vec2 screen;
+  Pirate pirate;
+
 };
 
 #endif //DIVCONQ_GAME_H

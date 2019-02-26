@@ -20,8 +20,10 @@ private:
   void onKey(GLFWwindow *, int key, int, int action, int mod);
   void onMouseClick(GLFWwindow *window, int button, int action, int mod);
   void onMouseMove(GLFWwindow *window, double xpos, double ypos);
+  void onKey2(GLFWwindow *, int key, int scancode, int action, int mod);
 
   Game *game;
+  World *world;
 };
 
 #endif //DIVCONQ_WINDOW_H
