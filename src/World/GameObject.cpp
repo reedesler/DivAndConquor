@@ -31,10 +31,6 @@ void GameObject::move(vec2 pos) {
     pathfinder->init(start.x, start.y, goal.x, goal.y);
     pathfinder->replan();
     path = pathfinder->getPath();
-    printf("================================================\n");
-    for (auto i : path.path) {
-        printf("%d  %d\n", i.x, i.y);
-    }
 }
 
 void GameObject::update() {

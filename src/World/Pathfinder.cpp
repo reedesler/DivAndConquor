@@ -14,12 +14,29 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
     k_m = 0;
 
+    cellInfo tmp{};
+    
+    for (int x = 0; x < world->tilemap.width; x++) {
+        for (int y = 0; y < world->tilemap.height; y++) {
+            Tile& t = world->tilemap.map[x][y];
+            if (t.explored) {
+                PF_Tile tile;
+                tile.x = x;
+                tile.y = y;
+
+                tmp.rhs = INFINITY;
+                tmp.g = INFINITY;
+                tmp.cost = t.type == 0 ? defaultCost : -1;
+
+                cellHash[tile] = tmp;
+            }
+        }
+    }
+
     s_start.x = sX;
     s_start.y = sY;
     s_goal.x = gX;
     s_goal.y = gY;
-
-    cellInfo tmp{};
     tmp.rhs = 0;
     tmp.g = INFINITY;
     tmp.cost = defaultCost;
@@ -295,21 +312,21 @@ void Pathfinder::getSucc(PF_Tile u, list<PF_Tile> &s) const {
     if (occupied(u)) return;
 
     u.x += 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.y += 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.x -= 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.x -= 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.y -= 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.y -= 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.x += 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
     u.x += 1;
-    s.push_front(u);
+    if (u.x >= 0 && u.x < world->tilemap.width && u.y >= 0 && u.y < world->tilemap.height) s.push_front(u);
 
 }
 
