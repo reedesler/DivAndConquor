@@ -29,8 +29,11 @@ void World::onClick(int button, int action, float xpos, float ypos) {
             if (inBounds(b, worldCoords)) {
                 if (selectedObject == o)
                     selectedObject = nullptr;
-                else
+                else{
+                    if(selectedObject)
+                        selectedObject->setSelected();
                     selectedObject = o;
+                }
                 o->setSelected();
                 return;
             }
