@@ -17,7 +17,7 @@ class GameObject
     bounds getBounds();
     void move(vec2 pos);
 
-  private:
+  protected:
     Sprite sprite;
 
     float w, h;
@@ -27,6 +27,17 @@ class GameObject
     float rotation; // in radians
 
     World* world;
+};
+
+class ShipObject : public GameObject{
+public:
+    ShipObject(World* world, vec2 loc);
+    void travel();
+    void setDestination(vec2 dst);
+    void setVelocity(float vel);
+private:
+    float velocity;
+    vec2 destination;
 };
 
 #endif //DIVCONQ_GAMEOBJECT_H

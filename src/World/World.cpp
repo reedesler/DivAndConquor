@@ -3,7 +3,7 @@
 World::World(rect viewPort) : camera(Camera(viewPort)),
                               tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))) {
     gameObjects.push_back(new GameObject(this));
-    ships.push_back(new Ship(this, {300, 300}, {200, 200}));
+    gameObjects.push_back(new ShipObject(this, {300, 300}));
 }
 
 void World::update() {
@@ -18,9 +18,6 @@ void World::draw(int pixelScale) {
     tilemap.draw(projection);
     for (auto o : gameObjects) {
         o->draw(projection);
-    }
-    for (auto s: ships){
-        s->draw(projection);
     }
 }
 
