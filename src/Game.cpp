@@ -12,13 +12,13 @@ void Game::update()
 void Game::draw(const mat3 &projection, int pixelScale)
 {
     world->draw(pixelScale);
-    glViewport(0, 0, screen.x, screen.y); // reset viewport
-    // buttons probably shouldnt have their own viewport
-    // after all, what if we want alert boxes or some menu that involves buttons over the world
-    for (auto &it : buttons)
-    {
-        it.Draw(projection);
-    }
+//    glViewport(0, 0, screen.x, screen.y); // reset viewport
+//    // buttons probably shouldnt have their own viewport
+//    // after all, what if we want alert boxes or some menu that involves buttons over the world
+//    for (auto &it : buttons)
+//    {
+//        it.Draw(projection);
+//    }
 }
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
@@ -55,7 +55,7 @@ void Game::init(vec2 screen)
 {
     this->screen = screen;
 
-    world = new World({0, 200, (GLint)screen.x, (GLint)screen.y - 200});
+    world = new World({0, 0, (GLint)screen.x, (GLint)screen.y});
 
     Sprite build_ship_button = Sprite();
     if (!build_ship_button.init(120, 90, buttons_path("build_ship.png")))
