@@ -49,6 +49,7 @@ private:
     std::unordered_set<ShipObject *> fleet;
 
     GameObject *selectedObject = nullptr;
+    GameObject *turtle = nullptr;
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;
