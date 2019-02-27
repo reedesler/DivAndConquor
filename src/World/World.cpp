@@ -5,6 +5,7 @@ World::World(rect viewPort) : camera(Camera(viewPort)),
 {
     gameObjects.push_back(new GameObject(this));
     gameObjects.push_back(new ShipObject(this, {300, 300}));
+    gameObjects.push_back(new SettlementObject(this, {770, 330}));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;

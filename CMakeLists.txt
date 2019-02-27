@@ -44,6 +44,7 @@ set(SOURCE_FILES
         src/World/Tilemap.cpp
         src/World/Camera.cpp
         src/World/ShipObject.cpp
+        src/World/SettlementObject.cpp
 
 
         src/ProjectPath.hpp
@@ -58,7 +59,9 @@ set(SOURCE_FILES
         src/World/World.hpp
         src/World/Tilemap.h
         src/World/Camera.hpp
-        src/World/Pathfinder.hpp src/PathRenderer.cpp src/PathRenderer.hpp)
+        src/World/Pathfinder.hpp
+        src/PathRenderer.cpp
+        src/PathRenderer.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
