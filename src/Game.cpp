@@ -200,8 +200,7 @@ void Game::onMouseMove(double xpos, double ypos) {
 }
 
 void Game::onScroll(double xoffset, double yoffset) {
-    printf("%f\n", yoffset);
-    float zoomVel = yoffset / 500;
+    auto zoomVel = static_cast<float>(yoffset / 500);
     world->camera.zoom *= (1 + zoomVel);
     world->camera.boundCameraToWorld();
 }
