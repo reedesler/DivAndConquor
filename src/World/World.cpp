@@ -3,7 +3,8 @@
 World::World(rect viewPort) : camera(Camera(viewPort)),
                               tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt")))
 {
-    gameObjects.push_back(new GameObject(this));
+    turtle = new GameObject(this);
+    gameObjects.push_back(turtle);
     gameObjects.push_back(new ShipObject(this, {300, 300}));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
@@ -29,6 +30,8 @@ void World::update(float time)
     pirate.update(time);
 
     tilemap.setExplored(visibleTiles);
+
+    pathRenderer->init(turtle->pathfinder->getPath());
 }
 
 void World::draw(int pixelScale)
@@ -69,7 +72,9 @@ void World::onClick(int button, int action, float xpos, float ypos)
         if (selectedObject != nullptr)
         {
             selectedObject->move(worldCoords);
-            pathRenderer->init(selectedObject->path);
+            if (selectedObject == turtle) {
+                pathRenderer->init(selectedObject->path);
+            }
         }
     }
 }
@@ -87,7 +92,11 @@ void World::setExplored(vec2 pos, float radius)
         {
             if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)}))
             {
-                //map[x][y].setExplored(vertices);
+                if (tilemap.map[x][y].type != 0) {
+                    for (auto o : gameObjects) {
+                        o->pathfinder->updateCell(x, y, -1);
+                    }
+                }
                 visibleTiles.insert(TilePos{x, y});
             }
         }

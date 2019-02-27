@@ -249,7 +249,7 @@ void Pathfinder::remove(const PF_Tile &u) {
 double Pathfinder::trueDist(const PF_Tile &a, const PF_Tile &b) const {
     float x = a.x - b.x;
     float y = a.y - b.y;
-    return x * x + y * y;
+    return sqrt(x * x + y * y);
 }
 
 double Pathfinder::heuristic(const PF_Tile &a, const PF_Tile &b) const {
@@ -338,8 +338,6 @@ void Pathfinder::getPred(PF_Tile u, list<PF_Tile> &s) const {
     u.key.second = -1;
 
     PF_Tile v = u;
-
-    if (occupied(u)) return;
 
     for (int x = -1; x < 2; x++) {
         v.x = u.x + x;
