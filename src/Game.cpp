@@ -136,36 +136,24 @@ void Game::onKey(int key, int scancode, int action)
     {
         switch (key)
         {
-        case GLFW_KEY_UP:
+        case GLFW_KEY_W:
             cameraDir.y -= 1;
             break;
-        case GLFW_KEY_DOWN:
+        case GLFW_KEY_S:
             cameraDir.y += 1;
             break;
-        case GLFW_KEY_LEFT:
+        case GLFW_KEY_A:
             cameraDir.x -= 1;
             break;
-        case GLFW_KEY_RIGHT:
+        case GLFW_KEY_D:
             cameraDir.x += 1;
             break;
-        case GLFW_KEY_COMMA:
+        case GLFW_KEY_Q:
             cameraZoom -= 1;
             break;
-        case GLFW_KEY_PERIOD:
+        case GLFW_KEY_E:
             cameraZoom += 1;
             break;
-//        case GLFW_KEY_W:
-//            world->pirate.moveUp = true;
-//            break;
-//        case GLFW_KEY_S:
-//            world->pirate.moveDown = true;
-//            break;
-//        case GLFW_KEY_A:
-//            world->pirate.moveLeft = true;
-//            break;
-//        case GLFW_KEY_D:
-//            world->pirate.moveRight = true;
-//            break;
         default:
             break;
         }
@@ -174,40 +162,46 @@ void Game::onKey(int key, int scancode, int action)
     {
         switch (key)
         {
-        case GLFW_KEY_UP:
+        case GLFW_KEY_W:
             cameraDir.y += 1;
             break;
-        case GLFW_KEY_DOWN:
+        case GLFW_KEY_S:
             cameraDir.y -= 1;
             break;
-        case GLFW_KEY_LEFT:
+        case GLFW_KEY_A:
             cameraDir.x += 1;
             break;
-        case GLFW_KEY_RIGHT:
+        case GLFW_KEY_D:
             cameraDir.x -= 1;
             break;
-        case GLFW_KEY_COMMA:
+        case GLFW_KEY_Q:
             cameraZoom += 1;
             break;
-        case GLFW_KEY_PERIOD:
+        case GLFW_KEY_E:
             cameraZoom -= 1;
             break;
-//        case GLFW_KEY_W:
-//            world->pirate.moveUp = false;
-//            break;
-//        case GLFW_KEY_S:
-//            world->pirate.moveDown = false;
-//            break;
-//        case GLFW_KEY_A:
-//            world->pirate.moveLeft = false;
-//            break;
-//        case GLFW_KEY_D:
-//            world->pirate.moveRight = false;
-//            break;
         default:
             break;
         }
     }
 
     world->camera.move(cameraDir, cameraZoom);
+}
+
+void Game::onMouseMove(double xpos, double ypos) {
+
+    rect viewPort = world->camera.viewPort;
+    auto viewX = static_cast<float>(xpos - viewPort.x);
+    auto viewY = static_cast<float>(ypos - screen.y + viewPort.y + viewPort.h);
+    if (viewX >= 0 && viewX <= viewPort.w && viewY >= 0 && viewY <= viewPort.h)
+    {
+        world->onMouseMove(viewX, viewY);
+    }
+}
+
+void Game::onScroll(double xoffset, double yoffset) {
+    printf("%f\n", yoffset);
+    float zoomVel = yoffset / 500;
+    world->camera.zoom *= (1 + zoomVel);
+    world->camera.boundCameraToWorld();
 }

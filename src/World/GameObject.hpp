@@ -118,7 +118,7 @@ public:
     //vec2 p_position; // Window coordinates
     //float w;
     //float h;
-    bool moveUp;
+    bool moveUp = true;
     bool moveDown;
     bool moveLeft;
     bool moveRight;

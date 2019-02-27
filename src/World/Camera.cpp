@@ -1,6 +1,9 @@
 #include "Camera.hpp"
 
-Camera::Camera(rect viewPort) {
+Camera::Camera(rect viewPort, unsigned int worldWidth, unsigned int worldHeight, int tileSize) : worldWidth(worldWidth),
+                                                                                                 worldHeight(
+                                                                                                         worldHeight),
+                                                                                                 tileSize(tileSize) {
     pos = {0, 0};
     vel = {0, 0};
     zoomVel = 0;
@@ -8,7 +11,7 @@ Camera::Camera(rect viewPort) {
     this->viewPort = viewPort;
 }
 
-void Camera::update(unsigned int width, unsigned int height, int tileSize) {
+void Camera::update() {
     pos.x += vel.x / zoom;
     pos.y += vel.y / zoom;
     if (zoomVel > 0) {
@@ -17,32 +20,11 @@ void Camera::update(unsigned int width, unsigned int height, int tileSize) {
         zoom /= -zoomVel;
     }
 
-    if (zoom < 0.07) zoom = 0.07;
-
-    bounds b = getCameraBounds();
-
-    float topLeftBorder = 0 - tileSize / 2.f;
-    if (b.left < topLeftBorder) {
-        pos.x += topLeftBorder - b.left;
-    }
-
-    float rightBorder = width * tileSize - tileSize / 2.f;
-    if (b.right > rightBorder) {
-        pos.x += rightBorder - b.right;
-    }
-
-    if (b.top < topLeftBorder) {
-        pos.y += topLeftBorder - b.top;
-    }
-
-    float bottomBorder = height * tileSize - tileSize / 2.f;
-    if (b.bottom > bottomBorder) {
-        pos.y += bottomBorder - b.bottom;
-    }
+    boundCameraToWorld();
 }
 
-void Camera::move(vec2 dir, int zoom) {
-    const float CAMERA_SPEED = 20;
+void Camera::move(vec2 dir, float zoom) {
+    const float CAMERA_SPEED = 5;
     const float CAMERA_ZOOM = 1.01;
     vel.x += dir.x * CAMERA_SPEED;
     vel.y += dir.y * CAMERA_SPEED;
@@ -86,4 +68,31 @@ bounds Camera::getCameraBounds() {
 
 vec2 Camera::viewToWorld(vec2 mouse) {
     return {pos.x + (-viewPort.w / 2.f + mouse.x) / zoom, pos.y + (-viewPort.h / 2.f + mouse.y) / zoom};
+}
+
+void Camera::boundCameraToWorld() {
+
+    if (zoom < 0.07) zoom = 0.07;
+    if (zoom > 2) zoom = 2;
+
+    bounds b = getCameraBounds();
+
+    float topLeftBorder = 0 - tileSize / 2.f;
+    if (b.left < topLeftBorder) {
+        pos.x += topLeftBorder - b.left;
+    }
+
+    float rightBorder = worldWidth * tileSize - tileSize / 2.f;
+    if (b.right > rightBorder) {
+        pos.x += rightBorder - b.right;
+    }
+
+    if (b.top < topLeftBorder) {
+        pos.y += topLeftBorder - b.top;
+    }
+
+    float bottomBorder = worldHeight * tileSize - tileSize / 2.f;
+    if (b.bottom > bottomBorder) {
+        pos.y += bottomBorder - b.bottom;
+    }
 }

@@ -26,11 +26,12 @@ class World
     void update();
     void draw(int pixelScale);
     void onClick(int button, int action, float xpos, float ypos);
+    void onMouseMove(double xpos, double ypos);
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
 
-    Camera camera;
     Tilemap tilemap;
+    Camera camera;
     long int w;
     long int h;
 
@@ -45,6 +46,8 @@ class World
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;
+
+    double prevMouseXpos, prevMouseYpos;
 };
 
 #endif //DIVCONQ_WORLD_H
