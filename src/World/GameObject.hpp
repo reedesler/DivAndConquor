@@ -54,4 +54,20 @@ private:
   //uint16_t iron;
 };
 
+class SettlementObject : public GameObject
+{
+public:
+    SettlementObject(World *world, vec2 loc);
+    void update();
+    void move(vec2 pos);
+    vec3 getResources();
+    //void setDestination(vec2 dst);
+    //void setVelocity(float vel);
+
+private:
+    uint16_t gold;
+    uint16_t timber;
+    uint16_t iron;
+};
+
 #endif //DIVCONQ_GAMEOBJECT_H
