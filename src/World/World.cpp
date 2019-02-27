@@ -3,16 +3,13 @@
 World::World(rect viewPort) : camera(Camera(viewPort)),
                               tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt")))
 {
-    turtle = new GameObject(this);
-    gameObjects.push_back(turtle);
     gameObjects.push_back(new ShipObject(this, {300, 300}));
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
-    gameObjects.push_back(new Pirate(this, {350, 500}));
+    gameObjects.push_back(new Pirate(this, {900, 500}));
 
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
-   // pirate.init();
 }
 
 void World::addShip(ShipObject *ship)
@@ -20,7 +17,7 @@ void World::addShip(ShipObject *ship)
     this->fleet.insert(ship);
 }
 
-void World::update(float time)
+void World::update()
 {
     tilemap.clearVisible(visibleTiles);
     visibleTiles.clear();
@@ -30,11 +27,12 @@ void World::update(float time)
     {
         o->update();
     }
-    //pirate.update(time);
 
     tilemap.setExplored(visibleTiles);
 
-    pathRenderer->init(turtle->pathfinder->getPath());
+    if (selectedObject && selectedObject->pathfinder) {
+        pathRenderer->init(selectedObject->pathfinder->getPath());
+    }
 }
 
 void World::draw(int pixelScale)
@@ -45,8 +43,9 @@ void World::draw(int pixelScale)
     {
         o->draw(projection);
     }
-    //pirate.draw(projection);
-    pathRenderer->draw(projection);
+    if (selectedObject && selectedObject->pathfinder) {
+        pathRenderer->draw(projection);
+    }
 }
 
 void World::onClick(int button, int action, float xpos, float ypos)
@@ -76,9 +75,6 @@ void World::onClick(int button, int action, float xpos, float ypos)
         if (selectedObject != nullptr)
         {
             selectedObject->move(worldCoords);
-            if (selectedObject == turtle) {
-                pathRenderer->init(selectedObject->path);
-            }
         }
     }
 }
@@ -98,7 +94,9 @@ void World::setExplored(vec2 pos, float radius)
             {
                 if (tilemap.map[x][y].type != 0) {
                     for (auto o : gameObjects) {
-                        o->pathfinder->updateCell(x, y, -1);
+                        if (o->pathfinder) {
+                            o->pathfinder->updateCell(x, y, -1);
+                        }
                     }
                 }
                 visibleTiles.insert(TilePos{x, y});

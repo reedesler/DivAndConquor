@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 
-void Game::update(float time)
+void Game::update()
 {
-    world->update(time);
+    world->update();
 }
 
 void Game::draw(const mat3 &projection, int pixelScale)

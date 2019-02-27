@@ -23,24 +23,16 @@ class World
 {
   public:
     explicit World(rect viewPort);
-    void update(float);
+    void update();
     void draw(int pixelScale);
     void onClick(int button, int action, float xpos, float ypos);
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
 
     Camera camera;
-    std::vector<Pirate *> pirates;
-   //Pirate pirate;
     Tilemap tilemap;
     long int w;
     long int h;
-
-    Pirate * selected = nullptr;
-private:
-    void on_key(int, int key, int, int action);
-
-    void on_key2(int, int key, int scancode, int action);
 
   private:
     std::vector<GameObject *> gameObjects;
@@ -50,7 +42,6 @@ private:
     std::unordered_set<ShipObject *> fleet;
 
     GameObject *selectedObject = nullptr;
-    GameObject *turtle = nullptr;
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;

@@ -52,7 +52,7 @@ class Game
 {
 public:
   void init(vec2 screen);
-  void update(float time);
+  void update();
   void draw(const mat3 &projection, int pixelScale);
   void onKey(int key, int scancode, int action);
   bool registerButton(Sprite &btn, vec2 location, ButtonOnClickFunc callback);

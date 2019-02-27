@@ -14,14 +14,13 @@ float ANIMATION_FRAME_H = 0.75f;
 float ANIMATION_FRAME_W = 0.33f;
 float Frame = 0.5f;
 
-Pirate::Pirate(World *world, vec2 pos): GameObject(world), Renderable(){
+Pirate::Pirate(World *world, vec2 pos): GameObject(world, pos), Renderable(){
     w = 75;
     h = 50;
     //if (!sprite.init(w, h, textures_path("captain.png"), {0.33f, 0.25f}))
     //{
     //    printf("ERROR initializing sprite\n");
     //}
-    position = pos;
     rotation = 0;
     scale = {1.f, 1.f};
     selected = false;

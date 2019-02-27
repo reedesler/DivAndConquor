@@ -4,7 +4,7 @@ Camera::Camera(rect viewPort) {
     pos = {0, 0};
     vel = {0, 0};
     zoomVel = 0;
-    zoom = 1;
+    zoom = 0.5;
     this->viewPort = viewPort;
 }
 

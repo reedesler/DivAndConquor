@@ -38,7 +38,7 @@ int main()
             (float)(std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate)).count() / 1000;
         while (updateDebt >= UPDATE_INTERVAL_MS)
         {
-            game.update(updateDebt);
+            game.update();
             updateDebt -= UPDATE_INTERVAL_MS;
             lastUpdate = now;
         }

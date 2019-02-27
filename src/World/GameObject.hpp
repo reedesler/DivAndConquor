@@ -13,7 +13,7 @@ class GameObject;
 class GameObject
 {
   public:
-    GameObject(World* world);
+    GameObject(World* world, vec2 loc);
 
     virtual void draw(const mat3 &projection);
     virtual void update();
@@ -21,7 +21,7 @@ class GameObject
     virtual void move(vec2 pos);
     virtual void setSelected();
     bool onTerrain(vec2 loc, int type);
-    Pathfinder* pathfinder;
+    Pathfinder* pathfinder = nullptr;
     Path path;
 
   protected:
@@ -47,8 +47,6 @@ public:
   //void setVelocity(float vel);
 
 private:
-  float velocity;
-  vec2 destination;
 
   //uint16_t gold;
   //uint16_t timber;

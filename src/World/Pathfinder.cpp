@@ -315,7 +315,7 @@ void Pathfinder::getSucc(PF_Tile u, list<PF_Tile> &s) const {
         if (v.x >= 0 && v.x < world->tilemap.width) {
             for (int y = -1; y < 2; y++) {
                 v.y = u.y + y;
-                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.height) {
                     if (x != 0 && y != 0) {
                         PF_Tile w = v;
                         w.x = u.x;
@@ -344,7 +344,7 @@ void Pathfinder::getPred(PF_Tile u, list<PF_Tile> &s) const {
         if (v.x >= 0 && v.x < world->tilemap.width) {
             for (int y = -1; y < 2; y++) {
                 v.y = u.y + y;
-                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.width) {
+                if (!(x == 0 && y == 0) && !occupied(v) && v.y >= 0 && v.y < world->tilemap.height) {
                     if (x != 0 && y != 0) {
                         PF_Tile w = v;
                         w.x = u.x;
