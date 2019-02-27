@@ -7,10 +7,12 @@ World::World(rect viewPort) : camera(Camera(viewPort)),
     gameObjects.push_back(turtle);
     gameObjects.push_back(new ShipObject(this, {300, 300}));
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
+    gameObjects.push_back(new Pirate(this, {350, 500}));
+
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
-    pirate.init();
+   // pirate.init();
 }
 
 void World::addShip(ShipObject *ship)
@@ -28,7 +30,7 @@ void World::update(float time)
     {
         o->update();
     }
-    pirate.update(time);
+    //pirate.update(time);
 
     tilemap.setExplored(visibleTiles);
 
@@ -57,6 +59,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
             bounds b = o->getBounds();
             if (inBounds(b, worldCoords))
             {
+                int a = 1;
                 if (selectedObject == o)
                     selectedObject = nullptr;
                 else

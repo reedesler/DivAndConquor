@@ -14,11 +14,12 @@ class GameObject
 {
   public:
     GameObject(World* world);
-    void draw(const mat3 &projection);
+
+    virtual void draw(const mat3 &projection);
     virtual void update();
     bounds getBounds();
     virtual void move(vec2 pos);
-    void setSelected();
+    virtual void setSelected();
     bool onTerrain(vec2 loc, int type);
     Pathfinder* pathfinder;
     Path path;
@@ -54,12 +55,14 @@ private:
   //uint16_t iron;
 };
 
-class SettlementObject : public GameObject
-{
+class SettlementObject : public GameObject {
 public:
     SettlementObject(World *world, vec2 loc);
+
     void update();
+
     void move(vec2 pos);
+
     vec3 getResources();
     //void setDestination(vec2 dst);
     //void setVelocity(float vel);
@@ -68,6 +71,61 @@ private:
     uint16_t gold;
     uint16_t timber;
     uint16_t iron;
+};
+class Pirate : public GameObject , public Renderable{
+
+    static Texture pirate_texture;
+
+public:
+    bool init();
+    // Creates all the associated render resources and default transform
+    Pirate(World* world, vec2 pos);
+
+    // Releases all the associated resources
+    //void destroy();
+
+    // Update turtle due to current
+    // ms represents the number of milliseconds elapsed from the previous update() call
+    void update(float ms);
+
+
+    void updateFrame(float ms);
+
+    void move(vec2 off);
+
+    // Renders the salmon
+    // projection is the 2D orthographic projection matrix
+    void draw(const mat3 &projection);
+    void setSelected();
+
+    // Returns the current turtle position
+    vec2 get_position() const;
+
+    // Sets the new turtle position
+    void set_position(vec2 position);
+
+    // Returns the turtle' bounding box for collision detection, called by collides_with()
+    vec2 get_bounding_box() const;
+
+   // bounds getBounds();
+    void moveToPos(vec2 pos);
+    void movement(vec2 pos);
+
+private:
+
+    //vec2 p_scale; // 1.f in each dimension. 1.f is as big as the associated texture
+    //float p_rotation; // in radians
+
+public:
+    //vec2 p_position; // Window coordinates
+    //float w;
+    //float h;
+    bool moveUp;
+    bool moveDown;
+    bool moveLeft;
+    bool moveRight;
+    bool selected;
+    std::array<GLfloat,3 > tint;
 };
 
 #endif //DIVCONQ_GAMEOBJECT_H

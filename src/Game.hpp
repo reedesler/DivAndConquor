@@ -62,14 +62,14 @@ public:
   void buildShip(vec2 location);
 
   void onKey2(int key, int scancode, int action);
-
+//  Pirate pirate;
     World *world;
 private:
   std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
   std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
 
   vec2 screen;
-  Pirate pirate;
+//  Pirate pirate;
 };
 
 #endif //DIVCONQ_GAME_H

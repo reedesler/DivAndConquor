@@ -13,7 +13,6 @@ using Clock = std::chrono::high_resolution_clock;
 
 GameWindow window;
 Game game;
-Pirate pirate;
 const int width = 1200;
 const int height = 800;
 

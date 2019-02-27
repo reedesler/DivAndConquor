@@ -4,6 +4,8 @@
 
 #include <cmath>
 #include "Pirate.h"
+#include "Common.hpp"
+#include "World/GameObject.hpp"
 
 Texture Pirate::pirate_texture;
 int ANIMATION_SPEED;
@@ -12,9 +14,19 @@ float ANIMATION_FRAME_H = 0.75f;
 float ANIMATION_FRAME_W = 0.33f;
 float Frame = 0.5f;
 
-//Pirate::Pirate(){
-//    this->init();
-//}
+Pirate::Pirate(World *world, vec2 pos): GameObject(world), Renderable(){
+    w = 75;
+    h = 50;
+    //if (!sprite.init(w, h, textures_path("captain.png"), {0.33f, 0.25f}))
+    //{
+    //    printf("ERROR initializing sprite\n");
+    //}
+    position = pos;
+    rotation = 0;
+    scale = {1.f, 1.f};
+    selected = false;
+    init();
+}
 
 bool Pirate::init() {
     // Load shared texture
@@ -82,9 +94,9 @@ bool Pirate::init() {
 
     // Setting initial values, scale is negative to make it face the opposite way
     // 1.0 would be as big as the original texture
-    p_position = {200, 200};
-    p_rotation = 0;
-    p_scale = {0.5f, 0.5f};
+    //p_position = {200, 200};
+    rotation = 0;
+    scale = {0.5f, 0.5f};
 
     moveDown = false;
     moveLeft = false;
@@ -114,15 +126,15 @@ bool Pirate::init() {
 
 // Call if init() was successful
 // Releases all graphics resources
-void Pirate::destroy() {
-    glDeleteBuffers(1, &mesh.vbo);
-    glDeleteBuffers(1, &mesh.ibo);
-    glDeleteBuffers(1, &mesh.vao);
-
-    glDeleteShader(effect.vertex);
-    glDeleteShader(effect.fragment);
-    glDeleteShader(effect.program);
-}
+//void Pirate::destroy() {
+//    glDeleteBuffers(1, &mesh.vbo);
+//    glDeleteBuffers(1, &mesh.ibo);
+//    glDeleteBuffers(1, &mesh.vao);
+//
+//    glDeleteShader(effect.vertex);
+//    glDeleteShader(effect.fragment);
+//    glDeleteShader(effect.program);
+//}
 
 void Pirate::update(float ms) {
     // Move fish along -X based on how much time has passed, this is to (partially) avoid
@@ -146,8 +158,11 @@ void Pirate::update(float ms) {
 }
 
 void Pirate::move(vec2 off) {
-    p_position.x += off.x;
-    p_position.y += off.y;
+    if (onTerrain(off, 2)){
+        position.x = off.x;
+        position.y = off.y;
+    }
+
 }
 
 void Pirate::moveToPos(vec2 pos) {
@@ -158,7 +173,7 @@ void Pirate::moveToPos(vec2 pos) {
 //            break;
 //        }
 //    }
-    p_position = pos;
+    position = pos;
 
 }
 
@@ -170,8 +185,8 @@ void Pirate::movement(vec2 pos) {
 //            break;
 //        }
 //    }
-    p_position.x = p_position.x + pos.x;
-    p_position.y = p_position.y + pos.y;
+    position.x = position.x + pos.x;
+    position.y = position.y + pos.y;
 
 }
 
@@ -183,14 +198,16 @@ void Pirate::updateFrame(float ms) {
 //        frame = (frame +1)%NUM_FRAMES;
 //    }
 }
-
+void Pirate::setSelected(){
+    this->selected = !this->selected;
+}
 void Pirate::draw(const mat3 &projection) {
     // Transformation code, see Rendering and Transformation in the template specification for more info
     // Incrementally updates transformation matrix, thus ORDER IS IMPORTANT
     transform_begin();
-    transform_translate({p_position.x, p_position.y});
-    transform_scale(p_scale);
-    transform_rotate(p_rotation);
+    transform_translate({position.x, position.y});
+    transform_scale(scale);
+    transform_rotate(rotation);
     transform_end();
 
 
@@ -257,7 +274,11 @@ void Pirate::draw(const mat3 &projection) {
             ANIMATION_FRAME_W = 0.33f;
         }
 
-
+    if (selected)
+        tint = {0.7f, 1.f, 0.7f};
+    else
+        tint = {1.f, 1.f, 1.f};
+    glUniform3fv(color_uloc, 1, tint.data());
 
     glUniform2f(texcoordShiftLoc, ANIMATION_FRAME_W, ANIMATION_FRAME_H);
     //glUniform2f(texcoordShiftLoc, 0.25f, 0.f);
@@ -265,7 +286,7 @@ void Pirate::draw(const mat3 &projection) {
 
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *) &transform);
     float color[] = {1.f, 1.f, 1.f};
-    glUniform3fv(color_uloc, 1, color);
+    //glUniform3fv(color_uloc, 1, tint.data());
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *) &projection);
 
     // Drawing!
@@ -336,20 +357,20 @@ void Pirate::draw(const mat3 &projection) {
 }
 
 vec2 Pirate::get_position() const {
-    return p_position;
+    return position;
 }
 
 void Pirate::set_position(vec2 position) {
-    p_position = position;
+    this->position = position;
 }
 
 // Returns the local bounding coordinates scaled by the current size of the turtle
 vec2 Pirate::get_bounding_box() const {
     // fabs is to avoid negative scale due to the facing direction
-    return {std::fabs(p_scale.x) * pirate_texture.width, std::fabs(p_scale.y) * pirate_texture.height};
+    return {std::fabs(scale.x) * pirate_texture.width, std::fabs(scale.y) * pirate_texture.height};
 }
 
-bounds Pirate::getBounds() {
-    return {p_position.x - pirate_texture.width / 2, p_position.x + pirate_texture.width / 2,
-            p_position.y - pirate_texture.height / 2, p_position.y + pirate_texture.height / 2};
-}
+//bounds Pirate::getBounds() {
+//    return {p_position.x - pirate_texture.width / 2, p_position.x + pirate_texture.width / 2,
+//            p_position.y - pirate_texture.height / 2, p_position.y + pirate_texture.height / 2};
+//}

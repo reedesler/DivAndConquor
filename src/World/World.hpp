@@ -17,6 +17,7 @@ class World;
 class PathRenderer;
 
 class ShipObject;
+class Pirate;
 
 class World
 {
@@ -30,7 +31,7 @@ class World
 
     Camera camera;
     std::vector<Pirate *> pirates;
-   Pirate pirate;
+   //Pirate pirate;
     Tilemap tilemap;
     long int w;
     long int h;
