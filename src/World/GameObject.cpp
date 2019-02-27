@@ -35,6 +35,23 @@ void GameObject::move(vec2 pos) {
 
 void GameObject::update() {
     world->setExplored(position, 7 * TILE_SIZE);
+    if (!path.path.empty()) {
+        std::list<PF_Tile>::iterator next = std::next(path.path.begin());
+        if (next == path.path.end()) return;
+        float destX = next->x * TILE_SIZE;
+        float destY = next->y * TILE_SIZE;
+        if (abs(position.x - destX) <= 5 && abs(position.y - destY) <= 5) {
+            pathfinder->updateStart(next->x, next->y);
+            pathfinder->replan();
+            path = pathfinder->getPath();
+        } else {
+            vec2 dir =  {destX - position.x, destY - position.y};
+            float length = sqrt(dir.x*dir.x + dir.y*dir.y);
+            const float VELOCITY = 5;
+            vec2 newPos = {position.x + dir.x / length * VELOCITY, position.y + dir.y / length * VELOCITY};
+            position = newPos;
+        }
+    }
 }
 
 void GameObject::setSelected() {

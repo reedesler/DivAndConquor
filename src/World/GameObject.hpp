@@ -20,6 +20,7 @@ class GameObject
     virtual void move(vec2 pos);
     void setSelected();
     bool onTerrain(vec2 loc, int type);
+    Pathfinder* pathfinder;
     Path path;
 
   protected:
@@ -32,7 +33,6 @@ class GameObject
 
     World* world;
 
-    Pathfinder* pathfinder;
 };
 
 class ShipObject : public GameObject
