@@ -72,7 +72,7 @@ vec2 Camera::viewToWorld(vec2 mouse) {
 
 void Camera::boundCameraToWorld() {
 
-    if (zoom < 0.07) zoom = 0.07;
+    if (zoom < 0.1) zoom = 0.1;
     if (zoom > 2) zoom = 2;
 
     bounds b = getCameraBounds();

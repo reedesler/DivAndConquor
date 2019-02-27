@@ -1,0 +1,26 @@
+Team 11
+Minimal Playability Submission
+
+David Ma         12428165
+Dmitry Narkevich 12032141
+Reed Esler       25426140
+Tomer Torgeman   50138156
+Vladimir Agushev 17501157
+
+
+For this milestone we are running behind schedule because of starting from scratch after using SDL for our first
+milestone and deciding that it wasn't sufficient enough for our needs.
+
+We have reimplimented the features from the previous milestone, plus further gameplay features.
+
+The player's ship can now interact with the world by uncovering unexplored territory. As the ship moves, everything it
+can see is added to the map that the player sees. Everything that has been seen before but isn't visible now is dimmed.
+Eventually the player will only see enemies within the bright parts of the map.
+
+The ship moves around the map by pathfinding to it's destination tile. Everything not yet explored is treated as open
+water, and as the ships uncover more of the map the paths they are taking update dynamically.
+
+We added some basic UI buttons but haven't implimented their functionality yet, so they are hidden in the current
+state of the game.
+
+We have also updated the engine to support different types of game objects, such as the settlement that appears in the world.
