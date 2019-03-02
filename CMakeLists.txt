@@ -74,12 +74,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/freetype/include)
 
 # so policy CMP0072 doesn't scream either
 set(OpenGL_GL_PREFERENCE GLVND)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 # Find Freetype
+if (IS_OS_WINDOWS)
+    set(FREETYPE_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/ext/freetype/win64/freetype.dll)
+    set(FREETYPE_INCLUDE_DIRS ext/freetype/include)
+endif()
 find_package(Freetype REQUIRED)
 
 if (OPENGL_FOUND)

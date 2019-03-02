@@ -1,5 +1,6 @@
 #include "Pathfinder.hpp"
 
+#undef near
 Pathfinder::Pathfinder(World* world) : world(world) {
     maxSteps = 80000;
     defaultCost = 1;

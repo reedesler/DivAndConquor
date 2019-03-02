@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <string>
+#define  UI_HEIGHT 150
 
+Sprite portraitFrame;
 void Game::update()
 {
     world->update();
@@ -12,13 +14,20 @@ void Game::update()
 void Game::draw(const mat3 &projection, int pixelScale)
 {
     world->draw(pixelScale);
-//    glViewport(0, 0, screen.x, screen.y); // reset viewport
-//    // buttons probably shouldnt have their own viewport
-//    // after all, what if we want alert boxes or some menu that involves buttons over the world
-//    for (auto &it : buttons)
-//    {
-//        it.Draw(projection);
-//    }
+    drawUI(projection);
+    // buttons probably shouldnt have their own viewport
+    // after all, what if we want alert boxes or some menu that involves buttons over the world
+
+}
+
+void Game::drawUI(const mat3 &projection) {
+    glViewport(0, 0, screen.x, screen.y); // reset viewport
+
+    for (auto &it : buttons)
+    {
+        it.Draw(projection);
+    }
+    portraitFrame.draw(projection,{25 + 150/2, screen.y-150/2});
 }
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
@@ -77,10 +86,17 @@ void Game::init(vec2 screen)
         printf("ERROR initializing sprite\n");
     }
 
-    registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
-    registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
-    registerButton(build_settlement_button, {80.f, 300.f}, invokeHireSailors);
 
+    registerButton(build_ship_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeBuildShip);
+    registerButton(hire_sailors_button, {300 + 150, screen.y - UI_HEIGHT/2 }, invokeHireSailors);
+    registerButton(build_settlement_button, {300 + 150*2, screen.y - UI_HEIGHT/2 }, invokeHireSailors);
+
+    portraitFrame = Sprite();
+    if (!portraitFrame.init(150, 150, textures_path("portraitframe.png")))
+    {
+
+        printf("ERROR initializing sprite\n");
+    }
     //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
 
     //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
@@ -200,7 +216,7 @@ void Game::onMouseMove(double xpos, double ypos) {
 }
 
 void Game::onScroll(double xoffset, double yoffset) {
-    auto zoomVel = static_cast<float>(yoffset / 500);
+    auto zoomVel = static_cast<float>(yoffset / 25);
     world->camera.zoom *= (1 + zoomVel);
     world->camera.boundCameraToWorld();
 }

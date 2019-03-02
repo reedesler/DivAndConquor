@@ -19,7 +19,9 @@ struct TileVertex
     vec3 position;
     vec2 texcoord;
     float explored;
+    unsigned int tileid;
 };
+
 
 struct TilePos {
     int x, y;

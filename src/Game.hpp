@@ -64,6 +64,8 @@ private:
     std::unordered_set<Sprite*> selectedSprites; // TODO: these should be gameobjects maybe
 
     vec2 screen;
+
+    void drawUI(const mat3 &projection);
 };
 
 #endif //DIVCONQ_GAME_H

@@ -20,6 +20,7 @@ private:
     vec2 pos;
     vec2 vel;
     float zoomVel;
+    float actualZoom;
     unsigned int worldWidth, worldHeight;
     int tileSize;
 };

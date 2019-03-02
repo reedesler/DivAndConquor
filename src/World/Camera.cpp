@@ -7,7 +7,8 @@ Camera::Camera(rect viewPort, unsigned int worldWidth, unsigned int worldHeight,
     pos = {0, 0};
     vel = {0, 0};
     zoomVel = 0;
-    zoom = 0.5;
+    actualZoom = zoom = 0.5;
+
     this->viewPort = viewPort;
 }
 
@@ -18,6 +19,10 @@ void Camera::update() {
         zoom *= zoomVel;
     } else if (zoomVel < 0) {
         zoom /= -zoomVel;
+    }
+    
+    if(std::abs(actualZoom - zoom) > 0.001f ){
+        actualZoom = actualZoom * 0.85f + zoom * 0.15f;
     }
 
     boundCameraToWorld();
@@ -48,8 +53,8 @@ mat3 Camera::getProjection(int pixelScale) {
     mat3 T = {{1.f,    0.f,    0.f},
               {0.f,    1.f,    0.f},
               {-pos.x, -pos.y, 1.f}};
-    mat3 S = {{zoom, 0.f,  0.f},
-              {0.f,  zoom, 0.f},
+    mat3 S = {{actualZoom, 0.f,  0.f},
+              {0.f,  actualZoom, 0.f},
               {0.f,  0.f,  1.f}};
     mat3 camT = {{1.f,              0.f,              0.f},
                  {0.f,              1.f,              0.f},
@@ -59,21 +64,21 @@ mat3 Camera::getProjection(int pixelScale) {
 }
 
 bounds Camera::getCameraBounds() {
-    float left = pos.x - viewPort.w / 2.f / zoom;
-    float right = pos.x + viewPort.w / 2.f / zoom;
-    float top = pos.y - viewPort.h / 2.f / zoom;
-    float bottom = pos.y + viewPort.h / 2.f / zoom;
+    float left = pos.x - viewPort.w / 2.f / actualZoom;
+    float right = pos.x + viewPort.w / 2.f / actualZoom;
+    float top = pos.y - viewPort.h / 2.f / actualZoom;
+    float bottom = pos.y + viewPort.h / 2.f / actualZoom;
     return {left, right, top, bottom};
 }
 
 vec2 Camera::viewToWorld(vec2 mouse) {
-    return {pos.x + (-viewPort.w / 2.f + mouse.x) / zoom, pos.y + (-viewPort.h / 2.f + mouse.y) / zoom};
+    return {pos.x + (-viewPort.w / 2.f + mouse.x) / actualZoom, pos.y + (-viewPort.h / 2.f + mouse.y) / actualZoom};
 }
 
 void Camera::boundCameraToWorld() {
 
-    if (zoom < 0.1) zoom = 0.1;
-    if (zoom > 2) zoom = 2;
+    if (actualZoom < 0.1) actualZoom = 0.1;
+    if (actualZoom > 2) actualZoom = 2;
 
     bounds b = getCameraBounds();
 
