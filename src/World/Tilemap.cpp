@@ -231,17 +231,13 @@ void Tile::setExplored(std::vector<TileVertex>& vertices) {
     explored = true;
     visible = true;
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
-        vertices[i].explored_old = vertices[i].explored;
         vertices[i].explored = 1;
-        vertices[i].explored_changetime = glfwGetTime();
     }
 }
 
 void Tile::setVisible(std::vector<TileVertex> &vertices, bool visible) {
     this->visible = visible;
     for (unsigned int i = vertexIndex; i < vertexIndex + 4; i++) {
-        vertices[i].explored_old = vertices[i].explored;
         vertices[i].explored = visible ? 1 : EXPLORED_BUT_NOT_VISIBLE;
-        vertices[i].explored_changetime = glfwGetTime();
     }
 }
