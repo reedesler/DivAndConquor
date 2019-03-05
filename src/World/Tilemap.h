@@ -19,7 +19,9 @@ struct TileVertex
     vec3 position;
     vec2 texcoord;
     float explored;
-    unsigned int tileid;
+    GLint tileid;
+    TransitionState tranState;
+    float tranStartTime;
 };
 
 

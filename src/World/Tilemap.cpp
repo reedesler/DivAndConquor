@@ -73,7 +73,7 @@ void Tilemap::draw(const mat3 &projection) {
     GLint in_texcoord_loc = glGetAttribLocation(effect.program, "in_texcoord");
     GLint in_explored_loc = glGetAttribLocation(effect.program, "in_explored");
     GLint in_tileid_loc = glGetAttribLocation(effect.program, "in_tileid");
-    GLuint in_time_uloc = glGetUniformLocation(effect.program, "time");
+    GLint in_time_uloc = glGetUniformLocation(effect.program, "time");
 
     glEnableVertexAttribArray(in_position_loc);
     glEnableVertexAttribArray(in_texcoord_loc);
@@ -84,7 +84,7 @@ void Tilemap::draw(const mat3 &projection) {
     glVertexAttribPointer(in_position_loc, 3, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) 0);
     glVertexAttribPointer(in_texcoord_loc, 2, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*) sizeof(vec3));
     glVertexAttribPointer(in_explored_loc, 1, GL_FLOAT, GL_FALSE, sizeof(TileVertex), (void*)offsetof(TileVertex, explored));
-    glVertexAttribPointer(in_tileid_loc, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(TileVertex), (void*)offsetof(TileVertex, tileid));
+    glVertexAttribPointer(in_tileid_loc, 1, GL_INT, GL_FALSE, sizeof(TileVertex), (void*)offsetof(TileVertex, tileid));
 
     // Enabling and binding texture to slot 0
     glActiveTexture(GL_TEXTURE0);
@@ -163,16 +163,16 @@ Tilemap::Tilemap(Tile** map, unsigned int w, unsigned int h) : width(w), height(
 
             vertices.emplace_back(TileVertex{{x0 - wr,      y0 + hr, -0.02f},
                                              {textureLeft,  textureBottom},
-                                             0, t.type});
+                                             0, .tileid=(GLint)t.type});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 + hr, -0.02f},
                                              {textureRight, textureBottom},
-                                             0, t.type});
+                                             0, .tileid=(GLint)t.type});
             vertices.emplace_back(TileVertex{{x0 + wr,      y0 - hr, -0.02f},
                                              {textureRight, textureTop},
-                                             0, t.type});
+                                             0, .tileid=(GLint)t.type});
             vertices.emplace_back(TileVertex{{x0 - wr,      y0 - hr, -0.02f},
                                              {textureLeft,  textureTop},
-                                             0, t.type});
+                                             0, .tileid=(GLint)t.type});
             indices.insert(indices.end(), {idx, 3 + idx, 1 + idx, 1 + idx, 3 + idx, 2 + idx});
             idx += 4;
 

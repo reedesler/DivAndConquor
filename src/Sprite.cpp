@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits>
 #include "Sprite.hpp"
 
 std::map<const char *, Texture *> Sprite::textures;
