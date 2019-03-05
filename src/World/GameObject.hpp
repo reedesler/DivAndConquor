@@ -20,6 +20,7 @@ class GameObject
     bounds getBounds();
     virtual void move(vec2 pos);
     virtual void setSelected();
+    vec2 getPosition() {return position;};
     bool onTerrain(vec2 loc, int type);
     Pathfinder* pathfinder = nullptr;
     Path path;

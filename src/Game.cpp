@@ -170,6 +170,9 @@ void Game::onKey(int key, int scancode, int action)
         case GLFW_KEY_E:
             cameraZoom += 1;
             break;
+        case GLFW_KEY_SPACE:
+            world->camera.followSelected=true;
+            break;
         default:
             break;
         }
@@ -195,6 +198,9 @@ void Game::onKey(int key, int scancode, int action)
             break;
         case GLFW_KEY_E:
             cameraZoom -= 1;
+            break;
+        case GLFW_KEY_SPACE:
+            world->camera.followSelected=false;
             break;
         default:
             break;

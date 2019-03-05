@@ -29,6 +29,8 @@ class World
     void onMouseMove(double xpos, double ypos);
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
+    void centerCameraOn(GameObject &go);
+    GameObject* getSelected() { return selectedObject;}
 
     Tilemap tilemap;
     Camera camera;

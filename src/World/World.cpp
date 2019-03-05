@@ -20,6 +20,9 @@ void World::addShip(ShipObject *ship)
     this->fleet.insert(ship);
 }
 
+void World::centerCameraOn(GameObject &go){
+    this->camera.moveTo(go.getPosition());
+}
 void World::update()
 {
     tilemap.clearVisible(visibleTiles);
@@ -36,6 +39,10 @@ void World::update()
     if (selectedObject && selectedObject->pathfinder) {
         pathRenderer->init(selectedObject->pathfinder->getPath());
     }
+
+
+    if(camera.followSelected && getSelected() != nullptr)
+        centerCameraOn(*getSelected());
 }
 
 void World::draw(int pixelScale)

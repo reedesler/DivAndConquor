@@ -4,7 +4,7 @@ Camera::Camera(rect viewPort, unsigned int worldWidth, unsigned int worldHeight,
                                                                                                  worldHeight(
                                                                                                          worldHeight),
                                                                                                  tileSize(tileSize) {
-    pos = {0, 0};
+    actualPos = pos = {0, 0};
     vel = {0, 0};
     zoomVel = 0;
     actualZoom = zoom = 0.5;
@@ -25,6 +25,10 @@ void Camera::update() {
         actualZoom = actualZoom * 0.85f + zoom * 0.15f;
     }
 
+    if((actualPos.x * actualPos.y + pos.x * pos.y) > 0.1f ){
+        actualPos.x = actualPos.x * 0.85f + pos.x * 0.15f;
+        actualPos.y = actualPos.y * 0.85f + pos.y * 0.15f;
+    }
     boundCameraToWorld();
 }
 
@@ -34,6 +38,12 @@ void Camera::move(vec2 dir, float zoom) {
     vel.x += dir.x * CAMERA_SPEED;
     vel.y += dir.y * CAMERA_SPEED;
     zoomVel += zoom * CAMERA_ZOOM;
+}
+
+void Camera::moveTo(vec2 target) {
+    //vel = {0,0};
+    pos=target;
+    boundCameraToWorld();
 }
 
 mat3 Camera::getProjection(int pixelScale) {
@@ -52,7 +62,7 @@ mat3 Camera::getProjection(int pixelScale) {
                        {tx,  ty,  1.f}};
     mat3 T = {{1.f,    0.f,    0.f},
               {0.f,    1.f,    0.f},
-              {-pos.x, -pos.y, 1.f}};
+              {-actualPos.x, -actualPos.y, 1.f}};
     mat3 S = {{actualZoom, 0.f,  0.f},
               {0.f,  actualZoom, 0.f},
               {0.f,  0.f,  1.f}};
@@ -64,40 +74,55 @@ mat3 Camera::getProjection(int pixelScale) {
 }
 
 bounds Camera::getCameraBounds() {
-    float left = pos.x - viewPort.w / 2.f / actualZoom;
-    float right = pos.x + viewPort.w / 2.f / actualZoom;
-    float top = pos.y - viewPort.h / 2.f / actualZoom;
-    float bottom = pos.y + viewPort.h / 2.f / actualZoom;
+    float left = actualPos.x - viewPort.w / 2.f / actualZoom;
+    float right = actualPos.x + viewPort.w / 2.f / actualZoom;
+    float top = actualPos.y - viewPort.h / 2.f / actualZoom;
+    float bottom = actualPos.y + viewPort.h / 2.f / actualZoom;
+    return {left, right, top, bottom};
+}
+bounds Camera::getCameraBoundsFor(vec2 vec) {
+    float left = vec.x - viewPort.w / 2.f / actualZoom;
+    float right = vec.x + viewPort.w / 2.f / actualZoom;
+    float top = vec.y - viewPort.h / 2.f / actualZoom;
+    float bottom = vec.y + viewPort.h / 2.f / actualZoom;
     return {left, right, top, bottom};
 }
 
 vec2 Camera::viewToWorld(vec2 mouse) {
-    return {pos.x + (-viewPort.w / 2.f + mouse.x) / actualZoom, pos.y + (-viewPort.h / 2.f + mouse.y) / actualZoom};
+    return {actualPos.x + (-viewPort.w / 2.f + mouse.x) / actualZoom, actualPos.y + (-viewPort.h / 2.f + mouse.y) / actualZoom};
 }
 
 void Camera::boundCameraToWorld() {
+    pos = boundVecToWorld(pos);
+}
+
+vec2 Camera::boundVecToWorld(vec2 initial) {
+
 
     if (actualZoom < 0.1) actualZoom = 0.1;
     if (actualZoom > 2) actualZoom = 2;
 
-    bounds b = getCameraBounds();
+
+    bounds b = getCameraBoundsFor(initial);
 
     float topLeftBorder = 0 - tileSize / 2.f;
     if (b.left < topLeftBorder) {
-        pos.x += topLeftBorder - b.left;
+        initial.x += topLeftBorder - b.left;
     }
 
     float rightBorder = worldWidth * tileSize - tileSize / 2.f;
     if (b.right > rightBorder) {
-        pos.x += rightBorder - b.right;
+        initial.x += rightBorder - b.right;
     }
 
     if (b.top < topLeftBorder) {
-        pos.y += topLeftBorder - b.top;
+        initial.y += topLeftBorder - b.top;
     }
 
     float bottomBorder = worldHeight * tileSize - tileSize / 2.f;
     if (b.bottom > bottomBorder) {
-        pos.y += bottomBorder - b.bottom;
+        initial.y += bottomBorder - b.bottom;
     }
+    return initial;
 }
+
