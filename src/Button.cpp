@@ -14,7 +14,7 @@ void Button::OnClick(Game *game, int action, double xpos, double ypos)
 
 void Button::Draw(const mat3 &projection)
 {
-    float flash = 0.8f;
+    float flash = 0.85f;
     if (lastPressMs > 0)
     {
         auto now = currentTimeMs();

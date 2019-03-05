@@ -28,9 +28,11 @@ void Game::drawUI(const mat3 &projection) {
         it.Draw(projection);
     }
     portraitFrame.draw(projection,{25 + 150/2, screen.y-150/2});
+
+    // draw selected unit in portrait frame
     if(world->getSelected() != nullptr){
         Sprite spt =  world->getSelected()->getSprite();
-        spt.selected = false;
+        spt.tint = {1.f,1.f,1.f};
         spt.draw(projection,{25 + 150/2, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
     }
 }
