@@ -28,6 +28,11 @@ void Game::drawUI(const mat3 &projection) {
         it.Draw(projection);
     }
     portraitFrame.draw(projection,{25 + 150/2, screen.y-150/2});
+    if(world->getSelected() != nullptr){
+        Sprite spt =  world->getSelected()->getSprite();
+        spt.selected = false;
+        spt.draw(projection,{25 + 150/2, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
+    }
 }
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)

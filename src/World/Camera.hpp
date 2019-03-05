@@ -29,6 +29,8 @@ private:
     bounds getCameraBoundsFor(vec2 vec);
 
     vec2 boundVecToWorld(vec2 initial);
+
+    void enforceConstraints();
 };
 
 

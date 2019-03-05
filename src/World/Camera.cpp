@@ -29,6 +29,13 @@ void Camera::update() {
         actualPos.x = actualPos.x * 0.85f + pos.x * 0.15f;
         actualPos.y = actualPos.y * 0.85f + pos.y * 0.15f;
     }
+    enforceConstraints();
+}
+
+void Camera::enforceConstraints() {
+
+    if (zoom < 0.1) zoom = 0.1;
+    if (zoom > 2) zoom = 2;
     boundCameraToWorld();
 }
 
@@ -43,7 +50,7 @@ void Camera::move(vec2 dir, float zoom) {
 void Camera::moveTo(vec2 target) {
     //vel = {0,0};
     pos=target;
-    boundCameraToWorld();
+    enforceConstraints();
 }
 
 mat3 Camera::getProjection(int pixelScale) {
@@ -99,8 +106,6 @@ void Camera::boundCameraToWorld() {
 vec2 Camera::boundVecToWorld(vec2 initial) {
 
 
-    if (actualZoom < 0.1) actualZoom = 0.1;
-    if (actualZoom > 2) actualZoom = 2;
 
 
     bounds b = getCameraBoundsFor(initial);

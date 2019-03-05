@@ -24,6 +24,7 @@ class GameObject
     bool onTerrain(vec2 loc, int type);
     Pathfinder* pathfinder = nullptr;
     Path path;
+    Sprite& getSprite() {return sprite;};
 
   protected:
     Sprite sprite;
