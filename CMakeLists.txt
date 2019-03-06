@@ -36,7 +36,7 @@ set(SOURCE_FILES
         src/Common.cpp
         src/GameWindow.cpp
         src/Game.cpp
-        src/Button.cpp
+        src/Ui/Button.cpp
         src/Sprite.cpp
         src/World/Pathfinder.cpp
         src/World/GameObject.cpp
@@ -51,7 +51,7 @@ set(SOURCE_FILES
         src/Common.hpp
         src/GameWindow.hpp
         src/Game.hpp
-        src/Button.hpp
+        src/Ui/Button.hpp
         src/Sprite.hpp
         src/Pirate.cpp
         src/Pirate.h
@@ -61,7 +61,7 @@ set(SOURCE_FILES
         src/World/Camera.hpp
         src/World/Pathfinder.hpp
         src/PathRenderer.cpp
-        src/PathRenderer.hpp)
+        src/PathRenderer.hpp src/Ui/PauseBtn.cpp src/Ui/PauseBtn.h src/Ui/UiElement.cpp src/Ui/UiElement.h src/Ui/UiCallback.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)

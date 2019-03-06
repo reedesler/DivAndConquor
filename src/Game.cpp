@@ -8,6 +8,12 @@
 Sprite portraitFrame;
 void Game::update()
 {
+    if(world->getSelected() != nullptr) {
+        activeUiElements = unitUis[typeid(*world->getSelected())];
+    }
+    else if (!activeUiElements.empty()) {
+        activeUiElements = vector<UiElement *>();
+    }
     world->update();
 }
 
@@ -23,9 +29,9 @@ void Game::draw(const mat3 &projection, int pixelScale)
 void Game::drawUI(const mat3 &projection) {
     glViewport(0, 0, screen.x, screen.y); // reset viewport
 
-    for (auto &it : buttons)
+    for (auto &it : activeUiElements)
     {
-        it.Draw(projection);
+        it->Draw(projection);
     }
     portraitFrame.draw(projection,{25 + 150/2, screen.y-150/2});
 
@@ -33,6 +39,7 @@ void Game::drawUI(const mat3 &projection) {
     if(world->getSelected() != nullptr){
         Sprite spt =  world->getSelected()->getSprite();
         spt.tint = {1.f,1.f,1.f};
+        spt.state = 0;
         spt.draw(projection,{25 + 150/2, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
     }
 }
@@ -94,9 +101,10 @@ void Game::init(vec2 screen)
     }
 
 
-    registerButton(build_ship_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeBuildShip);
-    registerButton(hire_sailors_button, {300 + 150, screen.y - UI_HEIGHT/2 }, invokeHireSailors);
-    registerButton(build_settlement_button, {300 + 150*2, screen.y - UI_HEIGHT/2 }, invokeHireSailors);
+    unitUis[typeid(ShipObject)].push_back(new Button(build_settlement_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeHireSailors));
+
+    unitUis[typeid(SettlementObject)].push_back(new Button(build_ship_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeBuildShip));
+    unitUis[typeid(SettlementObject)].push_back(new Button(hire_sailors_button, {300 + 150, screen.y - UI_HEIGHT/2 }, invokeHireSailors));
 
     portraitFrame = Sprite();
     if (!portraitFrame.init(150, 150, textures_path("portraitframe.png")))
@@ -110,9 +118,9 @@ void Game::init(vec2 screen)
     //renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 }
 
-bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
+bool Game::registerButton(Sprite &btn, vec2 location, UiCallback::OnClickFunc callback)
 {
-    buttons.emplace_back(btn, location, callback);
+    activeUiElements.push_back(new Button{btn, location, callback});
     return true;
 }
 
@@ -122,20 +130,21 @@ void Game::onClick(int button, int action, double xpos, double ypos)
     //printf("falled in the region? %lf %lf\n", xpos, ypos);
     if (action == GLFW_PRESS)
     {
-        for (auto &it : buttons)
+        for (auto &it : activeUiElements)
         {
 
-            if (it.InBounds({(float)xpos, (float)ypos}))
+            if (it->InBounds({(float)xpos, (float)ypos}))
             {
-                it.OnClick(this, 0, xpos, ypos);
-                if (selectedSprites.find(&it.sprite) == selectedSprites.end())
+                it->OnClick(this, 0, xpos, ypos);
+                if (selectedSprites.find(&it->sprite) == selectedSprites.end())
                 {
-                    selectedSprites.insert(&it.sprite);
+                    selectedSprites.insert(&it->sprite);
                 }
                 else
                 {
-                    selectedSprites.erase(&it.sprite);
+                    selectedSprites.erase(&it->sprite);
                 }
+                return; // prevent clickthrough
             }
         }
     } /* else if (action == GLFW_RELEASE) {
