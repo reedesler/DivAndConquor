@@ -3,6 +3,7 @@
 
 
 #include <Common.hpp>
+#include <cmath>
 
 
 class Camera {

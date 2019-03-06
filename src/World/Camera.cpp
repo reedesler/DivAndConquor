@@ -21,7 +21,7 @@ void Camera::update() {
         zoom /= -zoomVel;
     }
     
-    if(std::abs(actualZoom - zoom) > 0.001f ){
+    if(fabs(actualZoom - zoom) > 0.001f ){
         actualZoom = actualZoom * 0.85f + zoom * 0.15f;
     }
 
@@ -36,6 +36,8 @@ void Camera::enforceConstraints() {
 
     if (zoom < 0.1) zoom = 0.1;
     if (zoom > 2) zoom = 2;
+    if (actualZoom < 0.1) actualZoom = 0.1;
+    if (actualZoom > 2) actualZoom = 2;
     boundCameraToWorld();
 }
 
