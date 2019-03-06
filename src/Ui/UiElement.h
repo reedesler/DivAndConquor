@@ -23,7 +23,9 @@ public:
     const int flashMs;
     void OnClick(Game *game, int action, double xpos, double ypos)
     {
-        callback(game, action, action, xpos, ypos);
+        if (callback != nullptr) {
+            callback(game, action, action, xpos, ypos);
+        }
         this->lastPressMs = currentTimeMs();
     }
 

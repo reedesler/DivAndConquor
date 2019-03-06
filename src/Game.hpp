@@ -61,7 +61,8 @@ public:
 private:
 
     std::map<std::type_index, std::vector<UiElement*>> unitUis;
-    std::vector<UiElement*> activeUiElements;                  //TODO: generalize this to Ui elements?
+    std::vector<UiElement*> activeUiElements;
+    std::vector<UiElement*> staticUiElements;
     std::unordered_set<Sprite*> selectedSprites; // TODO: these should be gameobjects maybe
 
     vec2 screen;

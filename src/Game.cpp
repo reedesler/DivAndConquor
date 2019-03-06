@@ -29,18 +29,21 @@ void Game::draw(const mat3 &projection, int pixelScale)
 void Game::drawUI(const mat3 &projection) {
     glViewport(0, 0, screen.x, screen.y); // reset viewport
 
+    for (auto &it : staticUiElements)
+    {
+        it->Draw(projection);
+    }
     for (auto &it : activeUiElements)
     {
         it->Draw(projection);
     }
-    portraitFrame.draw(projection,{25 + 150/2, screen.y-150/2});
 
     // draw selected unit in portrait frame
     if(world->getSelected() != nullptr){
         Sprite spt =  world->getSelected()->getSprite();
         spt.tint = {1.f,1.f,1.f};
         spt.state = 0;
-        spt.draw(projection,{25 + 150/2, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
+        spt.draw(projection,{100, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
     }
 }
 
@@ -51,6 +54,10 @@ void invokeBuildShip(Game *game, int button, int action, double xpos, double ypo
     game->buildShip(vec2{(float)xpos, (float)ypos});
 }
 
+void invokeBuildSettlement(Game *game, int button, int action, double xpos, double ypos)
+{
+    printf("buildSettlement!\n");
+}
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
 //    game->world->pirate.init();
@@ -101,17 +108,22 @@ void Game::init(vec2 screen)
     }
 
 
-    unitUis[typeid(ShipObject)].push_back(new Button(build_settlement_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeHireSailors));
+    unitUis[typeid(ShipObject)].push_back(new Button(build_settlement_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeBuildSettlement));
 
     unitUis[typeid(SettlementObject)].push_back(new Button(build_ship_button, {300.f, screen.y - UI_HEIGHT/2 }, invokeBuildShip));
     unitUis[typeid(SettlementObject)].push_back(new Button(hire_sailors_button, {300 + 150, screen.y - UI_HEIGHT/2 }, invokeHireSailors));
 
-    portraitFrame = Sprite();
-    if (!portraitFrame.init(150, 150, textures_path("portraitframe.png")))
+
+
+
+    Sprite bottombar = Sprite();
+    if (!bottombar.init(screen.x, UI_HEIGHT, textures_path("bottombar.png")))
     {
 
         printf("ERROR initializing sprite\n");
     }
+    staticUiElements.push_back(new UiElement(bottombar, {screen.x/2, screen.y - UI_HEIGHT/2}, nullptr));
+
     //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
 
     //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
@@ -144,6 +156,15 @@ void Game::onClick(int button, int action, double xpos, double ypos)
                 {
                     selectedSprites.erase(&it->sprite);
                 }
+                return; // prevent clickthrough
+            }
+        }
+        for (auto &it : staticUiElements)
+        {
+
+            if (it->InBounds({(float)xpos, (float)ypos}))
+            {
+                it->OnClick(this, 0, xpos, ypos);
                 return; // prevent clickthrough
             }
         }
