@@ -17,11 +17,13 @@ public:
     void boundCameraToWorld();
     vec2 viewToWorld(vec2 pos);
     rect viewPort;
-    float zoom;
     bool followSelected = false;
+    void zoomToPoint(float zoom, vec2 pos);
+    void stop();
 private:
     vec2 pos, actualPos;
     vec2 vel;
+    float zoom;
     float zoomVel;
     float actualZoom;
     unsigned int worldWidth, worldHeight;
@@ -32,6 +34,8 @@ private:
     vec2 boundVecToWorld(vec2 initial);
 
     void enforceConstraints();
+
+    vec2 prevZoomViewPos, prevZoomWorldPos;
 };
 
 

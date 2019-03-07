@@ -1,5 +1,8 @@
 #include "Camera.hpp"
 
+#define MAX_ZOOM 2
+#define MIN_ZOOM 0.1
+
 Camera::Camera(rect viewPort, unsigned int worldWidth, unsigned int worldHeight, int tileSize) : worldWidth(worldWidth),
                                                                                                  worldHeight(
                                                                                                          worldHeight),
@@ -34,10 +37,10 @@ void Camera::update() {
 
 void Camera::enforceConstraints() {
 
-    if (zoom < 0.1) zoom = 0.1;
-    if (zoom > 2) zoom = 2;
-    if (actualZoom < 0.1) actualZoom = 0.1;
-    if (actualZoom > 2) actualZoom = 2;
+    if (zoom < MIN_ZOOM) zoom = MIN_ZOOM;
+    if (zoom > MAX_ZOOM) zoom = MAX_ZOOM;
+    if (actualZoom < MIN_ZOOM) actualZoom = MIN_ZOOM;
+    if (actualZoom > MAX_ZOOM) actualZoom = MAX_ZOOM;
     boundCameraToWorld();
 }
 
@@ -131,5 +134,23 @@ vec2 Camera::boundVecToWorld(vec2 initial) {
         initial.y += bottomBorder - b.bottom;
     }
     return initial;
+}
+
+void Camera::zoomToPoint(float zoom, vec2 pos) {
+    float prevZoom = this->zoom;
+    this->zoom *= zoom;
+    enforceConstraints();
+    vec2 worldPos = (pos.x == prevZoomViewPos.x && pos.y == prevZoomViewPos.y) ? prevZoomWorldPos : viewToWorld(pos);
+    float difX = this->pos.x - worldPos.x;
+    float difY = this->pos.y - worldPos.y;
+    this->pos.x -= difX - difX * prevZoom / this->zoom;
+    this->pos.y -= difY - difY * prevZoom / this->zoom;
+
+    prevZoomViewPos = pos;
+    prevZoomWorldPos = worldPos;
+}
+
+void Camera::stop() {
+    vel = {0,0};
 }
 

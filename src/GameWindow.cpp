@@ -133,5 +133,7 @@ void GameWindow::onMouseClick(GLFWwindow* window, int button, int action, int mo
 }
 
 void GameWindow::onScroll(GLFWwindow* window, double xoffset, double yoffset) {
-    game->onScroll(xoffset, yoffset);
+    double xpos = 0.0, ypos = 0.0;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    game->onScroll(xoffset, yoffset, xpos, ypos);
 }

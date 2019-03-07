@@ -85,7 +85,7 @@ void Game::init(vec2 screen)
 {
     this->screen = screen;
 
-    world = new World({0, 0, (GLint)screen.x, (GLint)screen.y});
+    world = new World({0, UI_HEIGHT, (GLint)screen.x, (GLint)screen.y - UI_HEIGHT});
 
     Sprite build_ship_button = Sprite();
     if (!build_ship_button.init(120, 90, buttons_path("build_ship.png")))
@@ -255,11 +255,17 @@ void Game::onMouseMove(double xpos, double ypos) {
     if (viewX >= 0 && viewX <= viewPort.w && viewY >= 0 && viewY <= viewPort.h)
     {
         world->onMouseMove(viewX, viewY);
+    } else {
+        world->onMouseMove(-1, -1);
     }
 }
 
-void Game::onScroll(double xoffset, double yoffset) {
-    auto zoomVel = static_cast<float>(yoffset / 25);
-    world->camera.zoom *= (1 + zoomVel);
-    world->camera.boundCameraToWorld();
+void Game::onScroll(double xoffset, double yoffset, double xpos, double ypos) {
+    rect viewPort = world->camera.viewPort;
+    auto viewX = static_cast<float>(xpos - viewPort.x);
+    auto viewY = static_cast<float>(ypos - screen.y + viewPort.y + viewPort.h);
+    if (viewX >= 0 && viewX <= viewPort.w && viewY >= 0 && viewY <= viewPort.h) {
+        auto zoomVel = static_cast<float>(yoffset / 25);
+        world->camera.zoomToPoint(1 + zoomVel, {viewX, viewY});
+    }
 }
