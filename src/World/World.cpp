@@ -6,7 +6,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     gameObjects.push_back(new ShipObject(this, {300, 300}));
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
-
+    gameObjects.push_back(new Sailor(this, {900, 350}));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
@@ -61,7 +61,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
             bounds b = o->getBounds();
             if (inBounds(b, worldCoords))
             {
-                int a = 1;
+                //int a = 1;
                 if (selectedObject == o)
                     selectedObject = nullptr;
                 else
@@ -69,6 +69,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
                     if (selectedObject)
                         selectedObject->setSelected();
                     selectedObject = o;
+
                 }
                 o->setSelected();
                 return;

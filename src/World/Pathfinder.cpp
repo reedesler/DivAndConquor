@@ -26,7 +26,14 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
                 tmp.rhs = INFINITY;
                 tmp.g = INFINITY;
-                tmp.cost = t.type == 0 ? defaultCost : -1;
+
+                if (world->selectedObject->landUnit){
+                    tmp.cost = (t.type == 2 || t.type == 1) ? defaultCost : -1;
+
+                } else {
+                    tmp.cost = t.type == 0 ? defaultCost : -1;
+
+                }
 
                 cellHash[tile] = tmp;
             }

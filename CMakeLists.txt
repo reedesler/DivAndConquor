@@ -61,7 +61,9 @@ set(SOURCE_FILES
         src/World/Camera.hpp
         src/World/Pathfinder.hpp
         src/PathRenderer.cpp
-        src/PathRenderer.hpp)
+        src/PathRenderer.hpp
+        src/Sailor.cpp
+        src/Sailor.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)

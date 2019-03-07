@@ -14,7 +14,7 @@ ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
     }
     rotation = 0;
     scale = {1.f, 1.f};
-
+landUnit = false;
     pathfinder = new Pathfinder(world);
 }
 
@@ -24,6 +24,7 @@ void ShipObject::move(vec2 pos) {
     pathfinder->init(start.x, start.y, goal.x, goal.y);
     pathfinder->replan();
     path = pathfinder->getPath();
+    int a= 1;
 }
 
 void ShipObject::update() {

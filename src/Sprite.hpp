@@ -18,6 +18,7 @@ public:
   std::array<GLfloat,3 > tint;
   int state;
   bool selected;
+  vec2 frame = {0.f,0.f};
 };
 
 #endif //DIVCONQ_SPRITE_H

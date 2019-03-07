@@ -36,13 +36,13 @@ bool Sprite::init(float width, float height, const char *textureName, vec2 texPi
 
     TexturedVertex vertices[4];
     vertices[0].position = {-wr, +hr, -0.02f};
-    vertices[0].texcoord = {0.f, texPiece.y};
+    vertices[0].texcoord = {frame.x, texPiece.y};
     vertices[1].position = {+wr, +hr, -0.02f};
     vertices[1].texcoord = {texPiece.x, texPiece.y};
     vertices[2].position = {+wr, -hr, -0.02f};
-    vertices[2].texcoord = {texPiece.x, 0.f};
+    vertices[2].texcoord = {texPiece.x, frame.y};
     vertices[3].position = {-wr, -hr, -0.02f};
-    vertices[3].texcoord = {0.f, 0.f};
+    vertices[3].texcoord = {frame.x, frame.y};
 
     // counterclockwise as it's the default opengl front winding direction
     uint16_t indices[] = {0, 3, 1, 1, 3, 2};

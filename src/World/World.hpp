@@ -18,6 +18,7 @@ class PathRenderer;
 
 class ShipObject;
 class Pirate;
+class Sailor;
 
 class World
 {
@@ -29,20 +30,21 @@ class World
     void onMouseMove(double xpos, double ypos);
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
+    void addSailor(Sailor * sailor);
 
     Tilemap tilemap;
     Camera camera;
     long int w;
+    GameObject *selectedObject = nullptr;
+
     long int h;
+private:
 
-  private:
     std::vector<GameObject *> gameObjects;
-
     int64_t balance;
     uint64_t sailors;
-    std::unordered_set<ShipObject *> fleet;
 
-    GameObject *selectedObject = nullptr;
+    std::unordered_set<ShipObject *> fleet;
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;
