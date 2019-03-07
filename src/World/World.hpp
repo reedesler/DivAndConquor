@@ -31,6 +31,8 @@ class World
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
     void addSailor(Sailor * sailor);
+    void centerCameraOn(GameObject &go);
+    GameObject* getSelected() { return selectedObject;}
 
     Tilemap tilemap;
     Camera camera;

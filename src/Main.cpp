@@ -36,6 +36,7 @@ int main()
         auto now = Clock::now();
         auto updateDebt =
             (float)(std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate)).count() / 1000;
+        if (updateDebt > 10 * UPDATE_INTERVAL_MS) updateDebt = 10 * UPDATE_INTERVAL_MS;
         while (updateDebt >= UPDATE_INTERVAL_MS)
         {
             game.update();

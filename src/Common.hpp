@@ -132,3 +132,10 @@ struct Renderable
 	void transform_translate(vec2 pos);
 	void transform_end();
 };
+
+const int TransitionTime = 500;
+enum TransitionState {
+    NONE,
+    FADEIN,
+    FADEOUT
+};

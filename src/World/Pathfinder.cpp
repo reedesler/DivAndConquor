@@ -1,7 +1,8 @@
 #include "Pathfinder.hpp"
 
+#undef near
 Pathfinder::Pathfinder(World* world) : world(world) {
-    maxSteps = 80000;
+    maxSteps = 40000;
     defaultCost = 1;
 }
 
@@ -154,7 +155,7 @@ int Pathfinder::computeShortestPath() {
            (!isConsistent(s_start))) {
 
         if (steps++ > maxSteps) {
-            fprintf(stderr, "At maxsteps\n");
+            fprintf(stderr, "At maxsteps in computeShortestPath\n");
             return -1;
         }
 
@@ -458,7 +459,13 @@ bool Pathfinder::replan() {
     }
 
     // constructs the path
+    int steps = 0;
     while (cur != s_goal) {
+
+        if (steps++ > maxSteps) {
+            fprintf(stderr, "At maxsteps in replan\n");
+            return -1;
+        }
 
         path.path.push_back(cur);
         path.cost += cost(prev, cur);

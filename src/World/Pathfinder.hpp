@@ -2,6 +2,7 @@
  * James Neufeld (neufeld@cs.ualberta.ca)
  */
 
+#undef near
 #ifndef DIVCONQ_PATHFINDING_H
 #define DIVCONQ_PATHFINDING_H
 #ifndef DIVCONQ_PATHFINDING_H_DEFINED

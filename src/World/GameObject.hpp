@@ -27,11 +27,13 @@ public:
 
     virtual void setSelected();
 
+    vec2 getPosition() {return position;};
     bool onTerrain(vec2 loc, int type);
 
     Pathfinder *pathfinder = nullptr;
     Path path;
     bool landUnit;
+    Sprite& getSprite() {return sprite;};
 
 protected:
     Sprite sprite;

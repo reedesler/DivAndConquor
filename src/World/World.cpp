@@ -20,6 +20,9 @@ void World::addShip(ShipObject *ship)
     this->fleet.insert(ship);
 }
 
+void World::centerCameraOn(GameObject &go){
+    this->camera.moveTo(go.getPosition());
+}
 void World::update()
 {
     tilemap.clearVisible(visibleTiles);
@@ -36,6 +39,10 @@ void World::update()
     if (selectedObject && selectedObject->pathfinder) {
         pathRenderer->init(selectedObject->pathfinder->getPath());
     }
+
+
+    if(camera.followSelected && getSelected() != nullptr)
+        centerCameraOn(*getSelected());
 }
 
 void World::draw(int pixelScale)
@@ -112,6 +119,10 @@ void World::setExplored(vec2 pos, float radius)
 #define MOUSE_MOVE_SIZE 50
 
 void World::onMouseMove(double xpos, double ypos) {
+    if (xpos == -1 && ypos == -1) {
+        xpos = camera.viewPort.w / 2.f;
+        ypos = camera.viewPort.h / 2.f;
+    }
     vec2 cameraDir = {0, 0};
     if (xpos <= MOUSE_MOVE_SIZE && prevMouseXpos > MOUSE_MOVE_SIZE) cameraDir.x -= 1;
     if (prevMouseXpos <= MOUSE_MOVE_SIZE && xpos > MOUSE_MOVE_SIZE) cameraDir.x += 1;

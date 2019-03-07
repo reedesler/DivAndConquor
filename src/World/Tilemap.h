@@ -19,7 +19,11 @@ struct TileVertex
     vec3 position;
     vec2 texcoord;
     float explored;
+    GLint tileid;
+    TransitionState tranState;
+    float tranStartTime;
 };
+
 
 struct TilePos {
     int x, y;
