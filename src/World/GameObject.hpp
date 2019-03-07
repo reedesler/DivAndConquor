@@ -80,12 +80,16 @@ public:
     // bool init();
     void update();
 
+    void renderDirection(vec2 dir);
+
+
   //  void draw(const mat3 &projection);
 
    // void setSelected();
 
     void move(vec2 pos);
 
+    float frameNo;
     //bool selected;
     //std::array<GLfloat, 3> tint;
 };
@@ -124,6 +128,7 @@ public:
     // Update turtle due to current
     // ms represents the number of milliseconds elapsed from the previous update() call
     void update(float ms);
+
 
 
     void updateFrame(float ms);

@@ -14,6 +14,7 @@ float ANIMATION_FRAME_WS = 0.33f;
 Sailor::Sailor(World *world, vec2 pos): GameObject(world, pos){
     w = 75;
     h = 75;
+
     if (!sprite.init(w, h, textures_path("sailor.png"), {0.33f, 0.25f}))
     {
         printf("ERROR initializing sprite\n");
@@ -60,38 +61,47 @@ void Sailor::travel(vec2 destination) {
     vec2 dir = {destination.x - position.x, destination.y - position.y};
     float length = sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length > SAILOR_VELOCITY) {
-        if(dir.x > 0){
-            this->sprite.state = 1;
-            this->sprite.texPiece.x =0.f;
-            this->sprite.texPiece.y = 0.25f;
-            this->sprite.frame.x = 0.3f;
-            this->sprite.frame.y = 0.25f;
-        } else {
-            this->sprite.state = 1;
-            this->sprite.texPiece.x =0.f;
-            this->sprite.texPiece.y = 0.75f;
-            this->sprite.frame.x = 0.3f;
-            this->sprite.frame.y = 0.25f;
-        }
 
-        if (dir.y > 0){
-            this->sprite.state = 1;
-            this->sprite.texPiece.x =0.f;
-            this->sprite.texPiece.y = 0.5f;
-            this->sprite.frame.x = 0.3f;
-            this->sprite.frame.y = 0.25f;
-        } else {
-            this->sprite.state = 1;
-            this->sprite.texPiece.x =0.f;
-            this->sprite.texPiece.y = 0.f;
-            this->sprite.frame.x = 0.3f;
-            this->sprite.frame.y = 0.25f;
-        }
+        renderDirection(dir);
+
         dir = {dir.x / length, dir.y / length};
 
         vec2 newPos = {position.x + dir.x * SAILOR_VELOCITY, position.y + dir.y * SAILOR_VELOCITY};
         position = newPos;
     }
+}
+
+void Sailor::renderDirection(vec2 dir){
+    if(frameNo > 1){
+        frameNo = 0;
+    }
+    if(dir.x > 0 && abs(dir.x)  > abs(dir.y)){
+        this->sprite.state = 1;
+        this->sprite.texPiece.x =0.f + frameNo;
+        this->sprite.texPiece.y = 0.25f;
+        this->sprite.frame.x = 0.3f;
+        this->sprite.frame.y = 0.25f;
+    } else if (dir.x < 0){
+        this->sprite.state = 1;
+        this->sprite.texPiece.x =0.f + frameNo;
+        this->sprite.texPiece.y = 0.75f;
+        this->sprite.frame.x = 0.3f;
+        this->sprite.frame.y = 0.25f;
+    } else if (dir.y > 0 && abs(dir.x) < abs(dir.y)){
+        this->sprite.state = 1;
+        this->sprite.texPiece.x =0.f + frameNo;
+        this->sprite.texPiece.y = 0.5f;
+        this->sprite.frame.x = 0.3f;
+        this->sprite.frame.y = 0.25f;
+    } else {
+        this->sprite.state = 1;
+        this->sprite.texPiece.x =0.f + frameNo;
+        this->sprite.texPiece.y = 0.f;
+        this->sprite.frame.x = 0.3f;
+        this->sprite.frame.y = 0.25f;
+    }
+
+    frameNo = frameNo + 0.333f;
 }
 
 //bool Sailor::init() {
