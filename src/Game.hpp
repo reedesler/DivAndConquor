@@ -10,6 +10,8 @@
 #include <typeindex>
 #include "Ui/Button.hpp"
 #include "Ui/UiCallback.h"
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 struct Settlement {
     uint16_t gold;
@@ -64,7 +66,7 @@ private:
     std::vector<UiElement*> activeUiElements;
     std::vector<UiElement*> staticUiElements;
     std::unordered_set<Sprite*> selectedSprites; // TODO: these should be gameobjects maybe
-
+    Mix_Music* background_music;
     vec2 screen;
 
     void drawUI(const mat3 &projection, int pixelScale);
