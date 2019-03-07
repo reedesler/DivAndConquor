@@ -67,7 +67,7 @@ private:
 
     vec2 screen;
 
-    void drawUI(const mat3 &projection);
+    void drawUI(const mat3 &projection, int pixelScale);
 };
 
 #endif //DIVCONQ_GAME_H

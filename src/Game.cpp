@@ -20,14 +20,11 @@ void Game::update()
 void Game::draw(const mat3 &projection, int pixelScale)
 {
     world->draw(pixelScale);
-    drawUI(projection);
-    // buttons probably shouldnt have their own viewport
-    // after all, what if we want alert boxes or some menu that involves buttons over the world
-
+    drawUI(projection, pixelScale);
 }
 
-void Game::drawUI(const mat3 &projection) {
-    glViewport(0, 0, screen.x, screen.y); // reset viewport
+void Game::drawUI(const mat3 &projection, int pixelScale) {
+    glViewport(0, 0, screen.x * pixelScale, screen.y * pixelScale); // reset viewport
 
     for (auto &it : staticUiElements)
     {
@@ -43,7 +40,7 @@ void Game::drawUI(const mat3 &projection) {
         Sprite spt =  world->getSelected()->getSprite();
         spt.tint = {1.f,1.f,1.f};
         spt.state = 0;
-        spt.draw(projection,{100, screen.y - 150/2 + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
+        spt.draw(projection,{100, screen.y - UI_HEIGHT/2.f + 20 } , 0.f, {100.f/ spt.width, 100.f/spt.height});
     }
 }
 
