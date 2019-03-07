@@ -101,7 +101,9 @@ void Sailor::renderDirection(vec2 dir){
         this->sprite.frame.y = 0.25f;
     }
 
-    frameNo = frameNo + 0.333f;
+    if (r % 3 == 0){
+        frameNo = frameNo + 0.333f;
+    }
 }
 
 //bool Sailor::init() {

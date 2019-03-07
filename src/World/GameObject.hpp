@@ -90,6 +90,9 @@ public:
     void move(vec2 pos);
 
     float frameNo;
+
+    int r = std::rand();
+
     //bool selected;
     //std::array<GLfloat, 3> tint;
 };
