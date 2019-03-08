@@ -35,6 +35,8 @@ public:
     bool landUnit;
     Sprite& getSprite() {return sprite;};
 
+    bool playerControlled = true;
+
 protected:
     Sprite sprite;
 
@@ -64,6 +66,15 @@ private:
     //uint16_t gold;
     //uint16_t timber;
     //uint16_t iron;
+};
+
+class PirateShip : public GameObject {
+public:
+    PirateShip(World *world, vec2 loc);
+
+    void travel(vec2 dir);
+
+    void update();
 };
 
 class Sailor : public GameObject{

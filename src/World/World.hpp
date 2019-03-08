@@ -40,6 +40,8 @@ class World
     GameObject *selectedObject = nullptr;
 
     long int h;
+
+    GameObject* getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
 private:
 
     std::vector<GameObject *> gameObjects;

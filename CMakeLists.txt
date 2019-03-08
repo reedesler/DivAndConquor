@@ -45,6 +45,7 @@ set(SOURCE_FILES
         src/World/Camera.cpp
         src/World/ShipObject.cpp
         src/World/SettlementObject.cpp
+        src/World/PirateShip.cpp
 
 
         src/ProjectPath.hpp

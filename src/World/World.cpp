@@ -4,6 +4,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
                                 camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
     gameObjects.push_back(new ShipObject(this, {300, 300}));
+    gameObjects.push_back(new PirateShip(this, {300, 800}));
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
     gameObjects.push_back(new Sailor(this, {900, 350}));
@@ -65,8 +66,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
         vec2 worldCoords = camera.viewToWorld({xpos, ypos});
         for (auto o : gameObjects)
         {
-            bounds b = o->getBounds();
-            if (inBounds(b, worldCoords))
+            if (o->playerControlled && inBounds(o->getBounds(), worldCoords))
             {
                 //int a = 1;
                 if (selectedObject == o)
@@ -138,4 +138,21 @@ void World::onMouseMove(double xpos, double ypos) {
 
     prevMouseXpos = xpos;
     prevMouseYpos = ypos;
+}
+
+GameObject* World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit) {
+    float minDist = INFINITY;
+    GameObject* closest;
+    for (auto o : gameObjects) {
+        if (o->playerControlled == playerControlled && o->landUnit == landUnit) {
+            float difX = pos.x - o->getPosition().x;
+            float difY = pos.y - o->getPosition().y;
+            float dist = difX * difX + difY * difY;
+            if (dist < minDist) {
+                minDist = dist;
+                closest = o;
+            }
+        }
+    }
+    return closest;
 }

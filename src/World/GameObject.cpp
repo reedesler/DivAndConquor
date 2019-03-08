@@ -14,11 +14,10 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
 
 void GameObject::draw(const mat3 &projection)
 {
-    if (sprite.selected)
-        sprite.tint = {0.7f, 1.f, 0.7f};
-    else
-        sprite.tint = {1.f, 1.f, 1.f};
-    sprite.draw(projection, position, rotation, scale);
+    Tile t = world->tilemap.getTile(position.x, position.y);
+    if (t.visible) {
+        sprite.draw(projection, position, rotation, scale);
+    }
 
 }
 
