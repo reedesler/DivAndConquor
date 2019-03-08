@@ -15,7 +15,7 @@ ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
     rotation = 0;
     scale = {1.f, 1.f};
 landUnit = false;
-    pathfinder = new Pathfinder(world);
+    pathfinder = new Pathfinder(world, false);
 }
 
 void ShipObject::move(vec2 pos) {

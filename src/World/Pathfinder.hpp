@@ -105,9 +105,9 @@ typedef priority_queue<PF_Tile, vector<PF_Tile>, greater<PF_Tile> > OpenQueue;
 
 class Pathfinder {
 public:
-    explicit Pathfinder(World* world);
+    explicit Pathfinder(World* world, bool landUnit);
     void   init(int sX, int sY, int gX, int gY);
-    void   updateCell(int x, int y, double val);
+    void   updateCell(int x, int y, bool water);
     void   updateStart(int x, int y);
     void   updateGoal(int x, int y);
     bool   replan();
@@ -121,6 +121,8 @@ private:
     Path path;
 
     double defaultCost;
+    double landCost;
+    double waterCost;
     double k_m;
     PF_Tile s_start, s_goal, s_last;
     int maxSteps;

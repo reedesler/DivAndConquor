@@ -67,34 +67,16 @@ private:
 };
 
 class Sailor : public GameObject{
-
-   // static Texture sailor_texture;
-
 public:
     Sailor(World *world, vec2 pos);
-
-   // bool init();
-
     void travel(vec2 dir);
-
-    // bool init();
     void update();
-
     void renderDirection(vec2 dir);
-
-
-  //  void draw(const mat3 &projection);
-
-   // void setSelected();
-
     void move(vec2 pos);
 
     float frameNo;
 
     int r = std::rand();
-
-    //bool selected;
-    //std::array<GLfloat, 3> tint;
 };
 
 class SettlementObject : public GameObject {

@@ -103,11 +103,9 @@ void World::setExplored(vec2 pos, float radius)
         {
             if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)}))
             {
-                if (tilemap.map[x][y].type != 0) {
-                    for (auto o : gameObjects) {
-                        if (o->pathfinder) {
-                            o->pathfinder->updateCell(x, y, -1);
-                        }
+                for (auto o : gameObjects) {
+                    if (o->pathfinder) {
+                        o->pathfinder->updateCell(x, y, tilemap.map[x][y].type == 0);
                     }
                 }
                 visibleTiles.insert(TilePos{x, y});
