@@ -1,0 +1,20 @@
+TEAM 11 -- Ship Game
+
+===================================================================
+OVERALL GRADING (74)
+
+* Core part:
+  - No decision based behaviour (-10)
+  - No Instructions is included  (-5).
+  - Gameplay is very basic (-5)
+  - Game executes and terminates smoothly
+  - Sprites match the input behaviour
+* Creative Part (12.5/25):
+  - Fog of war (+5)
+  - Refactoring the terrain rendering (+5)
+  - Path finding (but from external library, so does not count towards grade) 
+  - Minor new sprites. (+2.5)
+* A factor of 1.1x is used for the grade since there are 5 members in the team.
+
+
+Credits for creative from last time:  Camera control, map generation using noise patterns
