@@ -92,7 +92,7 @@ void TextRenderer::draw(const char *text, float x, float y, float sx, float sy)
         /* Upload the "bitmap", which contains an 8-bit grayscale image, as an alpha texture */
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, g->bitmap.width, g->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, g->bitmap.buffer);
 
-        printf("glTexImage2D %d %d\n", g->bitmap.width, g->bitmap.rows);
+        // printf("glTexImage2D %d %d\n", g->bitmap.width, g->bitmap.rows);
 
         _check_gl_error(__FILE__, __LINE__);
 
