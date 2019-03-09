@@ -1,0 +1,25 @@
+Team 11
+Playability Submission
+
+David Ma         12428165
+Dmitry Narkevich 12032141
+Reed Esler       25426140
+Tomer Torgeman   50138156
+Vladimir Agushev 17501157
+
+We continued adding features to the game. More game objects are now implemented (sailors as ground units now
+support pathfinding). Basic resource functionality is added (ground units are now able to collect resources).
+
+Water is now rendered using multiple samples to avoid redundancy in rendered texture. Additionally, tile map
+is now wrinkled to imitate natural formation of continents to some extent.
+
+Resource class is implemented. Ground units are able to collect resources walking through them (collision
+detection). Settlement accounts are updated to reflect collection of a particular resource.
+
+Pirate ship object is added. Pirate ships are programmed to approach the closest player-controlled object
+following a curved path. Attacks are still WIP.
+
+Work on the UI is continued. The player is now able to build more ships for a settlement. Other aspects of UI
+are also improved (smooth zooming based on cursor position).
+
+Some text rendering functionality is added to further improve the UX.
