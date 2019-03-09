@@ -4,7 +4,7 @@
 
 #include "GameObject.hpp"
 
-Loot::Loot(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(world, loc) {
+Resource::Resource(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(world, loc) {
     w = 50;
     h = 50;
     if (type == 0) {
@@ -23,7 +23,7 @@ Loot::Loot(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(wo
     resource = size;
 }
 
-bool Loot::collect(Sailor *obj) {
+bool Resource::collect(Sailor *obj) {
     bounds other = obj->getBounds();
     if (position.x >= other.left && position.x <= other.right)
         if (position.y >= other.top && position.y <= other.bottom){

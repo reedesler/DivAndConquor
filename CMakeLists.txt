@@ -51,7 +51,7 @@ set(SOURCE_FILES
         src/Ui/PauseBtn.cpp
         src/Sailor.cpp
         src/Ui/UiElement.cpp
-        src/World/Loot.cpp
+        src/World/Resource.cpp
 
 
         src/ProjectPath.hpp

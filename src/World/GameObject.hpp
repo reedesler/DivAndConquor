@@ -108,9 +108,9 @@ public:
     SettlementObject *settlement;
 };
 
-class Loot: public GameObject{
+class Resource: public GameObject{
 public:
-    Loot(World *world, vec2 loc, uint16_t type, uint16_t size);
+    Resource(World *world, vec2 loc, uint16_t type, uint16_t size);
 
     bool collect(Sailor *obj);
 private:

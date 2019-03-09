@@ -194,7 +194,7 @@ void World::setResources(){
             x = std::rand() % (this->w - 100);
             y = std::rand() % (this->h - 100);
         }
-        resources.push_back(new Loot(this, {x, y}, 0, 500));
+        resources.push_back(new Resource(this, {x, y}, 0, 500));
     }
     //setting iron
     for (int i = 0; i < 100; i++){
@@ -204,7 +204,7 @@ void World::setResources(){
             x = std::rand() % (this->w - 100);
             y = std::rand() % (this->h - 100);
         }
-        resources.push_back(new Loot(this, {x, y}, 1, 500));
+        resources.push_back(new Resource(this, {x, y}, 1, 500));
     }
     //setting timber
     for (int i = 0; i < 100; i++){
@@ -214,6 +214,6 @@ void World::setResources(){
             x = std::rand() % (this->w - 100);
             y = std::rand() % (this->h - 100);
         }
-        resources.push_back(new Loot(this, {x, y}, 2, 500));
+        resources.push_back(new Resource(this, {x, y}, 2, 500));
     }
 }

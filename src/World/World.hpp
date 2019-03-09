@@ -19,7 +19,7 @@ class PathRenderer;
 class ShipObject;
 class Pirate;
 class Sailor;
-class Loot;
+class Resource;
 
 class World
 {
@@ -52,7 +52,7 @@ private:
 
     std::vector<ShipObject *> fleet;
     std::vector<Sailor *> army;
-    std::vector<Loot *> resources;
+    std::vector<Resource *> resources;
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;
