@@ -45,7 +45,8 @@ set(SOURCE_FILES
         src/World/Camera.cpp
         src/World/ShipObject.cpp
         src/World/SettlementObject.cpp
-
+        src/TextRenderer.cpp
+        src/TextRenderer.hpp
 
         src/ProjectPath.hpp
         src/Common.hpp
@@ -74,6 +75,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
+# target_include_directories(${PROJECT_NAME} PUBLIC ext/liboglft)
 
 # so policy CMP0072 doesn't scream either
 set(OpenGL_GL_PREFERENCE GLVND)
@@ -81,6 +83,13 @@ set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 # Find Freetype
 find_package(Freetype REQUIRED)
+# Find glm
+find_package(glm REQUIRED)
+
+if (GLM_FOUND)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${GLM_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${GLM_LIBRARY_DIRS})
+endif()
 
 if (OPENGL_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})

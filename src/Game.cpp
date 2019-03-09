@@ -12,13 +12,13 @@ void Game::update()
 void Game::draw(const mat3 &projection, int pixelScale)
 {
     world->draw(pixelScale);
-//    glViewport(0, 0, screen.x, screen.y); // reset viewport
-//    // buttons probably shouldnt have their own viewport
-//    // after all, what if we want alert boxes or some menu that involves buttons over the world
-//    for (auto &it : buttons)
-//    {
-//        it.Draw(projection);
-//    }
+    //    glViewport(0, 0, screen.x, screen.y); // reset viewport
+    //    // buttons probably shouldnt have their own viewport
+    //    // after all, what if we want alert boxes or some menu that involves buttons over the world
+    //    for (auto &it : buttons)
+    //    {
+    //        it.Draw(projection);
+    //    }
 }
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
@@ -30,7 +30,7 @@ void invokeBuildShip(Game *game, int button, int action, double xpos, double ypo
 
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
-//    game->world->pirate.init();
+    //    game->world->pirate.init();
     printf("hireSailors!\n");
     //    mat3 pos = {{1.f, 0.f, (float)xpos},
     //                {0.f, 1.f, (float)ypos},
@@ -46,7 +46,6 @@ void invokeSubmitJourney(int button, int action, double xpos, double ypos)
 
 void Game::buildShip(vec2 location)
 {
-   
 
     (this->world)->addShip(new ShipObject(this->world, location));
 }
@@ -80,11 +79,6 @@ void Game::init(vec2 screen)
     registerButton(build_ship_button, {80.f, 100.f}, invokeBuildShip);
     registerButton(hire_sailors_button, {80.f, 500.f}, invokeHireSailors);
     registerButton(build_settlement_button, {80.f, 300.f}, invokeHireSailors);
-
-    //auto characters = loadFont("data/fonts/Carlito-Bold.ttf");
-
-    //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
-    //renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 }
 
 bool Game::registerButton(Sprite &btn, vec2 location, Button::OnClickFunc callback)
@@ -188,7 +182,8 @@ void Game::onKey(int key, int scancode, int action)
     world->camera.move(cameraDir, cameraZoom);
 }
 
-void Game::onMouseMove(double xpos, double ypos) {
+void Game::onMouseMove(double xpos, double ypos)
+{
 
     rect viewPort = world->camera.viewPort;
     auto viewX = static_cast<float>(xpos - viewPort.x);
@@ -199,7 +194,8 @@ void Game::onMouseMove(double xpos, double ypos) {
     }
 }
 
-void Game::onScroll(double xoffset, double yoffset) {
+void Game::onScroll(double xoffset, double yoffset)
+{
     auto zoomVel = static_cast<float>(yoffset / 500);
     world->camera.zoom *= (1 + zoomVel);
     world->camera.boundCameraToWorld();
