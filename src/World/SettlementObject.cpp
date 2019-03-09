@@ -13,7 +13,6 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     }
     this->rotation = 0;
     this->scale = {1.f, 1.f};
-
 }
 
 void SettlementObject::move(vec2 pos) {

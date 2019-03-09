@@ -108,6 +108,16 @@ private:
     uint16_t iron;
 };
 
+class Loot: public GameObject{
+public:
+    Loot(World *world, vec2 loc, uint16_t type, uint16_t size);
+
+    void collect(GameObject *obj);
+private:
+    uint16_t loot_type;
+    uint16_t resource;
+};
+
 class Pirate : public GameObject, public Renderable {
 
     static Texture pirate_texture;

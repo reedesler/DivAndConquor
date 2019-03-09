@@ -8,6 +8,9 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
     gameObjects.push_back(new Sailor(this, {900, 350}));
+    gameObjects.push_back(new Loot(this, {1000, 500}, 0, 500));
+    gameObjects.push_back(new Loot(this, {1200, 300}, 1, 500));
+    gameObjects.push_back(new Loot(this, {1400, 600}, 2, 500));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
@@ -18,7 +21,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
 
 void World::addShip(ShipObject *ship)
 {
-    this->fleet.insert(ship);
+    this->gameObjects.push_back(ship);
 }
 
 void World::centerCameraOn(GameObject &go){
