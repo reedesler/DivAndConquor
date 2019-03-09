@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits>
 #include "Sprite.hpp"
 
 std::map<const char *, Texture *> Sprite::textures;
@@ -36,13 +38,13 @@ bool Sprite::init(float width, float height, const char *textureName, vec2 texPi
 
     TexturedVertex vertices[4];
     vertices[0].position = {-wr, +hr, -0.02f};
-    vertices[0].texcoord = {0.f, texPiece.y};
+    vertices[0].texcoord = {frame.x, texPiece.y};
     vertices[1].position = {+wr, +hr, -0.02f};
     vertices[1].texcoord = {texPiece.x, texPiece.y};
     vertices[2].position = {+wr, -hr, -0.02f};
-    vertices[2].texcoord = {texPiece.x, 0.f};
+    vertices[2].texcoord = {texPiece.x, frame.y};
     vertices[3].position = {-wr, -hr, -0.02f};
-    vertices[3].texcoord = {0.f, 0.f};
+    vertices[3].texcoord = {frame.x, frame.y};
 
     // counterclockwise as it's the default opengl front winding direction
     uint16_t indices[] = {0, 3, 1, 1, 3, 2};
@@ -112,11 +114,11 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
 
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
-    if (selected)
-        tint = {0.7f, 1.f, 0.7f};
-    else
-        tint = {1.f, 1.f, 1.f};
-    glUniform3fv(color_uloc, 1, tint.data());
+
+    std::array<GLfloat,3> selectedTint = {0.7f, 1.f, 0.7f};
+    std::array<GLfloat,3> drawTint = selected ? selectedTint : tint;
+
+    glUniform3fv(color_uloc, 1, drawTint.data());
     glUniform2f(shift_uloc, texPiece.x * state, texPiece.y * state);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);
 

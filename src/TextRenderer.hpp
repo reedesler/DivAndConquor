@@ -18,10 +18,9 @@ private:
 
   FT_Library ft;
   FT_Face face;
-
-public:
   Effect shader;
 
+public:
   int init(const char *fontFileName);
 
   void config(unsigned int fontSize, glm::vec4 color);

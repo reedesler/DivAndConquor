@@ -14,7 +14,10 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
 
 void GameObject::draw(const mat3 &projection)
 {
-    sprite.draw(projection, position, rotation, scale);
+    Tile t = world->tilemap.getTile(position.x, position.y);
+    if (t.visible) {
+        sprite.draw(projection, position, rotation, scale);
+    }
 
 }
 

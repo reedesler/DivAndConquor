@@ -36,7 +36,7 @@ set(SOURCE_FILES
         src/Common.cpp
         src/GameWindow.cpp
         src/Game.cpp
-        src/Button.cpp
+        src/Ui/Button.cpp
         src/Sprite.cpp
         src/World/Pathfinder.cpp
         src/World/GameObject.cpp
@@ -47,12 +47,14 @@ set(SOURCE_FILES
         src/World/SettlementObject.cpp
         src/TextRenderer.cpp
         src/TextRenderer.hpp
+        src/World/PirateShip.cpp
+
 
         src/ProjectPath.hpp
         src/Common.hpp
         src/GameWindow.hpp
         src/Game.hpp
-        src/Button.hpp
+        src/Ui/Button.hpp
         src/Sprite.hpp
         src/Pirate.cpp
         src/Pirate.h
@@ -62,7 +64,10 @@ set(SOURCE_FILES
         src/World/Camera.hpp
         src/World/Pathfinder.hpp
         src/PathRenderer.cpp
-        src/PathRenderer.hpp)
+        src/PathRenderer.hpp
+        src/Sailor.cpp
+        src/Sailor.h
+        src/PathRenderer.hpp src/Ui/PauseBtn.cpp src/Ui/PauseBtn.h src/Ui/UiElement.cpp src/Ui/UiElement.h src/Ui/UiCallback.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
@@ -75,13 +80,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
-# target_include_directories(${PROJECT_NAME} PUBLIC ext/liboglft)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/freetype/include)
 
 # so policy CMP0072 doesn't scream either
 set(OpenGL_GL_PREFERENCE GLVND)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 # Find Freetype
+if (IS_OS_WINDOWS)
+    set(FREETYPE_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/ext/freetype/win64/freetype.dll)
+    set(FREETYPE_INCLUDE_DIRS ext/freetype/include)
+endif()
 find_package(Freetype REQUIRED)
 # Find glm
 find_package(glm REQUIRED)

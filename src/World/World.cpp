@@ -4,9 +4,10 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
                                 camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
     gameObjects.push_back(new ShipObject(this, {300, 300}));
+    gameObjects.push_back(new PirateShip(this, {300, 800}));
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
-
+    gameObjects.push_back(new Sailor(this, {900, 350}));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
@@ -20,6 +21,9 @@ void World::addShip(ShipObject *ship)
     this->fleet.insert(ship);
 }
 
+void World::centerCameraOn(GameObject &go){
+    this->camera.moveTo(go.getPosition());
+}
 void World::update()
 {
     tilemap.clearVisible(visibleTiles);
@@ -36,6 +40,10 @@ void World::update()
     if (selectedObject && selectedObject->pathfinder) {
         pathRenderer->init(selectedObject->pathfinder->getPath());
     }
+
+
+    if(camera.followSelected && getSelected() != nullptr)
+        centerCameraOn(*getSelected());
 }
 
 void World::draw(int pixelScale)
@@ -58,10 +66,9 @@ void World::onClick(int button, int action, float xpos, float ypos)
         vec2 worldCoords = camera.viewToWorld({xpos, ypos});
         for (auto o : gameObjects)
         {
-            bounds b = o->getBounds();
-            if (inBounds(b, worldCoords))
+            if (o->playerControlled && inBounds(o->getBounds(), worldCoords))
             {
-                int a = 1;
+                //int a = 1;
                 if (selectedObject == o)
                     selectedObject = nullptr;
                 else
@@ -69,6 +76,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
                     if (selectedObject)
                         selectedObject->setSelected();
                     selectedObject = o;
+
                 }
                 o->setSelected();
                 return;
@@ -95,11 +103,9 @@ void World::setExplored(vec2 pos, float radius)
         {
             if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)}))
             {
-                if (tilemap.map[x][y].type != 0) {
-                    for (auto o : gameObjects) {
-                        if (o->pathfinder) {
-                            o->pathfinder->updateCell(x, y, -1);
-                        }
+                for (auto o : gameObjects) {
+                    if (o->pathfinder) {
+                        o->pathfinder->updateCell(x, y, tilemap.map[x][y].type == 0);
                     }
                 }
                 visibleTiles.insert(TilePos{x, y});
@@ -111,6 +117,10 @@ void World::setExplored(vec2 pos, float radius)
 #define MOUSE_MOVE_SIZE 50
 
 void World::onMouseMove(double xpos, double ypos) {
+    if (xpos == -1 && ypos == -1) {
+        xpos = camera.viewPort.w / 2.f;
+        ypos = camera.viewPort.h / 2.f;
+    }
     vec2 cameraDir = {0, 0};
     if (xpos <= MOUSE_MOVE_SIZE && prevMouseXpos > MOUSE_MOVE_SIZE) cameraDir.x -= 1;
     if (prevMouseXpos <= MOUSE_MOVE_SIZE && xpos > MOUSE_MOVE_SIZE) cameraDir.x += 1;
@@ -128,4 +138,21 @@ void World::onMouseMove(double xpos, double ypos) {
 
     prevMouseXpos = xpos;
     prevMouseYpos = ypos;
+}
+
+GameObject* World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit) {
+    float minDist = INFINITY;
+    GameObject* closest;
+    for (auto o : gameObjects) {
+        if (o->playerControlled == playerControlled && o->landUnit == landUnit) {
+            float difX = pos.x - o->getPosition().x;
+            float difY = pos.y - o->getPosition().y;
+            float dist = difX * difX + difY * difY;
+            if (dist < minDist) {
+                minDist = dist;
+                closest = o;
+            }
+        }
+    }
+    return closest;
 }

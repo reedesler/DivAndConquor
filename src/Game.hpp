@@ -7,7 +7,11 @@
 #include "Common.hpp"
 #include "World/World.hpp"
 #include <cassert>
-#include "Button.hpp"
+#include <typeindex>
+#include "Ui/Button.hpp"
+#include "Ui/UiCallback.h"
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 struct Settlement {
     uint16_t gold;
@@ -43,27 +47,29 @@ static const Ship proa = {10, 10, 2, 4, 100, 0},
 // type forwarding since we have circular includes
 class Button;
 
-// ButtonOnClickFunc has a parameter list of {Game *game, int button, int action, double xpos, double ypos}
-typedef void (* ButtonOnClickFunc)(Game*, int, int, double, double);
-
 class Game {
 public:
     void init(vec2 screen);
     void update();
     void draw(const mat3 &projection, int pixelScale);
     void onKey(int key, int scancode, int action);
-    bool registerButton(Sprite &btn, vec2 location, ButtonOnClickFunc callback);
+    bool registerButton(Sprite &btn, vec2 location, UiCallback::OnClickFunc onclick);
     // bool removeButton(Sprite *btn);
     void onClick(int button, int action, double xpos, double ypos);
     void onMouseMove(double xpos, double ypos);
-    void onScroll(double xoffset, double yoffset);
+    void onScroll(double xoffset, double yoffset, double xpos, double ypos);
     void buildShip(vec2 location);
     World* world;
 private:
-    std::vector<Button> buttons;                  //TODO: generalize this to UI elements?
-    std::unordered_set<Sprite*> selectedSprites; // TODO: these should be gameobjects maybe
 
+    std::map<std::type_index, std::vector<UiElement*>> unitUis;
+    std::vector<UiElement*> activeUiElements;
+    std::vector<UiElement*> staticUiElements;
+    std::unordered_set<Sprite*> selectedSprites; // TODO: these should be gameobjects maybe
+    Mix_Music* background_music;
     vec2 screen;
+
+    void drawUI(const mat3 &projection, int pixelScale);
 };
 
 #endif //DIVCONQ_GAME_H

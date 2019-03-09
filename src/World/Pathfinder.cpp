@@ -1,8 +1,11 @@
 #include "Pathfinder.hpp"
 
-Pathfinder::Pathfinder(World* world) : world(world) {
-    maxSteps = 80000;
+#undef near
+Pathfinder::Pathfinder(World* world, bool landUnit) : world(world) {
+    maxSteps = 10000;
     defaultCost = 1;
+    waterCost = landUnit ? -1 : 1;
+    landCost = landUnit ? 1 : -1;
 }
 
 void Pathfinder::init(int sX, int sY, int gX, int gY) {
@@ -26,7 +29,8 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
                 tmp.rhs = INFINITY;
                 tmp.g = INFINITY;
-                tmp.cost = t.type == 0 ? defaultCost : -1;
+
+                tmp.cost = t.type == 0 ? waterCost : landCost;
 
                 cellHash[tile] = tmp;
             }
@@ -147,7 +151,7 @@ int Pathfinder::computeShortestPath() {
            (!isConsistent(s_start))) {
 
         if (steps++ > maxSteps) {
-            fprintf(stderr, "At maxsteps\n");
+            fprintf(stderr, "At maxsteps in computeShortestPath\n");
             return -1;
         }
 
@@ -281,9 +285,11 @@ double Pathfinder::cost(const PF_Tile &a, const PF_Tile &b) const {
     return scale * (cur->second).cost;
 }
 
-void Pathfinder::updateCell(int x, int y, double val) {
+void Pathfinder::updateCell(int x, int y, bool water) {
 
     PF_Tile u;
+
+    double val = water ? waterCost : landCost;
 
     u.x = x;
     u.y = y;
@@ -434,7 +440,7 @@ bool Pathfinder::replan() {
     //  printf("res: %d ols: %d ohs: %d tk: [%f %f] sk: [%f %f] sgr: (%f,%f)\n",res,openList.size(),openHash.size(),openList.top().k.first,openList.top().k.second, s_start.k.first, s_start.k.second,getRHS(s_start),getG(s_start));
 
     if (res < 0) {
-        //fprintf(stderr, "NO PATH TO GOAL\n");
+        fprintf(stderr, "NO PATH TO GOAL\n");
         path.cost = INFINITY;
         return false;
     }
@@ -445,20 +451,26 @@ bool Pathfinder::replan() {
     PF_Tile prev = s_start;
 
     if (isinf(getG(s_start))) {
-        //fprintf(stderr, "NO PATH TO GOAL\n");
+        fprintf(stderr, "NO PATH TO GOAL\n");
         path.cost = INFINITY;
         return false;
     }
 
     // constructs the path
+    int steps = 0;
     while (cur != s_goal) {
+
+        if (steps++ > maxSteps) {
+            fprintf(stderr, "At maxsteps in replan\n");
+            return -1;
+        }
 
         path.path.push_back(cur);
         path.cost += cost(prev, cur);
         getSucc(cur, n);
 
         if (n.empty()) {
-            //fprintf(stderr, "NO PATH TO GOAL\n");
+            fprintf(stderr, "NO PATH TO GOAL\n");
             path.cost = INFINITY;
             return false;
         }
