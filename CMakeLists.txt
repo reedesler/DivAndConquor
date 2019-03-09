@@ -38,6 +38,8 @@ set(SOURCE_FILES
         src/Game.cpp
         src/Ui/Button.cpp
         src/Sprite.cpp
+        src/Pirate.cpp
+        src/PathRenderer.cpp
         src/World/Pathfinder.cpp
         src/World/GameObject.cpp
         src/World/World.cpp
@@ -48,6 +50,10 @@ set(SOURCE_FILES
         src/TextRenderer.cpp
         src/TextRenderer.hpp
         src/World/PirateShip.cpp
+        src/Ui/PauseBtn.cpp
+        src/Sailor.cpp
+        src/Ui/UiElement.cpp
+        src/World/Resource.cpp
 
 
         src/ProjectPath.hpp
@@ -56,18 +62,18 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Ui/Button.hpp
         src/Sprite.hpp
-        src/Pirate.cpp
         src/Pirate.h
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
         src/World/Camera.hpp
         src/World/Pathfinder.hpp
-        src/PathRenderer.cpp
         src/PathRenderer.hpp
-        src/Sailor.cpp
         src/Sailor.h
-        src/PathRenderer.hpp src/Ui/PauseBtn.cpp src/Ui/PauseBtn.h src/Ui/UiElement.cpp src/Ui/UiElement.h src/Ui/UiCallback.h)
+        src/PathRenderer.hpp
+        src/Ui/PauseBtn.h
+        src/Ui/UiElement.h
+        src/Ui/UiCallback.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)

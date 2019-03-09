@@ -11,7 +11,7 @@ float ANIMATION_FRAME_WS = 0.33f;
 #define SAILOR_VELOCITY 5
 
 
-Sailor::Sailor(World *world, vec2 pos): GameObject(world, pos){
+Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject(world, pos){
     w = 75;
     h = 75;
 
@@ -21,6 +21,7 @@ Sailor::Sailor(World *world, vec2 pos): GameObject(world, pos){
     }
     rotation = 0;
     scale = {1.f, 1.f};
+    this->settlement = settlement;
     landUnit = true;
     pathfinder = new Pathfinder(world, landUnit);
 }

@@ -13,11 +13,25 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     }
     this->rotation = 0;
     this->scale = {1.f, 1.f};
-
+    this->gold = 500;
+    this->iron = 500;
+    this->timber = 500;
 }
 
 void SettlementObject::move(vec2 pos) {
 }
 void SettlementObject::update() {
     world->setExplored(position, 15 * TILE_SIZE);
+}
+void SettlementObject::updateResources(uint16_t type, uint16_t amount) {
+    if (type == 0)
+        this->gold += amount;
+    else if (type == 1)
+        this->iron += amount;
+    else if (type == 2)
+        this->timber += amount;
+}
+
+vec3 SettlementObject::getResources() {
+    return {(float) this->gold, (float) this->iron, (float) this->timber};
 }
