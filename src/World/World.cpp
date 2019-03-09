@@ -3,17 +3,23 @@
 World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))),
                                 camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
-    gameObjects.push_back(new ShipObject(this, {300, 300}));
+    auto *initialSet = new SettlementObject(this, {770, 330});
+    auto *initialShip = new ShipObject(this, {600, 400});
+    auto *initialSailor = new Sailor(this, {900, 350}, initialSet);
+    gameObjects.push_back(initialShip);
+    gameObjects.push_back(initialSet);
+    gameObjects.push_back(initialSailor);
     gameObjects.push_back(new PirateShip(this, {300, 800}));
-    gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
-    gameObjects.push_back(new Sailor(this, {900, 350}));
-    resources.push_back(new Loot(this, {1000, 500}, 0, 500));
-    resources.push_back(new Loot(this, {1200, 300}, 1, 500));
-    resources.push_back(new Loot(this, {1400, 600}, 2, 500));
+
+    //to keep track of various unit types
+    army.push_back(initialSailor);
+    fleet.push_back(initialShip);
+
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
+    this->setResources();
 
     prevMouseXpos = viewPort.w / 2.f;
     prevMouseYpos = viewPort.h / 2.f;
@@ -38,16 +44,20 @@ void World::update()
         o->update();
     }
 
+    //check for loot collisions
     std::vector<int> toDelete;
     for (int i = 0; i < resources.size(); ++i){
-        for (auto o : gameObjects){
+        for (auto o : army){
             if (o->playerControlled && resources[i]->collect(o)) {
-                printf("loot to be collected\n");
+                printf("current resources for settlement:\n");
+                vec3 tmp = o->settlement->getResources();
+                printf("gold: %f\niron: %f\ntimber: %f\n", tmp.x, tmp.y, tmp.z);
                 toDelete.push_back(i);
             }
         }
     }
 
+    //remove collected loot
     for (int i: toDelete)
         resources.erase(resources.begin()+i);
 
@@ -173,4 +183,37 @@ GameObject* World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
         }
     }
     return closest;
+}
+
+void World::setResources(){
+    //setting gold
+    for (int i = 0; i < 100; i++){
+        float x = std::rand() % (this->w - 100);
+        float y = std::rand() % (this->h - 100);
+        while(tilemap.getTile(x, y).type != 2){
+            x = std::rand() % (this->w - 100);
+            y = std::rand() % (this->h - 100);
+        }
+        resources.push_back(new Loot(this, {x, y}, 0, 500));
+    }
+    //setting iron
+    for (int i = 0; i < 100; i++){
+        float x = std::rand() % (this->w - 100);
+        float y = std::rand() % (this->h - 100);
+        while(tilemap.getTile(x, y).type != 2){
+            x = std::rand() % (this->w - 100);
+            y = std::rand() % (this->h - 100);
+        }
+        resources.push_back(new Loot(this, {x, y}, 1, 500));
+    }
+    //setting timber
+    for (int i = 0; i < 100; i++){
+        float x = std::rand() % (this->w - 100);
+        float y = std::rand() % (this->h - 100);
+        while(tilemap.getTile(x, y).type != 2){
+            x = std::rand() % (this->w - 100);
+            y = std::rand() % (this->h - 100);
+        }
+        resources.push_back(new Loot(this, {x, y}, 2, 500));
+    }
 }

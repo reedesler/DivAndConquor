@@ -31,6 +31,7 @@ class World
     void onMouseMove(double xpos, double ypos);
     void setExplored(vec2 pos, float radius);
     void addShip(ShipObject *ship);
+    void setResources();
     void addSailor(Sailor * sailor);
     void centerCameraOn(GameObject &go);
     GameObject* getSelected() { return selectedObject;}
@@ -49,7 +50,8 @@ private:
     int64_t balance;
     uint64_t sailors;
 
-    std::unordered_set<ShipObject *> fleet;
+    std::vector<ShipObject *> fleet;
+    std::vector<Sailor *> army;
     std::vector<Loot *> resources;
 
     VisibleSet visibleTiles;

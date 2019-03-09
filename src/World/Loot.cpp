@@ -14,7 +14,7 @@ Loot::Loot(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(wo
         if (!sprite.init(w, h, textures_path("iron.png"), {1.f, 1.f}))
             printf("ERROR initializing sprite\n");
     } else {
-        if (!sprite.init(w, h, textures_path("wood.png"), {1.f, 1.f}))
+        if (!sprite.init(w, h, textures_path("timber.png"), {1.f, 1.f}))
             printf("ERROR initializing sprite\n");
     }
     playerControlled = false;
@@ -23,10 +23,12 @@ Loot::Loot(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(wo
     resource = size;
 }
 
-bool Loot::collect(GameObject *obj) {
+bool Loot::collect(Sailor *obj) {
     bounds other = obj->getBounds();
     if (position.x >= other.left && position.x <= other.right)
-        if (position.y >= other.top && position.y <= other.bottom)
+        if (position.y >= other.top && position.y <= other.bottom){
+            obj->settlement->updateResources(this->loot_type, this->resource);
             return true;
+        }
     return false;
 }

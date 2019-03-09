@@ -4,7 +4,6 @@
 #define DIVCONQ_GAMEOBJECT_H_DEFINED
 
 class GameObject;
-
 #include "World.hpp"
 
 #endif
@@ -49,6 +48,24 @@ protected:
 
 };
 
+class SettlementObject : public GameObject {
+public:
+    SettlementObject(World *world, vec2 loc);
+
+    void update();
+
+    void move(vec2 pos);
+
+    vec3 getResources();
+
+    void updateResources(uint16_t type, uint16_t amount);
+
+private:
+    uint16_t gold;
+    uint16_t timber;
+    uint16_t iron;
+};
+
 class ShipObject : public GameObject {
 public:
     ShipObject(World *world, vec2 loc);
@@ -79,7 +96,7 @@ public:
 
 class Sailor : public GameObject{
 public:
-    Sailor(World *world, vec2 pos);
+    Sailor(World *world, vec2 pos, SettlementObject *settlement);
     void travel(vec2 dir);
     void update();
     void renderDirection(vec2 dir);
@@ -88,31 +105,14 @@ public:
     float frameNo;
 
     int r = std::rand();
-};
-
-class SettlementObject : public GameObject {
-public:
-    SettlementObject(World *world, vec2 loc);
-
-    void update();
-
-    void move(vec2 pos);
-
-    vec3 getResources();
-    //void setDestination(vec2 dst);
-    //void setVelocity(float vel);
-
-private:
-    uint16_t gold;
-    uint16_t timber;
-    uint16_t iron;
+    SettlementObject *settlement;
 };
 
 class Loot: public GameObject{
 public:
     Loot(World *world, vec2 loc, uint16_t type, uint16_t size);
 
-    bool collect(GameObject *obj);
+    bool collect(Sailor *obj);
 private:
     uint16_t loot_type;
     uint16_t resource;
