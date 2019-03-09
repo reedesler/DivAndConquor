@@ -50,7 +50,7 @@ private:
     uint64_t sailors;
 
     std::unordered_set<ShipObject *> fleet;
-    std::unordered_set<Loot *> resources;
+    std::vector<Loot *> resources;
 
     VisibleSet visibleTiles;
     PathRenderer* pathRenderer;

@@ -8,9 +8,9 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     gameObjects.push_back(new SettlementObject(this, {770, 330}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
     gameObjects.push_back(new Sailor(this, {900, 350}));
-    gameObjects.push_back(new Loot(this, {1000, 500}, 0, 500));
-    gameObjects.push_back(new Loot(this, {1200, 300}, 1, 500));
-    gameObjects.push_back(new Loot(this, {1400, 600}, 2, 500));
+    resources.push_back(new Loot(this, {1000, 500}, 0, 500));
+    resources.push_back(new Loot(this, {1200, 300}, 1, 500));
+    resources.push_back(new Loot(this, {1400, 600}, 2, 500));
     pathRenderer = new PathRenderer();
     w = tilemap.width *  TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
@@ -38,6 +38,19 @@ void World::update()
         o->update();
     }
 
+    std::vector<int> toDelete;
+    for (int i = 0; i < resources.size(); ++i){
+        for (auto o : gameObjects){
+            if (o->playerControlled && resources[i]->collect(o)) {
+                printf("loot to be collected\n");
+                toDelete.push_back(i);
+            }
+        }
+    }
+
+    for (int i: toDelete)
+        resources.erase(resources.begin()+i);
+
     tilemap.setExplored(visibleTiles);
 
     if (selectedObject && selectedObject->pathfinder) {
@@ -57,6 +70,8 @@ void World::draw(int pixelScale)
     {
         o->draw(projection);
     }
+    for (auto o: resources)
+        o->draw(projection);
     if (selectedObject && selectedObject->pathfinder) {
         pathRenderer->draw(projection);
     }

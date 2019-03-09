@@ -22,3 +22,11 @@ Loot::Loot(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(wo
     loot_type = type;
     resource = size;
 }
+
+bool Loot::collect(GameObject *obj) {
+    bounds other = obj->getBounds();
+    if (position.x >= other.left && position.x <= other.right)
+        if (position.y >= other.top && position.y <= other.bottom)
+            return true;
+    return false;
+}
