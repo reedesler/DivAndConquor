@@ -126,7 +126,7 @@ if (IS_OS_LINUX OR IS_OS_MAC)
     pkg_search_module(GLFW REQURIED glfw3)
 
     pkg_search_module(SDL2 REQURIED sdl2)
-    pkg_search_module(SDL_MIXER REQURIED SDL_mixer)
+    pkg_search_module(SDL2_MIXER REQURIED SDL2_mixer)
 
     # Link Frameworks on OSX
     if (IS_OS_MAC)
@@ -185,9 +185,9 @@ if (NOT GLFW_FOUND OR NOT SDL2_FOUND)
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PUBLIC ${SDL_MIXER_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2MIXER_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIBRARIES} ${SDL_MIXER_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2_LIBRARIES})
 
 # Needed to add this
 if(IS_OS_LINUX)
