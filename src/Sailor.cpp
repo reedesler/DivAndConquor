@@ -27,7 +27,7 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
 }
 
 void Sailor::move(vec2 pos) {
-
+    vec2 position = getPosition();
     TilePos start = Tilemap::getTilePos(position.x, position.y);
     TilePos goal = Tilemap::getTilePos(pos.x, pos.y);
     pathfinder->init(start.x, start.y, goal.x, goal.y);
@@ -36,6 +36,7 @@ void Sailor::move(vec2 pos) {
 }
 
 void Sailor::update() {
+    vec2 position = getPosition();
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
@@ -53,6 +54,7 @@ void Sailor::update() {
 }
 
 void Sailor::travel(vec2 destination) {
+    vec2 position = getPosition();
     vec2 dir = {destination.x - position.x, destination.y - position.y};
     float length = sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length > SAILOR_VELOCITY) {

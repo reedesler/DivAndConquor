@@ -17,6 +17,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
 }
 
 void PirateShip::update() {
+    vec2 position = getPosition();
     GameObject::update();
     if (ticks % 60 == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
@@ -47,6 +48,7 @@ void PirateShip::update() {
 }
 
 void PirateShip::travel(vec2 destination) {
+    vec2 position = getPosition();
     vec2 dir = {destination.x - position.x, destination.y - position.y};
     float length = sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length > SHIP_VELOCITY) {
@@ -59,7 +61,6 @@ void PirateShip::travel(vec2 destination) {
             this->sprite.state = 0;
         }
 
-        vec2 newPos = {position.x + dir.x * SHIP_VELOCITY, position.y + dir.y * SHIP_VELOCITY};
-        position = newPos;
+        addForce({dir.x * SHIP_VELOCITY, dir.y * SHIP_VELOCITY});
     }
 }

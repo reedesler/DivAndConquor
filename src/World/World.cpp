@@ -10,7 +10,6 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     gameObjects.push_back(initialSet);
     gameObjects.push_back(initialSailor);
     gameObjects.push_back(new PirateShip(this, {2300, 1300}));
-    gameObjects.push_back(new Pirate(this, {900, 500}));
 
     //to keep track of various unit types
     army.push_back(initialSailor);

@@ -19,6 +19,7 @@ ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
 }
 
 void ShipObject::move(vec2 pos) {
+    vec2 position = getPosition();
     TilePos start = Tilemap::getTilePos(position.x, position.y);
     TilePos goal = Tilemap::getTilePos(pos.x, pos.y);
     pathfinder->init(start.x, start.y, goal.x, goal.y);
@@ -27,13 +28,17 @@ void ShipObject::move(vec2 pos) {
 }
 
 void ShipObject::update() {
+
+    GameObject::update();
+
+    vec2 position = getPosition();
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
         if (next == path.path.end()) return;
         float destX = next->x * TILE_SIZE;
         float destY = next->y * TILE_SIZE;
-        if (abs(position.x - destX) <= SHIP_VELOCITY && abs(position.y - destY) <= SHIP_VELOCITY) {
+        if (abs(position.x - destX) <= SHIP_VELOCITY * 2 && abs(position.y - destY) <= SHIP_VELOCITY * 2) {
             pathfinder->updateStart(next->x, next->y);
             pathfinder->replan();
             path = pathfinder->getPath();
@@ -44,19 +49,19 @@ void ShipObject::update() {
 }
 
 void ShipObject::travel(vec2 destination) {
+    vec2 position = getPosition();
     vec2 dir = {destination.x - position.x, destination.y - position.y};
     float length = sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length > SHIP_VELOCITY) {
         dir = {dir.x / length, dir.y / length};
         this->rotation = atan2(dir.y, dir.x);
-        if (abs(rotation) > M_PI / 2) {
+        if (abs(rotation) > M_PI / 2 + 0.1) {
             this->sprite.state = 1;
             rotation = atan2(-dir.y, -dir.x);
-        } else {
+        } else if (abs(rotation) < M_PI / 2 - 0.1) {
             this->sprite.state = 0;
         }
 
-        vec2 newPos = {position.x + dir.x * SHIP_VELOCITY, position.y + dir.y * SHIP_VELOCITY};
-        position = newPos;
+        addForce({dir.x * SHIP_VELOCITY, dir.y * SHIP_VELOCITY});
     }
 }

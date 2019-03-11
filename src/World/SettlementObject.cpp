@@ -21,7 +21,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
 void SettlementObject::move(vec2 pos) {
 }
 void SettlementObject::update() {
-    world->setExplored(position, 15 * TILE_SIZE);
+    world->setExplored(getPosition(), 15 * TILE_SIZE);
 }
 void SettlementObject::updateResources(uint16_t type, uint16_t amount) {
     if (type == 0)

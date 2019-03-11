@@ -25,6 +25,7 @@ Resource::Resource(World *world, vec2 loc, uint16_t type, uint16_t size) : GameO
 
 bool Resource::collect(Sailor *obj) {
     bounds other = obj->getBounds();
+    vec2 position = getPosition();
     if (position.x >= other.left && position.x <= other.right)
         if (position.y >= other.top && position.y <= other.bottom){
             obj->settlement->updateResources(this->loot_type, this->resource);

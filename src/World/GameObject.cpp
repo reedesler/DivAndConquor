@@ -8,6 +8,8 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
         printf("ERROR initializing sprite\n");
     }
     position = loc;
+    velocity = {0, 0};
+    forces = {0, 0};
     rotation = 0;
     scale = {1.f, 1.f};
 }
@@ -29,7 +31,35 @@ void GameObject::move(vec2 pos) {
 }
 
 void GameObject::update() {
+
+    const float friction = -0.5f;
+    addForce({velocity.x  * friction, velocity.y * friction});
+
     ticks++;
+    position.x += velocity.x;
+    position.y += velocity.y;
+    velocity.x += forces.x;
+    velocity.y += forces.y;
+    forces = {0, 0};
+
+    float topLeftBorder = 0 - TILE_SIZE / 2.f;
+    if (position.x < topLeftBorder) {
+        position.x = topLeftBorder;
+    }
+
+    float rightBorder = world->w * TILE_SIZE - TILE_SIZE / 2.f;
+    if (position.x > rightBorder) {
+        position.x = rightBorder;
+    }
+
+    if (position.y < topLeftBorder) {
+        position.y = topLeftBorder;
+    }
+
+    float bottomBorder = world->h * TILE_SIZE - TILE_SIZE / 2.f;
+    if (position.y > bottomBorder) {
+        position.y = bottomBorder;
+    }
 }
 
 void GameObject::setSelected() {
@@ -50,4 +80,9 @@ bool GameObject::onTerrain(vec2 pos, int type){
                     res = true;
 
     return res;
+}
+
+void GameObject::addForce(vec2 f) {
+    forces.x += f.x;
+    forces.y += f.y;
 }

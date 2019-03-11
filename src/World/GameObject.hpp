@@ -40,13 +40,19 @@ protected:
     Sprite sprite;
 
     float w, h;
-    vec2 position;  // Window coordinates
     vec2 scale;     // 1.f in each dimension. 1.f is as big as the associated texture
     float rotation; // in radians
 
     World *world;
 
     long ticks = 0;
+
+    void addForce(vec2 f);
+
+private:
+    vec2 position;
+    vec2 velocity;
+    vec2 forces;
 
 };
 

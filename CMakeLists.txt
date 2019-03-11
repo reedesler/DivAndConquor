@@ -38,7 +38,6 @@ set(SOURCE_FILES
         src/Game.cpp
         src/Ui/Button.cpp
         src/Sprite.cpp
-        src/Pirate.cpp
         src/PathRenderer.cpp
         src/World/Pathfinder.cpp
         src/World/GameObject.cpp
@@ -62,14 +61,12 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Ui/Button.hpp
         src/Sprite.hpp
-        src/Pirate.h
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
         src/World/Camera.hpp
         src/World/Pathfinder.hpp
         src/PathRenderer.hpp
-        src/Sailor.h
         src/PathRenderer.hpp
         src/Ui/PauseBtn.h
         src/Ui/UiElement.h

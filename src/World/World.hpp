@@ -11,13 +11,11 @@ class World;
 #include "GameObject.hpp"
 #include "Tilemap.h"
 #include "Camera.hpp"
-#include "Pirate.h"
 #include "PathRenderer.hpp"
 
 class PathRenderer;
 
 class ShipObject;
-class Pirate;
 class Sailor;
 class Resource;
 
