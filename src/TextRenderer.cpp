@@ -6,6 +6,10 @@ void _check_gl_error(const char *file, int line);
 
 int TextRenderer::init(const char *fontFileName)
 {
+    // Set OpenGL options
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     /* Initialize the FreeType2 library */
     if (FT_Init_FreeType(&ft))
     {

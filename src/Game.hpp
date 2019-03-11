@@ -10,31 +10,32 @@
 #include <typeindex>
 #include "Ui/Button.hpp"
 #include "Ui/UiCallback.h"
-#include <SDL.h>
 
 #ifdef __LINUX__
 #include <SDL/SDL_mixer.h>
+#include <SDL/SDL.h>
 #else
 #include <SDL_mixer.h>
+#include <SDL.h>
 #endif
 
 struct Settlement
 {
-    uint16_t gold;
-    uint16_t timber;
-    uint16_t iron;
-    vec2 location;
-    uint16_t influence;
+  uint16_t gold;
+  uint16_t timber;
+  uint16_t iron;
+  vec2 location;
+  uint16_t influence;
 };
 
 struct Ship
 {
-    uint16_t capacity;
-    uint16_t sailingDistance;
-    uint16_t sailors;
-    uint16_t maxSpeed;
-    uint16_t price;
-    uint16_t firearm;
+  uint16_t capacity;
+  uint16_t sailingDistance;
+  uint16_t sailors;
+  uint16_t maxSpeed;
+  uint16_t price;
+  uint16_t firearm;
 };
 
 static const Ship proa = {10, 10, 2, 4, 100, 0},
@@ -56,28 +57,28 @@ class Button;
 
 class Game
 {
-  public:
-    void init(vec2 screen);
-    void update();
-    void draw(const mat3 &projection, int pixelScale);
-    void onKey(int key, int scancode, int action);
-    bool registerButton(Sprite &btn, vec2 location, UiCallback::OnClickFunc onclick);
-    // bool removeButton(Sprite *btn);
-    void onClick(int button, int action, double xpos, double ypos);
-    void onMouseMove(double xpos, double ypos);
-    void onScroll(double xoffset, double yoffset, double xpos, double ypos);
-    void buildShip(vec2 location);
-    World *world;
+public:
+  void init(vec2 screen);
+  void update();
+  void draw(const mat3 &projection, int pixelScale);
+  void onKey(int key, int scancode, int action);
+  bool registerButton(Sprite &btn, vec2 location, UiCallback::OnClickFunc onclick);
+  // bool removeButton(Sprite *btn);
+  void onClick(int button, int action, double xpos, double ypos);
+  void onMouseMove(double xpos, double ypos);
+  void onScroll(double xoffset, double yoffset, double xpos, double ypos);
+  void buildShip(vec2 location);
+  World *world;
 
-  private:
-    std::map<std::type_index, std::vector<UiElement *>> unitUis;
-    std::vector<UiElement *> activeUiElements;
-    std::vector<UiElement *> staticUiElements;
-    std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
-    Mix_Music *background_music;
-    vec2 screen;
+private:
+  std::map<std::type_index, std::vector<UiElement *>> unitUis;
+  std::vector<UiElement *> activeUiElements;
+  std::vector<UiElement *> staticUiElements;
+  std::unordered_set<Sprite *> selectedSprites; // TODO: these should be gameobjects maybe
+  Mix_Music *background_music;
+  vec2 screen;
 
-    void drawUI(const mat3 &projection, int pixelScale);
+  void drawUI(const mat3 &projection, int pixelScale);
 };
 
 #endif //DIVCONQ_GAME_H
