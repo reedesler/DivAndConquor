@@ -9,7 +9,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     gameObjects.push_back(initialShip);
     gameObjects.push_back(initialSet);
     gameObjects.push_back(initialSailor);
-    gameObjects.push_back(new PirateShip(this, {300, 800}));
+    gameObjects.push_back(new PirateShip(this, {2300, 1300}));
     gameObjects.push_back(new Pirate(this, {900, 500}));
 
     //to keep track of various unit types
@@ -132,7 +132,7 @@ void World::setExplored(vec2 pos, float radius)
             if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)}))
             {
                 for (auto o : gameObjects) {
-                    if (o->pathfinder) {
+                    if (o->pathfinder && !o->pathfinder->canSeeAll) {
                         o->pathfinder->updateCell(x, y, tilemap.map[x][y].type == 0);
                     }
                 }

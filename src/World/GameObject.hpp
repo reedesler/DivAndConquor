@@ -46,6 +46,8 @@ protected:
 
     World *world;
 
+    long ticks = 0;
+
 };
 
 class SettlementObject : public GameObject {

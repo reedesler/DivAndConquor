@@ -8,6 +8,10 @@ Pathfinder::Pathfinder(World* world, bool landUnit) : world(world) {
     landCost = landUnit ? 1 : -1;
 }
 
+Pathfinder::Pathfinder(World* world, bool landUnit, bool canSeeAll) : Pathfinder(world, landUnit) {
+    this->canSeeAll = canSeeAll;
+}
+
 void Pathfinder::init(int sX, int sY, int gX, int gY) {
 
     cellHash.clear();
@@ -22,7 +26,7 @@ void Pathfinder::init(int sX, int sY, int gX, int gY) {
     for (int x = 0; x < world->tilemap.width; x++) {
         for (int y = 0; y < world->tilemap.height; y++) {
             Tile& t = world->tilemap.map[x][y];
-            if (t.explored) {
+            if (canSeeAll || t.explored) {
                 PF_Tile tile;
                 tile.x = x;
                 tile.y = y;

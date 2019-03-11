@@ -106,6 +106,7 @@ typedef priority_queue<PF_Tile, vector<PF_Tile>, greater<PF_Tile> > OpenQueue;
 class Pathfinder {
 public:
     explicit Pathfinder(World* world, bool landUnit);
+    Pathfinder(World* world, bool landUnit, bool canSeeAll);
     void   init(int sX, int sY, int gX, int gY);
     void   updateCell(int x, int y, bool water);
     void   updateStart(int x, int y);
@@ -113,6 +114,8 @@ public:
     bool   replan();
 
     Path &getPath();
+
+    bool canSeeAll = false;
 
 private:
 

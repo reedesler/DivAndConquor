@@ -29,6 +29,7 @@ void GameObject::move(vec2 pos) {
 }
 
 void GameObject::update() {
+    ticks++;
 }
 
 void GameObject::setSelected() {

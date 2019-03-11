@@ -13,12 +13,36 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     scale = {1.f, 1.f};
     landUnit = false;
     playerControlled = false;
+    pathfinder = new Pathfinder(world, landUnit, true);
 }
 
 void PirateShip::update() {
-    GameObject* o = world->getClosestObject(position, true, false);
-    if (o) {
-        travel(o->getPosition());
+    GameObject::update();
+    if (ticks % 60 == 0) {
+        GameObject* o = world->getClosestObject(position, true, false);
+        if (o) {
+            vec2 targetPos = o->getPosition();
+            TilePos start = Tilemap::getTilePos(position.x, position.y);
+            TilePos goal = Tilemap::getTilePos(targetPos.x, targetPos.y);
+            pathfinder->init(start.x, start.y, goal.x, goal.y);
+            pathfinder->replan();
+            path = pathfinder->getPath();
+        }
+    }
+
+
+    if (!path.path.empty()) {
+        auto next = std::next(path.path.begin());
+        if (next == path.path.end()) return;
+        float destX = next->x * TILE_SIZE;
+        float destY = next->y * TILE_SIZE;
+        if (abs(position.x - destX) <= SHIP_VELOCITY && abs(position.y - destY) <= SHIP_VELOCITY) {
+            pathfinder->updateStart(next->x, next->y);
+            pathfinder->replan();
+            path = pathfinder->getPath();
+        } else {
+            travel({destX, destY});
+        }
     }
 }
 
@@ -36,8 +60,6 @@ void PirateShip::travel(vec2 destination) {
         }
 
         vec2 newPos = {position.x + dir.x * SHIP_VELOCITY, position.y + dir.y * SHIP_VELOCITY};
-        if (onTerrain(newPos, 0)) {
-            position = newPos;
-        }
+        position = newPos;
     }
 }
