@@ -86,3 +86,6 @@ void GameObject::addForce(vec2 f) {
     forces.x += f.x;
     forces.y += f.y;
 }
+
+void GameObject::collide(GameObject* obj) {
+}

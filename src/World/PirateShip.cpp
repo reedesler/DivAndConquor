@@ -34,16 +34,25 @@ void PirateShip::update() {
 
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
-        if (next == path.path.end()) return;
-        float destX = next->x * TILE_SIZE;
-        float destY = next->y * TILE_SIZE;
-        if (abs(position.x - destX) <= SHIP_VELOCITY && abs(position.y - destY) <= SHIP_VELOCITY) {
-            pathfinder->updateStart(next->x, next->y);
-            pathfinder->replan();
-            path = pathfinder->getPath();
-        } else {
-            travel({destX, destY});
+        if (next != path.path.end()) {
+            float destX = next->x * TILE_SIZE;
+            float destY = next->y * TILE_SIZE;
+            if (abs(position.x - destX) <= SHIP_VELOCITY && abs(position.y - destY) <= SHIP_VELOCITY) {
+                pathfinder->updateStart(next->x, next->y);
+                pathfinder->replan();
+                path = pathfinder->getPath();
+            } else {
+                travel({destX, destY});
+            }
         }
+    }
+
+    TilePos tilePos = Tilemap::getTilePos(position.x, position.y);
+    if (world->tilemap.map[tilePos.x][tilePos.y].type != 0) {
+        vec2 pos = {(float) tilePos.x * TILE_SIZE, (float) tilePos.y * TILE_SIZE};
+        float difX = position.x - pos.x;
+        float difY = position.y - pos.y;
+        addForce({difX * 0.5f, difY * 0.5f});
     }
 }
 
@@ -63,4 +72,12 @@ void PirateShip::travel(vec2 destination) {
 
         addForce({dir.x * SHIP_VELOCITY, dir.y * SHIP_VELOCITY});
     }
+}
+
+void PirateShip::collide(GameObject* obj) {
+    vec2 pos = obj->getPosition();
+    vec2 position = getPosition();
+    float difX = position.x - pos.x;
+    float difY = position.y - pos.y;
+    addForce({difX * 0.2f, difY * 0.2f});
 }

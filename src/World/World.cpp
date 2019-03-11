@@ -43,6 +43,17 @@ void World::update()
         o->update();
     }
 
+    for (int i = 0; i < gameObjects.size(); i++) {
+        for (int j = i + 1; j < gameObjects.size(); j++) {
+            GameObject* ob1 = gameObjects[i];
+            GameObject* ob2 = gameObjects[j];
+            if (collide(ob1->getBounds(), ob2->getBounds())) {
+                ob1->collide(ob2);
+                ob2->collide(ob1);
+            }
+        }
+    }
+
     //check for loot collisions
     std::vector<int> toDelete;
     for (int i = 0; i < resources.size(); ++i){

@@ -48,6 +48,7 @@ struct bounds
 };
 
 bool inBounds(bounds b, vec2 pos);
+bool collide(bounds b1, bounds b2);
 
 bool inRadius(vec2 pos, float radius, vec2 target);
 

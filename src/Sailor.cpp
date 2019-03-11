@@ -12,7 +12,7 @@ float ANIMATION_FRAME_WS = 0.33f;
 
 
 Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject(world, pos){
-    w = 75;
+    w = 56;
     h = 75;
 
     if (!sprite.init(w, h, textures_path("sailor.png"), {0.33f, 0.25f}))
@@ -36,6 +36,8 @@ void Sailor::move(vec2 pos) {
 }
 
 void Sailor::update() {
+    GameObject::update();
+
     vec2 position = getPosition();
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
@@ -43,7 +45,7 @@ void Sailor::update() {
         if (next == path.path.end()) return;
         float destX = next->x * TILE_SIZE;
         float destY = next->y * TILE_SIZE;
-        if (abs(position.x - destX) <= SAILOR_VELOCITY && abs(position.y - destY) <= SAILOR_VELOCITY) {
+        if (abs(position.x - destX) <= SAILOR_VELOCITY * 2 && abs(position.y - destY) <= SAILOR_VELOCITY * 2) {
             pathfinder->updateStart(next->x, next->y);
             pathfinder->replan();
             path = pathfinder->getPath();
@@ -63,8 +65,7 @@ void Sailor::travel(vec2 destination) {
 
         dir = {dir.x / length, dir.y / length};
 
-        vec2 newPos = {position.x + dir.x * SAILOR_VELOCITY, position.y + dir.y * SAILOR_VELOCITY};
-        position = newPos;
+        addForce({dir.x * SAILOR_VELOCITY, dir.y * SAILOR_VELOCITY});
     }
 }
 

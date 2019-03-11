@@ -296,6 +296,10 @@ bool inBounds(bounds b, vec2 pos) {
 	return pos.x >= b.left && pos.x <= b.right && pos.y >= b.top && pos.y <= b.bottom;
 }
 
+bool collide(bounds b1, bounds b2) {
+	return b1.left <= b2.right && b1.right >= b2.left && b1.top <= b2.bottom && b1.bottom >= b2.top;
+}
+
 bool inRadius(vec2 pos, float radius, vec2 target) {
 	vec2 dif = {pos.x - target.x, pos.y - target.y};
 	return dif.x * dif.x + dif.y * dif.y <= radius * radius;

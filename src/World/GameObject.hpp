@@ -36,6 +36,8 @@ public:
 
     bool playerControlled = true;
 
+    virtual void collide(GameObject* obj);
+
 protected:
     Sprite sprite;
 
@@ -83,8 +85,8 @@ public:
     void update();
 
     void move(vec2 pos);
-    //void setDestination(vec2 dst);
-    //void setVelocity(float vel);
+
+    void collide(GameObject* obj);
 
 private:
 
@@ -100,6 +102,7 @@ public:
     void travel(vec2 dir);
 
     void update();
+    void collide(GameObject* obj);
 };
 
 class Sailor : public GameObject{
