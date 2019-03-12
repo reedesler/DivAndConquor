@@ -14,6 +14,10 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
     scale = {1.f, 1.f};
 }
 
+GameObject::~GameObject() {
+    delete pathfinder;
+}
+
 void GameObject::draw(const mat3 &projection)
 {
     Tile t = world->tilemap.getTile(position.x, position.y);
@@ -88,4 +92,8 @@ void GameObject::addForce(vec2 f) {
 }
 
 void GameObject::collide(GameObject* obj) {
+}
+
+void GameObject::destroy() {
+    world->removeGameObject(this);
 }

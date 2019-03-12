@@ -54,9 +54,16 @@ void World::update()
         }
     }
 
+    for (auto o : toBeDeleted) {
+        gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), o), gameObjects.end());
+        delete o;
+    }
+
+    toBeDeleted.clear();
+
     //check for loot collisions
-    std::vector<int> toDelete;
-    for (int i = 0; i < resources.size(); ++i){
+        std::vector<int> toDelete;
+    for (int i = 0; i < resources.size(); ++i) {
         for (auto o : army){
             if (o->playerControlled && resources[i]->collect(o)) {
                 printf("current resources for settlement:\n");
@@ -226,4 +233,11 @@ void World::setResources(){
         }
         resources.push_back(new Resource(this, {x, y}, 2, 500));
     }
+}
+
+void World::removeGameObject(GameObject* obj) {
+    if (selectedObject == obj) {
+        selectedObject = nullptr;
+    }
+    toBeDeleted.push_back(obj);
 }

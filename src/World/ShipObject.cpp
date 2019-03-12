@@ -16,6 +16,7 @@ ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
     scale = {1.f, 1.f};
     landUnit = false;
     pathfinder = new Pathfinder(world, landUnit);
+    health = maxHealth = 100;
 }
 
 void ShipObject::move(vec2 pos) {
@@ -55,6 +56,12 @@ void ShipObject::update() {
         float difY = position.y - pos.y;
         addForce({difX * 0.5f, difY * 0.5f});
     }
+
+    if (health <= 0) {
+        destroy();
+    }
+
+    sprite.tint = {1.f, health / maxHealth, health / maxHealth};
 }
 
 void ShipObject::travel(vec2 destination) {
@@ -81,4 +88,8 @@ void ShipObject::collide(GameObject* obj) {
     float difX = position.x - pos.x;
     float difY = position.y - pos.y;
     addForce({difX * 0.2f, difY * 0.2f});
+
+    if (!obj->playerControlled) {
+        obj->health -= 10;
+    }
 }

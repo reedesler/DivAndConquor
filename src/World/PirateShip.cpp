@@ -5,15 +5,15 @@
 PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     w = 100;
     h = 100;
-    if (!sprite.init(w, h, textures_path("ship.png"), {0.5f, 1.f})) {
+    if (!sprite.init(w, h, textures_path("pirateship.png"), {0.5f, 1.f})) {
         printf("ERROR initializing sprite\n");
     }
-    sprite.tint = {1.f, 0.5f, 0.5f};
     rotation = 0;
     scale = {1.f, 1.f};
     landUnit = false;
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
+    health = maxHealth = 100;
 }
 
 void PirateShip::update() {
@@ -54,6 +54,12 @@ void PirateShip::update() {
         float difY = position.y - pos.y;
         addForce({difX * 0.5f, difY * 0.5f});
     }
+
+    if (health <= 0) {
+        destroy();
+    }
+
+    sprite.tint = {1.f, health / maxHealth, health / maxHealth};
 }
 
 void PirateShip::travel(vec2 destination) {
@@ -80,4 +86,8 @@ void PirateShip::collide(GameObject* obj) {
     float difX = position.x - pos.x;
     float difY = position.y - pos.y;
     addForce({difX * 0.2f, difY * 0.2f});
+
+    if (obj->playerControlled) {
+        obj->health -= 7;
+    }
 }

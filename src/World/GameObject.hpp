@@ -15,6 +15,7 @@ class GameObject;
 class GameObject {
 public:
     GameObject(World *world, vec2 loc);
+    virtual ~GameObject();
 
     virtual void draw(const mat3 &projection);
 
@@ -38,6 +39,9 @@ public:
 
     virtual void collide(GameObject* obj);
 
+    float health;
+    float maxHealth;
+
 protected:
     Sprite sprite;
 
@@ -50,6 +54,8 @@ protected:
     long ticks = 0;
 
     void addForce(vec2 f);
+
+    void destroy();
 
 private:
     vec2 position;

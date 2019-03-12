@@ -42,9 +42,12 @@ class World
     long int h;
 
     GameObject* getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
+
+    void removeGameObject(GameObject* obj);
 private:
 
     std::vector<GameObject *> gameObjects;
+    std::vector<GameObject *> toBeDeleted;
     int64_t balance;
     uint64_t sailors;
 
