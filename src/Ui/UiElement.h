@@ -32,7 +32,7 @@ public:
     virtual void Draw(const mat3 &projection){
         sprite.draw(projection, pos);
     }
-    bool  InBounds(vec2 point)
+    virtual bool  InBounds(vec2 point)
     {
         float x0 = pos.x - sprite.width / 2.f;
         float x1 = pos.x + sprite.width / 2.f;

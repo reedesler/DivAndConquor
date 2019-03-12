@@ -38,6 +38,7 @@ set(SOURCE_FILES
         src/Game.cpp
         src/Ui/Button.cpp
         src/Sprite.cpp
+        src/TriSprite.cpp
         src/PathRenderer.cpp
         src/World/Pathfinder.cpp
         src/World/GameObject.cpp
@@ -49,8 +50,10 @@ set(SOURCE_FILES
         src/TextRenderer.cpp
         src/TextRenderer.hpp
         src/World/PirateShip.cpp
-        src/Ui/PauseBtn.cpp
+        src/Ui/TriangleBtn.cpp
+        src/Sailor.cpp
         src/Ui/UiElement.cpp
+        src/Ui/Label.cpp
         src/World/Resource.cpp
 
         src/ProjectPath.hpp
@@ -59,6 +62,7 @@ set(SOURCE_FILES
         src/Game.hpp
         src/Ui/Button.hpp
         src/Sprite.hpp
+        src/TriSprite.hpp
         src/World/GameObject.hpp
         src/World/World.hpp
         src/World/Tilemap.h
@@ -66,13 +70,14 @@ set(SOURCE_FILES
         src/World/Pathfinder.hpp
         src/PathRenderer.hpp
         src/PathRenderer.hpp
-        src/Ui/PauseBtn.h
+        src/Ui/TriangleBtn.h
         src/Ui/UiElement.h
         src/Ui/UiCallback.h
         src/Sailor.cpp
         src/Attack.cpp
         src/Attack.h
-        src/PathRenderer.hpp src/Ui/PauseBtn.cpp src/Ui/PauseBtn.h src/Ui/UiElement.cpp src/Ui/UiElement.h src/Ui/UiCallback.h)
+        src/Ui/Label.hpp
+        src/Ui/UiCallback.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
