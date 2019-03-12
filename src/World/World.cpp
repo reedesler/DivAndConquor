@@ -48,9 +48,11 @@ void World::addSettlement() {
 
     float x = -1;
     float y = -1;
+    int tries = 0;
     while(x <= 0 || y <= 0 || tilemap.getTile(x, y).type == 0){
         x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
+        if (tries ++ >= 100) return;
     }
     this->gameObjects.push_back(new SettlementObject(this, {x, y}));
 
