@@ -10,6 +10,7 @@ bool Sprite::init(float width, float height, const char *textureName, vec2 texPi
     this->width = width;
     this->tint = {1.f, 1.f, 1.f};
     this->selected = false;
+    this->lock = false;
     this->state = 0;
     auto t = textures.find(textureName);
     if (textures.count(textureName) > 0)
@@ -116,9 +117,28 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
 
     std::array<GLfloat,3> selectedTint = {0.7f, 1.f, 0.7f};
-    std::array<GLfloat,3> drawTint = selected ? selectedTint : tint;
+    std::array<GLfloat,3> aTint = {1.f, 0.7f, 0.7f};
+    std::array<GLfloat,3> drawTint;
+
+    if(selected){
+        drawTint = selectedTint;
+    } else if(lock){
+        drawTint = aTint;
+    } else {
+        drawTint = tint;
+    }
+    //std::array<GLfloat,3> attackTint = lock ? aTint : tint;
+
+    //    if(selected){
+//        drawTint = selectedTint;
+//    }
+
 
     glUniform3fv(color_uloc, 1, drawTint.data());
+    //glUniform3fv(color_uloc, 1, aTint.data());
+
+
+
     glUniform2f(shift_uloc, texPiece.x * state, texPiece.y * state);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);
 

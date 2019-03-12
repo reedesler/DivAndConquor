@@ -16,9 +16,12 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     fleet.push_back(initialShip);
 
     pathRenderer = new PathRenderer();
-    w = tilemap.width *  TILE_SIZE;
+    //attack = new Attack({340, 900});
+    // attack->init();
+    w = tilemap.width * TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
     this->setResources();
+
 
     prevMouseXpos = viewPort.w / 2.f;
     prevMouseYpos = viewPort.h / 2.f;
@@ -50,19 +53,19 @@ void World::addSettlement() {
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
     this->gameObjects.push_back(new SettlementObject(this, {x, y}));
+
 }
 
-void World::centerCameraOn(GameObject &go){
+void World::centerCameraOn(GameObject &go) {
     this->camera.moveTo(go.getPosition());
 }
-void World::update()
-{
+
+void World::update() {
     tilemap.clearVisible(visibleTiles);
     visibleTiles.clear();
 
     camera.update();
-    for (auto o : gameObjects)
-    {
+    for (auto o : gameObjects) {
         o->update();
     }
 
@@ -108,69 +111,97 @@ void World::update()
     }
 
 
-    if(camera.followSelected && getSelected() != nullptr)
+    if (camera.followSelected && getSelected() != nullptr)
         centerCameraOn(*getSelected());
 }
 
-void World::draw(int pixelScale)
-{
+void World::draw(int pixelScale) {
     mat3 projection = camera.getProjection(pixelScale);
     tilemap.draw(projection);
-    for (auto o : gameObjects)
-    {
+
+    for (auto o : gameObjects) {
         o->draw(projection);
+        if (o && o->fight){
+            o->attack->draw(projection);
+        }
     }
     for (auto o: resources)
         o->draw(projection);
     if (selectedObject && selectedObject->pathfinder) {
         pathRenderer->draw(projection);
+
     }
+
+
+
+//    if(selectedObject->attack != nullptr && selectedObject->fight){
+//       // selectedObject->attack->draw(projection);
+//
+//    }
+
 }
 
-void World::onClick(int button, int action, float xpos, float ypos)
-{
-    if (action == GLFW_PRESS)
-    {
-        vec2 worldCoords = camera.viewToWorld({xpos, ypos});
-        for (auto o : gameObjects)
-        {
-            if (o->playerControlled && inBounds(o->getBounds(), worldCoords))
-            {
+void World::onClick(int button, int action, float xpos, float ypos) {
+    vec2 worldCoords = camera.viewToWorld({xpos, ypos});
+    if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+        for (auto o : gameObjects) {
+            if (o->playerControlled && inBounds(o->getBounds(), worldCoords)) {
                 //int a = 1;
                 if (selectedObject == o)
                     selectedObject = nullptr;
-                else
-                {
+                else {
                     if (selectedObject)
                         selectedObject->setSelected();
                     selectedObject = o;
-
                 }
                 o->setSelected();
+                return;
+            } else {
+
+            }
+        }
+
+        if (selectedObject != nullptr) {
+            selectedObject->move(worldCoords);
+        }
+    }
+    if(button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS){
+        for (auto o : gameObjects) {
+            if (o->playerControlled && inBounds(o->getBounds(), worldCoords)) {
+                //int a = 1;
+                if (lock == o)
+                    lock = nullptr;
+                else {
+                    if (lock)
+                        lock->lockOn();
+                    lock = o;
+                }
+                o->lockOn();
                 return;
             }
         }
 
-        if (selectedObject != nullptr)
-        {
-            selectedObject->move(worldCoords);
+        if (selectedObject != nullptr && lock != nullptr) {
+            if(selectedObject->canShoot){
+                    selectedObject->fire(lock->getPosition(), selectedObject->getPosition());
+
+
+                }
+
         }
+
     }
 }
 
-void World::setExplored(vec2 pos, float radius)
-{
+void World::setExplored(vec2 pos, float radius) {
     int minX = std::max(static_cast<int>(floor((pos.x - radius) / TILE_SIZE + 0.5f)), 0);
     int maxX = std::min(static_cast<unsigned int>(floor((pos.x + radius) / TILE_SIZE + 0.5f)), tilemap.width - 1);
     int minY = std::max(static_cast<int>(floor((pos.y - radius) / TILE_SIZE + 0.5f)), 0);
     int maxY = std::min(static_cast<unsigned int>(floor((pos.y + radius) / TILE_SIZE + 0.5f)), tilemap.height - 1);
 
-    for (int x = minX; x <= maxX; x++)
-    {
-        for (int y = minY; y <= maxY; y++)
-        {
-            if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)}))
-            {
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            if (inRadius(pos, radius, {static_cast<float>(x * TILE_SIZE), static_cast<float>(y * TILE_SIZE)})) {
                 for (auto o : gameObjects) {
                     if (o->pathfinder && !o->pathfinder->canSeeAll) {
                         o->pathfinder->updateCell(x, y, tilemap.map[x][y].type == 0);
@@ -193,14 +224,18 @@ void World::onMouseMove(double xpos, double ypos) {
     if (xpos <= MOUSE_MOVE_SIZE && prevMouseXpos > MOUSE_MOVE_SIZE) cameraDir.x -= 1;
     if (prevMouseXpos <= MOUSE_MOVE_SIZE && xpos > MOUSE_MOVE_SIZE) cameraDir.x += 1;
 
-    if (xpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && prevMouseXpos < camera.viewPort.w - MOUSE_MOVE_SIZE) cameraDir.x += 1;
-    if (prevMouseXpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && xpos < camera.viewPort.w - MOUSE_MOVE_SIZE) cameraDir.x -= 1;
+    if (xpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && prevMouseXpos < camera.viewPort.w - MOUSE_MOVE_SIZE)
+        cameraDir.x += 1;
+    if (prevMouseXpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && xpos < camera.viewPort.w - MOUSE_MOVE_SIZE)
+        cameraDir.x -= 1;
 
     if (ypos <= MOUSE_MOVE_SIZE && prevMouseYpos > MOUSE_MOVE_SIZE) cameraDir.y -= 1;
     if (prevMouseYpos <= MOUSE_MOVE_SIZE && ypos > MOUSE_MOVE_SIZE) cameraDir.y += 1;
 
-    if (ypos >= camera.viewPort.h - MOUSE_MOVE_SIZE && prevMouseYpos < camera.viewPort.h - MOUSE_MOVE_SIZE) cameraDir.y += 1;
-    if (prevMouseYpos >= camera.viewPort.h - MOUSE_MOVE_SIZE && ypos < camera.viewPort.h - MOUSE_MOVE_SIZE) cameraDir.y -= 1;
+    if (ypos >= camera.viewPort.h - MOUSE_MOVE_SIZE && prevMouseYpos < camera.viewPort.h - MOUSE_MOVE_SIZE)
+        cameraDir.y += 1;
+    if (prevMouseYpos >= camera.viewPort.h - MOUSE_MOVE_SIZE && ypos < camera.viewPort.h - MOUSE_MOVE_SIZE)
+        cameraDir.y -= 1;
 
     camera.move(cameraDir, 0);
 
@@ -208,9 +243,9 @@ void World::onMouseMove(double xpos, double ypos) {
     prevMouseYpos = ypos;
 }
 
-GameObject* World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit) {
+GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit) {
     float minDist = INFINITY;
-    GameObject* closest;
+    GameObject *closest;
     for (auto o : gameObjects) {
         if (o->playerControlled == playerControlled && o->landUnit == landUnit) {
             float difX = pos.x - o->getPosition().x;
@@ -264,3 +299,4 @@ void World::removeGameObject(GameObject* obj) {
     }
     toBeDeleted.push_back(obj);
 }
+

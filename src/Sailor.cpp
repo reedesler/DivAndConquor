@@ -23,7 +23,9 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     scale = {1.f, 1.f};
     this->settlement = settlement;
     landUnit = true;
+    canShoot = true;
     pathfinder = new Pathfinder(world, landUnit);
+    fight = false;
 }
 
 void Sailor::move(vec2 pos) {
@@ -39,6 +41,13 @@ void Sailor::update() {
     GameObject::update();
 
     vec2 position = getPosition();
+
+    if (attack){
+    if(attack->attackCondition(fight)){
+        fight = false;
+    }
+}
+
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
@@ -53,6 +62,8 @@ void Sailor::update() {
             travel({destX, destY});
         }
     }
+
+
 }
 
 void Sailor::travel(vec2 destination) {

@@ -11,6 +11,7 @@ class GameObject;
 #include "Sprite.hpp"
 #include "math.h"
 #include "Pathfinder.hpp"
+#include "Attack.h"
 
 class GameObject {
 public:
@@ -23,19 +24,32 @@ public:
 
     bounds getBounds();
 
+    void fire(vec2, vec2);
+
+    bool tooFar(GameObject * a, GameObject * b);
+
     virtual void move(vec2 pos);
 
     virtual void setSelected();
 
+    virtual void lockOn();
+
     vec2 getPosition() {return position;};
     bool onTerrain(vec2 loc, int type);
 
-    Pathfinder *pathfinder = nullptr;
+    Pathfinder * pathfinder = nullptr;
+
+    GameObject(Pathfinder *pathfinder);
+
+    Attack * attack = nullptr;
     Path path;
     bool landUnit;
     Sprite& getSprite() {return sprite;};
-
+    bool fight = false;
+    bool init = false;
+    bool canShoot;
     bool playerControlled = true;
+    //int health = 100;
 
     virtual void collide(GameObject* obj);
 
@@ -48,7 +62,6 @@ protected:
     float w, h;
     vec2 scale;     // 1.f in each dimension. 1.f is as big as the associated texture
     float rotation; // in radians
-
     World *world;
 
     long ticks = 0;
@@ -119,8 +132,8 @@ public:
     void renderDirection(vec2 dir);
     void move(vec2 pos);
 
-    float frameNo;
 
+    float frameNo;
     int r = std::rand();
     SettlementObject *settlement;
 };
@@ -187,8 +200,10 @@ public:
     bool moveLeft;
     bool moveRight;
     bool selected;
+    bool enemy;
     std::array<GLfloat, 3> tint;
 };
+
 
 
 #endif //DIVCONQ_GAMEOBJECT_H

@@ -34,6 +34,31 @@ bounds GameObject::getBounds() {
 void GameObject::move(vec2 pos) {
 }
 
+void GameObject::fire(vec2 dest, vec2 pos){
+        if (sprite.selected && playerControlled){
+        fight = true;
+            attack = new Attack({pos.x, pos.y});
+            attack->target = dest;
+        //attack->init();
+    }
+
+
+
+}
+
+bool GameObject::tooFar(GameObject * a, GameObject * b){
+    vec2 dist = {abs(a->getPosition().x - b->getPosition().x), abs(a->getPosition().y - b->getPosition().y)};
+    float length = sqrtf((dist.x * dist.x) + (dist.y * dist.y));
+
+    if (length > 40){
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+
 void GameObject::update() {
 
     const float friction = -0.5f;
@@ -70,6 +95,10 @@ void GameObject::setSelected() {
     sprite.selected = !sprite.selected;
 }
 
+void GameObject::lockOn() {
+    sprite.lock = !sprite.lock;
+}
+
 bool GameObject::onTerrain(vec2 pos, int type){
 
     int rT = world->tilemap.getTile(pos.x + w/2, pos.y - h/2).type;
@@ -97,3 +126,4 @@ void GameObject::collide(GameObject* obj) {
 void GameObject::destroy() {
     world->removeGameObject(this);
 }
+

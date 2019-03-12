@@ -12,7 +12,7 @@ class World;
 #include "Tilemap.h"
 #include "Camera.hpp"
 #include "PathRenderer.hpp"
-
+#include "Attack.h"
 class PathRenderer;
 
 class ShipObject;
@@ -34,12 +34,14 @@ class World
     void addSailor(Sailor * sailor);
     void centerCameraOn(GameObject &go);
     GameObject* getSelected() { return selectedObject;}
+   // bool tooFar(GameObject * a, GameObject * b);
 
     Tilemap tilemap;
     Camera camera;
     long int w;
     GameObject *selectedObject = nullptr;
-
+    GameObject * lock = nullptr;
+    Attack * attack;
     long int h;
 
     GameObject* getClosestObject(vec2 pos, bool playerControlled, bool landUnit);

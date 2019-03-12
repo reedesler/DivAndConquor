@@ -6,7 +6,7 @@
 
 #define SHIP_VELOCITY 5
 
-ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
+ShipObject::ShipObject(World *world, vec2 loc) : GameObject(world, loc) {
     w = 100;
     h = 100;
     if (!sprite.init(w, h, textures_path("ship.png"), {0.5f, 1.f})) {
@@ -17,6 +17,7 @@ ShipObject::ShipObject(World* world, vec2 loc) : GameObject(world, loc) {
     landUnit = false;
     pathfinder = new Pathfinder(world, landUnit);
     health = maxHealth = 100;
+    canShoot = true;
 }
 
 void ShipObject::move(vec2 pos) {
@@ -26,6 +27,7 @@ void ShipObject::move(vec2 pos) {
     pathfinder->init(start.x, start.y, goal.x, goal.y);
     pathfinder->replan();
     path = pathfinder->getPath();
+
 }
 
 void ShipObject::update() {
@@ -33,6 +35,12 @@ void ShipObject::update() {
     GameObject::update();
 
     vec2 position = getPosition();
+    if (attack){
+        if(attack->attackCondition(fight)){
+            fight = false;
+        }
+    }
+
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
@@ -62,6 +70,15 @@ void ShipObject::update() {
     }
 
     sprite.tint = {1.f, health / maxHealth, health / maxHealth};
+//    if(fight){
+//        attack->init();
+//        attack->travel(target);
+//        if(attack->position.x == target.x && attack->position.y == target.y){
+//            fight = false;
+//
+//        }
+//    }
+
 }
 
 void ShipObject::travel(vec2 destination) {

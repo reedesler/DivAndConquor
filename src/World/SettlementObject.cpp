@@ -16,6 +16,8 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     this->gold = 500;
     this->iron = 500;
     this->timber = 500;
+    canShoot = false;
+
 }
 
 void SettlementObject::move(vec2 pos) {

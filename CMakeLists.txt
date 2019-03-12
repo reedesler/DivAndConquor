@@ -50,10 +50,8 @@ set(SOURCE_FILES
         src/TextRenderer.hpp
         src/World/PirateShip.cpp
         src/Ui/PauseBtn.cpp
-        src/Sailor.cpp
         src/Ui/UiElement.cpp
         src/World/Resource.cpp
-
 
         src/ProjectPath.hpp
         src/Common.hpp
@@ -70,7 +68,11 @@ set(SOURCE_FILES
         src/PathRenderer.hpp
         src/Ui/PauseBtn.h
         src/Ui/UiElement.h
-        src/Ui/UiCallback.h)
+        src/Ui/UiCallback.h
+        src/Sailor.cpp
+        src/Attack.cpp
+        src/Attack.h
+        src/PathRenderer.hpp src/Ui/PauseBtn.cpp src/Ui/PauseBtn.h src/Ui/UiElement.cpp src/Ui/UiElement.h src/Ui/UiCallback.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
