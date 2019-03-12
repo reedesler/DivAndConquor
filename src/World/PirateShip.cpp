@@ -85,9 +85,12 @@ void PirateShip::collide(GameObject* obj) {
     vec2 position = getPosition();
     float difX = position.x - pos.x;
     float difY = position.y - pos.y;
-    addForce({difX * 0.2f, difY * 0.2f});
+    float mul = 0.05f;
 
     if (obj->playerControlled) {
         obj->health -= 7;
+        mul = 0.2f;
     }
+
+    addForce({difX * mul, difY * mul});
 }

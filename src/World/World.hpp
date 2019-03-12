@@ -28,7 +28,8 @@ class World
     void onClick(int button, int action, float xpos, float ypos);
     void onMouseMove(double xpos, double ypos);
     void setExplored(vec2 pos, float radius);
-    void addShip(ShipObject *ship);
+    void addShip();
+    void addSettlement();
     void setResources();
     void addSailor(Sailor * sailor);
     void centerCameraOn(GameObject &go);

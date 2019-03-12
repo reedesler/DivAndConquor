@@ -24,9 +24,32 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     prevMouseYpos = viewPort.h / 2.f;
 }
 
-void World::addShip(ShipObject *ship)
-{
-    this->gameObjects.push_back(ship);
+void World::addShip() {
+    if (!selectedObject) return;
+
+    vec2 pos = selectedObject->getPosition();
+
+    float x = -1;
+    float y = -1;
+    while(x <= 0 || y <= 0 || tilemap.getTile(x, y).type != 0){
+        x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
+        y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
+    }
+    this->gameObjects.push_back(new ShipObject(this, {x, y}));
+}
+
+void World::addSettlement() {
+    if (!selectedObject) return;
+
+    vec2 pos = selectedObject->getPosition();
+
+    float x = -1;
+    float y = -1;
+    while(x <= 0 || y <= 0 || tilemap.getTile(x, y).type == 0){
+        x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
+        y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
+    }
+    this->gameObjects.push_back(new SettlementObject(this, {x, y}));
 }
 
 void World::centerCameraOn(GameObject &go){

@@ -52,14 +52,12 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
 {
-    printf("invokeBuildShip! \n");
-
-    game->buildShip(vec2{(float)xpos, (float)ypos});
+    game->world->addShip();
 }
 
 void invokeBuildSettlement(Game *game, int button, int action, double xpos, double ypos)
 {
-    printf("buildSettlement!\n");
+    game->world->addSettlement();
 }
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
@@ -69,18 +67,6 @@ void invokeHireSailors(Game *game, int button, int action, double xpos, double y
     //                {0.f, 1.f, (float)ypos},
     //                {0.f,0.f,1.f}};
     //    p.draw(pos);
-}
-
-void invokeSubmitJourney(int button, int action, double xpos, double ypos)
-{
-    printf("Starting a journey from a to b!\n");
-    // find the two selected settlements that represent the src and dst
-}
-
-void Game::buildShip(vec2 location)
-{
-
-    (this->world)->addShip(new ShipObject(this->world, location));
 }
 
 void Game::init(vec2 screen)

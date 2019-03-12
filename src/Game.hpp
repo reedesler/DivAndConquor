@@ -67,7 +67,6 @@ public:
   void onClick(int button, int action, double xpos, double ypos);
   void onMouseMove(double xpos, double ypos);
   void onScroll(double xoffset, double yoffset, double xpos, double ypos);
-  void buildShip(vec2 location);
   World *world;
 
 private:
