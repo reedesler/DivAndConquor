@@ -5,43 +5,43 @@
 #ifndef DIVCONQ_BULLET_H
 #define DIVCONQ_BULLET_H
 
-
 #include "Common.hpp"
 
-class Attack : public Renderable{
+class Attack : public Renderable
+{
 
-    static Texture attack_texture;
-
+  static Texture attack_texture;
 
 public:
-    Attack(vec2);
+  Attack(vec2);
 
-    bool init();
+  bool init();
 
-    void travel(vec2);
+  void travel(vec2);
 
-    bool attackCondition(bool);
+  bool attackCondition(bool);
 
-    void move();
+  void move();
 
-    void draw(const mat3 &projection);
+  void draw(const mat3 &projection);
 
-    void destroy();
+  void destroy();
 
-    vec2 position;
+  bool collidesWith(vec2 circlePosition, float radius, vec2 rectLeftTop, vec2 rectRightBottom);
 
-    float width, height;
+  vec2 position;
 
-    vec2 texPiece = {1.f, 1.f};
+  float width, height;
 
-    vec2 frame = {0.f,0.f};
+  vec2 texPiece = {1.f, 1.f};
 
-    float rotation = 0;
+  vec2 frame = {0.f, 0.f};
 
-    vec2 scale = {1.f, 1.f};
+  float rotation = 0;
 
-    vec2 target;
+  vec2 scale = {1.f, 1.f};
+
+  vec2 target;
 };
-
 
 #endif //DIVCONQ_BULLET_H

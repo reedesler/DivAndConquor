@@ -20,8 +20,6 @@
 #include <SDL.h>
 #endif
 
-
-
 struct Settlement
 {
   uint16_t gold;
@@ -71,7 +69,12 @@ public:
   void onMouseMove(double xpos, double ypos);
   void onScroll(double xoffset, double yoffset, double xpos, double ypos);
   World *world;
-  enum State {MAINMENU, PAUSE, RUNNING};
+  enum State
+  {
+    MAINMENU,
+    PAUSE,
+    RUNNING
+  };
   Game::State state;
 
 private:

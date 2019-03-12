@@ -3,10 +3,8 @@
 
 #include "Button.hpp"
 
-
 void Button::Draw(const mat3 &projection)
 {
     UpdateFlash();
     UiElement::Draw(projection);
 }
-

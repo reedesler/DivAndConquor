@@ -116,28 +116,30 @@ void Sprite::draw(const mat3 &projection, vec2 position, float rotation, vec2 sc
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
 
-    std::array<GLfloat,3> selectedTint = {0.7f, 1.f, 0.7f};
-    std::array<GLfloat,3> aTint = {1.f, 0.7f, 0.7f};
-    std::array<GLfloat,3> drawTint;
+    std::array<GLfloat, 3> selectedTint = {0.7f, 1.f, 0.7f};
+    std::array<GLfloat, 3> aTint = {1.f, 0.7f, 0.7f};
+    std::array<GLfloat, 3> drawTint;
 
-    if(selected){
+    if (selected)
+    {
         drawTint = selectedTint;
-    } else if(lock){
+    }
+    else if (lock)
+    {
         drawTint = aTint;
-    } else {
+    }
+    else
+    {
         drawTint = tint;
     }
     //std::array<GLfloat,3> attackTint = lock ? aTint : tint;
 
     //    if(selected){
-//        drawTint = selectedTint;
-//    }
-
+    //        drawTint = selectedTint;
+    //    }
 
     glUniform3fv(color_uloc, 1, drawTint.data());
     //glUniform3fv(color_uloc, 1, aTint.data());
-
-
 
     glUniform2f(shift_uloc, texPiece.x * state, texPiece.y * state);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);

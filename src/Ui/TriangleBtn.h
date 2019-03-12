@@ -5,12 +5,12 @@
 #ifndef DIVCONQ_PAUSEBTN_H
 #define DIVCONQ_PAUSEBTN_H
 
-
 #include "Button.hpp"
 
-class TriangleBtn : public Button {
+class TriangleBtn : public Button
+{
 
-    virtual bool  InBounds(vec2 point)
+    virtual bool InBounds(vec2 point)
     {
         float x0 = pos.x - sprite.width / 2.f;
         float x1 = pos.x + sprite.width / 2.f;
@@ -24,15 +24,13 @@ class TriangleBtn : public Button {
         float y2 = (y0 + y1) / 2.f;
 
         if (point.x <= x2)
-            {
-                float floor = y0 + sprite.height*(point.x - x0)/sprite.width;
-                hit &= point.y > floor; 
-
-            }
+        {
+            float floor = y0 + sprite.height * (point.x - x0) / sprite.width;
+            hit &= point.y > floor;
+        }
         return hit;
     }
     using Button::Button;
 };
-
 
 #endif //DIVCONQ_PAUSEBTN_H

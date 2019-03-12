@@ -7,13 +7,11 @@
 #include <chrono>
 #include <Ui/UiElement.h>
 
-
 class Button : public UiElement
 {
-public:
+  public:
     void Draw(const mat3 &projection) override;
     using UiElement::UiElement;
-
 };
 
 #endif //DIVCONQ_BUTTON_H

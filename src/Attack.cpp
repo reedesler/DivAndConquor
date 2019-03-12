@@ -8,23 +8,31 @@
 #define PROJECTILE_VELOCITY 25
 Texture Attack::attack_texture;
 
-
-Attack::Attack(vec2 pos) {
+Attack::Attack(vec2 pos)
+{
     width = 1000;
     height = 1000;
     position = {pos.x, pos.y};
     rotation = 0;
-    scale = {0.06f,0.06f};
+    scale = {0.06f, 0.06f};
     this->init();
 };
 
-bool Attack::init() {
+double inline clamp(double d, double min, double max)
+{
+    const double t = d < min ? min : d;
+    return t > max ? max : t;
+}
+
+bool Attack::init()
+{
     // Loading shaders
 
-
-//TODO seems to be problem loading texturee
-    if (!attack_texture.is_valid()) {
-        if (!attack_texture.load_from_file(textures_path("cannonball.png"))) {
+    //TODO seems to be problem loading texturee
+    if (!attack_texture.is_valid())
+    {
+        if (!attack_texture.load_from_file(textures_path("cannonball.png")))
+        {
             fprintf(stderr, "Failed to load cannon texture!");
             return false;
         }
@@ -34,97 +42,119 @@ bool Attack::init() {
     float wr = attack_texture.width * 0.5f;
     float hr = attack_texture.height * 0.5f;
 
+    //    if (moveRight) {
+    //        ANIMATION_FRAME_H = 0.50f;
+    //        ANIMATION_FRAME_W = 0.33f;
+    //    } else if (moveLeft) {
+    //    } else if (moveUp) {
+    //        ANIMATION_FRAME_H = 0.25f;
+    //        ANIMATION_FRAME_W = 0.33f;
+    //        Frame = 0.5f;
+    //    } else if (moveDown) {
+    //    } else {
+    //        ANIMATION_FRAME_H = 0.25f;
+    //        ANIMATION_FRAME_W = 0.33f;
+    //    }
+    const int OUTLINE_VERTICES = 20;
+    const int CENTER_VERTEX_INDEX = OUTLINE_VERTICES;
+    const int NUM_OF_VERTICES = OUTLINE_VERTICES + 1;
+    const float radius = 1.f;
+    TexturedVertex vertices[NUM_OF_VERTICES];
+    uint16_t indices[NUM_OF_VERTICES * 3] = {};
 
-
-//    if (moveRight) {
-//        ANIMATION_FRAME_H = 0.50f;
-//        ANIMATION_FRAME_W = 0.33f;
-//    } else if (moveLeft) {
-//    } else if (moveUp) {
-//        ANIMATION_FRAME_H = 0.25f;
-//        ANIMATION_FRAME_W = 0.33f;
-//        Frame = 0.5f;
-//    } else if (moveDown) {
-//    } else {
-//        ANIMATION_FRAME_H = 0.25f;
-//        ANIMATION_FRAME_W = 0.33f;
-//    }
-
-    TexturedVertex vertices[4];
-    vertices[0].position = {-wr, +hr, -0.02f};
-    vertices[0].texcoord = {0.f, 1.f};
-    vertices[1].position = {+wr, +hr, -0.02f};
-    vertices[1].texcoord = {1.f, 1.f};
-    vertices[2].position = {+wr, -hr, -0.02f};
-    vertices[2].texcoord = {1.f, 0.f};
-    vertices[3].position = {-wr, -hr, -0.02f};
-    vertices[3].texcoord = {0.f, 0.f};
-
-    // counterclockwise as it's the default opengl front winding direction
-    uint16_t indices[] = {0, 3, 1, 1, 3, 2};
-
-
-
-    gl_flush_errors();
+    for (int i = 0; i < OUTLINE_VERTICES; i += 1)
+    {
+        // counterclockwise as it's the default opengl front winding direction
+        vertices[i].position = {radius * cos(i * M_PI * 2 / OUTLINE_VERTICES) - 1, radius * sin(i * M_PI * 2 / OUTLINE_VERTICES) - 1, -0.02f};
+        vertices[i].texcoord = {0.0, 0.0};
+    }
+    vertices[CENTER_VERTEX_INDEX] = {0.f, 0.f, 0.02f};
+    for (int i = 0; i < 20 - 1; i += 1)
+    {
+        indices[i * 3] = CENTER_VERTEX_INDEX;
+        indices[i * 3 + 1] = i;
+        indices[i * 3 + 2] = i + 1;
+    }
 
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * 4, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Index Buffer creation
     glGenBuffers(1, &mesh.ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * 6, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Vertex Array (Container for Vertex + Index buffer)
     glGenVertexArrays(1, &mesh.vao);
     if (gl_has_errors())
+    {
+        printf("gl_has_error\n");
         return false;
-        // Loading shaders
+    }
+    // Loading shaders
     return effect.load_from_file(shader_path("attack.vs.glsl"), shader_path("attack.fs.glsl"));
 }
 
-void Attack::move() {
+void Attack::move(){
 
 };
 
-void Attack::travel(vec2 destination) {
+void Attack::travel(vec2 destination)
+{
     //printf("desx:%f, desty:%f\n", destination.x, destination.y);
-    vec2 dir = {-position.x + destination.x ,  - position.y +  destination.y};
+    vec2 dir = {-position.x + destination.x, -position.y + destination.y};
     float length = sqrt((dir.x * dir.x) + (dir.y * dir.y));
-     // float angle = atan2(dir.y, dir.x) * 180 / 3.14f;
+    // float angle = atan2(dir.y, dir.x) * 180 / 3.14f;
 
-       // vec2 newPos = { (cos(angle * 3.14f/180) * PROJECTILE_VELOCITY), (sin(angle * 3.14f/180) * PROJECTILE_VELOCITY)};
-//
-//    float length = sqrt(dir.x * dir.x + dir.y * dir.y);
-//
-//
-        vec2 newPos = {(dir.x / length) * PROJECTILE_VELOCITY, (dir.y / length) * PROJECTILE_VELOCITY};
-//
-//        vec2 newPos = {position.x + dir.x * PROJECTILE_VELOCITY, position.y + dir.y * PROJECTILE_VELOCITY};
+    // vec2 newPos = { (cos(angle * 3.14f/180) * PROJECTILE_VELOCITY), (sin(angle * 3.14f/180) * PROJECTILE_VELOCITY)};
+    //
+    //    float length = sqrt(dir.x * dir.x + dir.y * dir.y);
+    //
+    //
+    vec2 newPos = {(dir.x / length) * PROJECTILE_VELOCITY, (dir.y / length) * PROJECTILE_VELOCITY};
+    //
+    //        vec2 newPos = {position.x + dir.x * PROJECTILE_VELOCITY, position.y + dir.y * PROJECTILE_VELOCITY};
 
-        position.x += newPos.x;
-        position.y += newPos.y;
-
+    position.x += newPos.x;
+    position.y += newPos.y;
 }
 
+bool Attack::collidesWith(vec2 circlePosition, float radius, vec2 rectLeftTop, vec2 rectRightBottom)
+{
+    // Find the closest point to the circle within the rectangle
+    float closestX = clamp(circlePosition.x, rectLeftTop.x, rectRightBottom.x);
+    float closestY = clamp(circlePosition.y, rectLeftTop.y, rectRightBottom.y);
 
-bool Attack::attackCondition(bool isFighting){
-//    (world->lock->health > 0 || !GameObject->tooFar(world->selectedObject, world->lock)){
+    // Calculate the distance between the circle's center and this closest point
+    float distanceX = circlePosition.x - closestX;
+    float distanceY = circlePosition.y - closestY;
 
-        if(isFighting) {
-            travel(target);
-            if (abs(position.x - target.x) < 15 && abs(position.y - target.y) < 15) {
-                // attack->destroy();
-                //free(attack);
-                return true;
-            }
+    // If the distance is less than the circle's radius, an intersection occurs
+    float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+    return distanceSquared < (radius * radius);
+}
+
+bool Attack::attackCondition(bool isFighting)
+{
+    //    (world->lock->health > 0 || !GameObject->tooFar(world->selectedObject, world->lock)){
+
+    if (isFighting)
+    {
+        travel(target);
+        if (abs(position.x - target.x) < 15 && abs(position.y - target.y) < 15)
+        {
+            // attack->destroy();
+            //free(attack);
+            return true;
         }
+    }
     return false;
 }
 
-void Attack::draw(const mat3 &projection) {
+void Attack::draw(const mat3 &projection)
+{
     transform_begin();
     transform_translate(position);
     transform_rotate(rotation);
@@ -165,16 +195,16 @@ void Attack::draw(const mat3 &projection) {
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
 
-
-//    glUniform3fv(color_uloc, 1, drawTint.data());
-    glUniform2f(shift_uloc, texPiece.x , texPiece.y );
+    //    glUniform3fv(color_uloc, 1, drawTint.data());
+    glUniform2f(shift_uloc, texPiece.x, texPiece.y);
     glUniformMatrix3fv(projection_uloc, 1, GL_FALSE, (float *)&projection);
 
     // Drawing!
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
 };
 
-void Attack::destroy() {
+void Attack::destroy()
+{
     glDeleteBuffers(1, &mesh.vbo);
     glDeleteBuffers(1, &mesh.ibo);
     glDeleteBuffers(1, &mesh.vao);

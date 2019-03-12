@@ -21,47 +21,47 @@ class Resource;
 
 class World
 {
-  public:
-    explicit World(rect viewPort);
-    void update();
-    void draw(int pixelScale);
-    void onClick(int button, int action, float xpos, float ypos);
-    void onMouseMove(double xpos, double ypos);
-    void setExplored(vec2 pos, float radius);
-    void addShip();
-    void addSettlement();
-    void setResources();
-    void addSailor(Sailor * sailor);
-    void centerCameraOn(GameObject &go);
-    GameObject* getSelected() { return selectedObject;}
-   // bool tooFar(GameObject * a, GameObject * b);
+public:
+  explicit World(rect viewPort);
+  void update();
+  void draw(int pixelScale);
+  void onClick(int button, int action, float xpos, float ypos);
+  void onMouseMove(double xpos, double ypos);
+  void setExplored(vec2 pos, float radius);
+  void addShip();
+  void addSettlement();
+  void setResources();
+  void addSailor(Sailor *sailor);
+  void centerCameraOn(GameObject &go);
+  GameObject *getSelected() { return selectedObject; }
+  // bool tooFar(GameObject * a, GameObject * b);
 
-    Tilemap tilemap;
-    Camera camera;
-    long int w;
-    GameObject *selectedObject = nullptr;
-    GameObject * lock = nullptr;
-    Attack * attack;
-    long int h;
+  Tilemap tilemap;
+  Camera camera;
+  long int w;
+  GameObject *selectedObject = nullptr;
+  GameObject *lock = nullptr;
+  Attack *attack;
+  long int h;
 
-    GameObject* getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
+  GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
 
-    void removeGameObject(GameObject* obj);
+  void removeGameObject(GameObject *obj);
+
 private:
+  std::vector<GameObject *> gameObjects;
+  std::vector<GameObject *> toBeDeleted;
+  int64_t balance;
+  uint64_t sailors;
 
-    std::vector<GameObject *> gameObjects;
-    std::vector<GameObject *> toBeDeleted;
-    int64_t balance;
-    uint64_t sailors;
+  std::vector<ShipObject *> fleet;
+  std::vector<Sailor *> army;
+  std::vector<Resource *> resources;
 
-    std::vector<ShipObject *> fleet;
-    std::vector<Sailor *> army;
-    std::vector<Resource *> resources;
+  VisibleSet visibleTiles;
+  PathRenderer *pathRenderer;
 
-    VisibleSet visibleTiles;
-    PathRenderer* pathRenderer;
-
-    double prevMouseXpos, prevMouseYpos;
+  double prevMouseXpos, prevMouseYpos;
 };
 
 #endif //DIVCONQ_WORLD_H

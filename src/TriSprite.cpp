@@ -2,7 +2,6 @@
 #include <limits>
 #include "TriSprite.hpp"
 
-
 bool TriSprite::init(float width, float height, const char *textureName, vec2 texPiece)
 {
     this->height = height;
@@ -40,10 +39,10 @@ bool TriSprite::init(float width, float height, const char *textureName, vec2 te
     vertices[1].position = {+wr, +hr, -0.02f};
     vertices[1].texcoord = {texPiece.x, texPiece.y};
     vertices[2].position = {+0, -hr, -0.02f};
-    vertices[2].texcoord = {(texPiece.x + frame.x)/2.f, frame.y};
+    vertices[2].texcoord = {(texPiece.x + frame.x) / 2.f, frame.y};
 
     // counterclockwise as it's the default opengl front winding direction
-    uint16_t indices[] = {0, 1 ,2};
+    uint16_t indices[] = {0, 1, 2};
 
     // Clearing errors
     gl_flush_errors();
@@ -111,8 +110,8 @@ void TriSprite::draw(const mat3 &projection, vec2 position, float rotation, vec2
     // Setting uniform values to the currently bound program
     glUniformMatrix3fv(transform_uloc, 1, GL_FALSE, (float *)&transform);
 
-    std::array<GLfloat,3> selectedTint = {0.7f, 1.f, 0.7f};
-    std::array<GLfloat,3> drawTint = selected ? selectedTint : tint;
+    std::array<GLfloat, 3> selectedTint = {0.7f, 1.f, 0.7f};
+    std::array<GLfloat, 3> drawTint = selected ? selectedTint : tint;
 
     glUniform3fv(color_uloc, 1, drawTint.data());
     glUniform2f(shift_uloc, texPiece.x * state, texPiece.y * state);

@@ -5,16 +5,17 @@
 #ifndef DIVCONQ_UIELEMENT_H
 #define DIVCONQ_UIELEMENT_H
 
-
 #include <Sprite.hpp>
 #include <Ui/UiCallback.h>
 class Game;
 
-class UiElement {
+class UiElement
+{
     UiCallback::OnClickFunc callback;
-public:
+
+  public:
     explicit UiElement(Sprite &btn, vec2 location, UiCallback::OnClickFunc callback)
-    : callback(callback), lastPressMs(0), pos(location), sprite(std::move(btn)), flashMs(200)
+        : callback(callback), lastPressMs(0), pos(location), sprite(std::move(btn)), flashMs(200)
     {
     }
     long lastPressMs;
@@ -23,16 +24,18 @@ public:
     const int flashMs;
     void OnClick(Game *game, int action, double xpos, double ypos)
     {
-        if (callback != nullptr) {
+        if (callback != nullptr)
+        {
             callback(game, action, action, xpos, ypos);
         }
         this->lastPressMs = currentTimeMs();
     }
 
-    virtual void Draw(const mat3 &projection){
+    virtual void Draw(const mat3 &projection)
+    {
         sprite.draw(projection, pos);
     }
-    virtual bool  InBounds(vec2 point)
+    virtual bool InBounds(vec2 point)
     {
         float x0 = pos.x - sprite.width / 2.f;
         float x1 = pos.x + sprite.width / 2.f;
@@ -45,7 +48,8 @@ public:
         return hit;
     }
 
-    void UpdateFlash(){
+    void UpdateFlash()
+    {
         float flash = 0.85f;
         if (lastPressMs > 0)
         {
@@ -57,6 +61,5 @@ public:
         sprite.tint = {flash, flash, flash};
     }
 };
-
 
 #endif //DIVCONQ_UIELEMENT_H
