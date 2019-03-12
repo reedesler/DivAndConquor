@@ -16,10 +16,12 @@ is now wrinkled to imitate natural formation of continents to some extent.
 Resource class is implemented. Ground units are able to collect resources walking through them (collision
 detection). Settlement accounts are updated to reflect collection of a particular resource.
 
-Pirate ship object is added. Pirate ships are programmed to approach the closest player-controlled object
-following a curved path. Attacks are still WIP.
-
 Work on the UI is continued. The player is now able to build more ships for a settlement. Other aspects of UI
 are also improved (smooth zooming based on cursor position).
 
 Some text rendering functionality is added to further improve the UX.
+
+Enemy pirate ships were added, that move towards the closest player ship by pathfinding. A timestepping physics system
+was added to the ships and other units, allowing them to collide with each other. Now all ship and land unit movement
+is through forces, with friction and collision added. When enemy ships collide, they do damage to each other and
+are destroyed if they lose all their health.
