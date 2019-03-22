@@ -64,8 +64,8 @@ bool Attack::init()
 
     for (int i = 0; i < OUTLINE_VERTICES; i += 1)
     {
-        // counterclockwise as it's the default opengl front winding direction
-        vertices[i].position = {radius * cos(i * M_PI * 2 / OUTLINE_VERTICES) - 1, radius * sin(i * M_PI * 2 / OUTLINE_VERTICES) - 1, -0.02f};
+         //counterclockwise as it's the default opengl front winding direction
+         vertices[i].position = {(float)(radius * cos(i * M_PI * 2 / OUTLINE_VERTICES) - 1), (float)(radius * sin(i * M_PI * 2 / OUTLINE_VERTICES) - 1), -0.02f};
         vertices[i].texcoord = {0.0, 0.0};
     }
     vertices[CENTER_VERTEX_INDEX] = {0.f, 0.f, 0.02f};

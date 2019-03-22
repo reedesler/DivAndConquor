@@ -70,7 +70,6 @@ protected:
 
     void destroy();
 
-private:
     vec2 position;
     vec2 velocity;
     vec2 forces;
@@ -148,7 +147,7 @@ private:
     uint16_t resource;
 };
 
-class Pirate : public GameObject, public Renderable {
+class Pirate : public GameObject {
 
     static Texture pirate_texture;
 
@@ -163,9 +162,11 @@ public:
 
     // Update turtle due to current
     // ms represents the number of milliseconds elapsed from the previous update() call
-    void update(float ms);
+    void update();
 
+    void renderDirection(vec2);
 
+    void travel(vec2);
 
     void updateFrame(float ms);
 
@@ -173,7 +174,7 @@ public:
 
     // Renders the salmon
     // projection is the 2D orthographic projection matrix
-    void draw(const mat3 &projection);
+   // void draw(const mat3 &projection);
 
     void setSelected();
 
@@ -195,6 +196,9 @@ public:
     //vec2 p_position; // Window coordinates
     //float w;
     //float h;
+    float frameNo;
+    int r = std::rand();
+
     bool moveUp = true;
     bool moveDown;
     bool moveLeft;
