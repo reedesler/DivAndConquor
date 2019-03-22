@@ -31,7 +31,8 @@ public:
   void addShip();
   void addSettlement();
   void setResources();
-  void addSailor(Sailor *sailor);
+  void setPirates();
+  void addSailor();
   void centerCameraOn(GameObject &go);
   GameObject *getSelected() { return selectedObject; }
   // bool tooFar(GameObject * a, GameObject * b);
