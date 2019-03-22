@@ -1,6 +1,6 @@
 #include "GameObject.hpp"
 
-#define SHIP_VELOCITY 4
+#define SHIP_VELOCITY 1
 
 PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     w = 100;

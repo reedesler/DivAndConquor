@@ -13,7 +13,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
     w = tilemap.width * TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
     this->setResources();
-    //this->setPirates();
+    this->setPirates();
     initialSet->updateResources(0, 3000);
 
     prevMouseXpos = viewPort.w / 2.f;
@@ -322,7 +322,7 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
 }
 void World::setPirates()
 {
-    for (int i = 0; i < 15; i++){
+    for (int i = 0; i < 10; i++){
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
         while (tilemap.getTile(x, y).type != 0)

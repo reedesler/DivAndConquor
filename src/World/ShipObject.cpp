@@ -4,7 +4,7 @@
 
 #include "GameObject.hpp"
 
-#define SHIP_VELOCITY 5
+#define SHIP_VELOCITY 2
 
 ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : GameObject(world, loc) {
     w = 100;
