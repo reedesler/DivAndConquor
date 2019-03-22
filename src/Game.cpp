@@ -81,12 +81,8 @@ void invokeBuildSettlement(Game *game, int button, int action, double xpos, doub
 }
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
-    //    game->world->pirate.init();
-    printf("hireSailors!\n");
-    //    mat3 pos = {{1.f, 0.f, (float)xpos},
-    //                {0.f, 1.f, (float)ypos},
-    //                {0.f,0.f,1.f}};
-    //    p.draw(pos);
+    game->world->addSailor();
+
 }
 void invokeTogPause(Game *game, int btn, int action, double xpos, double ypos)
 {

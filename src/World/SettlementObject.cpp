@@ -25,13 +25,14 @@ void SettlementObject::move(vec2 pos) {
 void SettlementObject::update() {
     world->setExplored(getPosition(), 15 * TILE_SIZE);
 }
-void SettlementObject::updateResources(uint16_t type, uint16_t amount) {
+void SettlementObject::updateResources(uint16_t type, int amount) {
     if (type == 0)
         this->gold += amount;
     else if (type == 1)
         this->iron += amount;
     else if (type == 2)
         this->timber += amount;
+    printf("sett: %p g:%d i:%d t:%d\n", this, this->gold, this->iron, this->timber);
 }
 
 vec3 SettlementObject::getResources() {

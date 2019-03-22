@@ -1,19 +1,11 @@
 #include "World.hpp"
 
-World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horizontal.txt"))),
+World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
                               camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
-    auto *initialSet = new SettlementObject(this, {770, 330});
-    auto *initialShip = new ShipObject(this, {600, 400});
-    auto *initialSailor = new Sailor(this, {900, 350}, initialSet);
-    gameObjects.push_back(initialShip);
+    auto *initialSet = new SettlementObject(this, {1650, 4200});
     gameObjects.push_back(initialSet);
-    gameObjects.push_back(initialSailor);
-    gameObjects.push_back(new PirateShip(this, {2300, 1300}));
-    gameObjects.push_back(new Pirate(this, {900, 400}));
-    //to keep track of various unit types
-    army.push_back(initialSailor);
-    fleet.push_back(initialShip);
+    //gameObjects.push_back(new PirateShip(this, {2300, 1300}));
 
     pathRenderer = new PathRenderer();
     //attack = new Attack({340, 900});
@@ -21,6 +13,8 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_horiz
     w = tilemap.width * TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
     this->setResources();
+    //this->setPirates();
+    initialSet->updateResources(0, 3000);
 
     prevMouseXpos = viewPort.w / 2.f;
     prevMouseYpos = viewPort.h / 2.f;
@@ -40,7 +34,11 @@ void World::addShip()
         x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
-    this->gameObjects.push_back(new ShipObject(this, {x, y}));
+    if (((SettlementObject *) selectedObject)->getResources().x >= 500){
+        auto tmpShip = new ShipObject(this, {x, y}, (SettlementObject *)selectedObject);
+        this->gameObjects.push_back(tmpShip);
+        this->fleet.push_back(tmpShip);
+    }
 }
 
 void World::addSettlement()
@@ -60,7 +58,32 @@ void World::addSettlement()
         if (tries++ >= 100)
             return;
     }
-    this->gameObjects.push_back(new SettlementObject(this, {x, y}));
+    auto tmpShip = (ShipObject *) selectedObject;
+    if (tmpShip->settlement->getResources().x >= 1000){
+        tmpShip->settlement->updateResources(0, -1000);
+        this->gameObjects.push_back(new SettlementObject(this, {x, y}));
+    }
+}
+
+void World::addSailor()
+{
+    if (!selectedObject)
+        return;
+
+    vec2 pos = selectedObject->getPosition();
+
+    float x = -1;
+    float y = -1;
+    while (x <= 0 || y <= 0 || tilemap.getTile(x, y).type != 2 || (abs(x-pos.x) < 100 && abs(y-pos.y) < 100))
+    {
+        x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
+        y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
+    }
+    if (((SettlementObject *) selectedObject)->getResources().x >= 100){
+        auto *tmpSailor = new Sailor(this, {x, y}, (SettlementObject *)selectedObject);
+        this->gameObjects.push_back(tmpSailor);
+        this->army.push_back(tmpSailor);
+    }
 }
 
 void World::centerCameraOn(GameObject &go)
@@ -109,9 +132,6 @@ void World::update()
         {
             if (o->playerControlled && resources[i]->collect(o))
             {
-                printf("current resources for settlement:\n");
-                vec3 tmp = o->settlement->getResources();
-                printf("gold: %f\niron: %f\ntimber: %f\n", tmp.x, tmp.y, tmp.z);
                 toDelete.push_back(i);
             }
         }
@@ -152,10 +172,9 @@ void World::draw(int pixelScale)
         pathRenderer->draw(projection);
     }
 
-    //    if(selectedObject->attack != nullptr && selectedObject->fight){
-    //       // selectedObject->attack->draw(projection);
-    //
-    //    }
+    if(selectedObject && selectedObject->attack != nullptr && selectedObject->fight){
+        selectedObject->attack->draw(projection);
+    }
 }
 
 void World::onClick(int button, int action, float xpos, float ypos)
@@ -301,11 +320,23 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
     }
     return closest;
 }
-
+void World::setPirates()
+{
+    for (int i = 0; i < 15; i++){
+        float x = std::rand() % (this->w - 100);
+        float y = std::rand() % (this->h - 100);
+        while (tilemap.getTile(x, y).type != 0)
+        {
+            x = std::rand() % (this->w - 100);
+            y = std::rand() % (this->h - 100);
+        }
+        gameObjects.push_back(new PirateShip(this, {x, y}));
+    }
+}
 void World::setResources()
 {
     //setting gold
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 50; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
@@ -317,7 +348,7 @@ void World::setResources()
         resources.push_back(new Resource(this, {x, y}, 0, 500));
     }
     //setting iron
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 50; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
@@ -329,7 +360,7 @@ void World::setResources()
         resources.push_back(new Resource(this, {x, y}, 1, 500));
     }
     //setting timber
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 50; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);

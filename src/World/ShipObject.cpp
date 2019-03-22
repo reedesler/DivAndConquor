@@ -6,7 +6,7 @@
 
 #define SHIP_VELOCITY 5
 
-ShipObject::ShipObject(World *world, vec2 loc) : GameObject(world, loc) {
+ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : GameObject(world, loc) {
     w = 100;
     h = 100;
     if (!sprite.init(w, h, textures_path("ship.png"), {0.5f, 1.f})) {
@@ -18,6 +18,8 @@ ShipObject::ShipObject(World *world, vec2 loc) : GameObject(world, loc) {
     pathfinder = new Pathfinder(world, landUnit);
     health = maxHealth = 100;
     canShoot = true;
+    this->settlement = settlement;
+    settlement->updateResources(0, -500);
 }
 
 void ShipObject::move(vec2 pos) {

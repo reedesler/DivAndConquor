@@ -4,7 +4,7 @@
 
 #include "GameObject.hpp"
 
-Resource::Resource(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(world, loc) {
+Resource::Resource(World *world, vec2 loc, uint16_t type, int size) : GameObject(world, loc) {
     w = 50;
     h = 50;
     if (type == 0) {

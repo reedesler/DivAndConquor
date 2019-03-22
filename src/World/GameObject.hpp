@@ -86,17 +86,17 @@ public:
 
     vec3 getResources();
 
-    void updateResources(uint16_t type, uint16_t amount);
+    void updateResources(uint16_t type, int amount);
 
 private:
-    uint16_t gold;
-    uint16_t timber;
-    uint16_t iron;
+    int gold;
+    int timber;
+    int iron;
 };
 
 class ShipObject : public GameObject {
 public:
-    ShipObject(World *world, vec2 loc);
+    ShipObject(World *world, vec2 loc, SettlementObject *settlement);
 
     void travel(vec2 dir);
 
@@ -105,6 +105,8 @@ public:
     void move(vec2 pos);
 
     void collide(GameObject* obj);
+
+    SettlementObject* settlement;
 
 private:
 
@@ -139,12 +141,12 @@ public:
 
 class Resource: public GameObject{
 public:
-    Resource(World *world, vec2 loc, uint16_t type, uint16_t size);
+    Resource(World *world, vec2 loc, uint16_t type, int size);
 
     bool collect(Sailor *obj);
 private:
     uint16_t loot_type;
-    uint16_t resource;
+    int resource;
 };
 
 class Pirate : public GameObject {
