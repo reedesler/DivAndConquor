@@ -5,8 +5,14 @@
 #ifndef DIVCONQ_UIELEMENT_H
 #define DIVCONQ_UIELEMENT_H
 
-#include <Sprite.hpp>
-#include <Ui/UiCallback.h>
+#include <cstring>
+
+#include "Sprite.hpp"
+#include "Ui/UiCallback.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "../ext/stb_image/stb_image.h"
+
 class Game;
 
 class UiElement
@@ -35,6 +41,33 @@ class UiElement
     {
         sprite.draw(projection, pos);
     }
+
+    /*
+    virtual bool ChangeCursor(const char *path)
+    {
+        if (path == nullptr)
+            return false;
+
+        int width, height;
+
+        stbi_uc *data = stbi_load(path, &width, &height, nullptr, 4);
+        if (data == nullptr)
+            return false;
+
+        unsigned char pixels[width * height * 4];
+        memset(pixels, 0xff, sizeof(pixels));
+        GLFWimage image;
+        image.width = width;
+        image.height = height;
+        image.pixels = pixels;
+        GLFWcursor *cursor = glfwCreateCursor(&image, 0, 0);
+
+        // glfwSetCursor(window, cursor);
+
+        return cursor != nullptr;
+    }
+    */
+
     virtual bool InBounds(vec2 point)
     {
         float x0 = pos.x - sprite.width / 2.f;
