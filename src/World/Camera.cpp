@@ -7,7 +7,7 @@ Camera::Camera(rect viewPort, unsigned int worldWidth, unsigned int worldHeight,
                                                                                                  worldHeight(
                                                                                                          worldHeight),
                                                                                                  tileSize(tileSize) {
-    actualPos = pos = {0, 0};
+    actualPos = pos = {1900, 4200};
     vel = {0, 0};
     zoomVel = 0;
     actualZoom = zoom = 0.5;

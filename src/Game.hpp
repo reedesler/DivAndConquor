@@ -77,6 +77,7 @@ public:
   };
   Game::State state;
 
+
 private:
   std::map<std::type_index, std::vector<UiElement *>> unitUis;
   std::vector<UiElement *> activeUiElements;

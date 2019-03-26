@@ -81,12 +81,8 @@ void invokeBuildSettlement(Game *game, int button, int action, double xpos, doub
 }
 void invokeHireSailors(Game *game, int button, int action, double xpos, double ypos)
 {
-    //    game->world->pirate.init();
-    printf("hireSailors!\n");
-    //    mat3 pos = {{1.f, 0.f, (float)xpos},
-    //                {0.f, 1.f, (float)ypos},
-    //                {0.f,0.f,1.f}};
-    //    p.draw(pos);
+    game->world->addSailor();
+
 }
 void invokeTogPause(Game *game, int btn, int action, double xpos, double ypos)
 {
@@ -156,34 +152,34 @@ void Game::init(vec2 screen)
     // sound initialized here
 
     //TODO uncomment music
-    //    if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    //    {
-    //        fprintf(stderr, "Failed to initialize SDL Audio");
-    //    }
-    //
-    //    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
-    //    {
-    //        fprintf(stderr, "Failed to open audio device");
-    //    }
-    //
-    //    background_music = Mix_LoadMUS(audio_path("background.wav"));
-    //
-    //
-    //    if (background_music == nullptr)
-    //    {
-    //        fprintf(stderr, "Failed to load sounds\n %s\n %s\n %s\n make sure the data directory is present",
-    //                audio_path("music.wav"),
-    //                audio_path("salmon_dead.wav"),
-    //                audio_path("salmon_eat.wav"));
-    //
-    //    }
-    //
-    //    // Playing background music undefinitely
-    //    Mix_PlayMusic(background_music, -1);
-    //
-    //    fprintf(stderr, "Loaded music\n");
-
-    fprintf(stderr, "Loaded music\n");
+//        if (SDL_Init(SDL_INIT_AUDIO) < 0)
+//        {
+//            fprintf(stderr, "Failed to initialize SDL Audio");
+//        }
+//
+//        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+//        {
+//            fprintf(stderr, "Failed to open audio device");
+//        }
+//
+//        background_music = Mix_LoadMUS(audio_path("background.wav"));
+//
+//
+//        if (background_music == nullptr)
+//        {
+//            fprintf(stderr, "Failed to load sounds\n %s\n %s\n %s\n make sure the data directory is present",
+//                    audio_path("music.wav"),
+//                    audio_path("salmon_dead.wav"),
+//                    audio_path("salmon_eat.wav"));
+//
+//        }
+//
+//        // Playing background music undefinitely
+//        Mix_PlayMusic(background_music, -1);
+//
+//        fprintf(stderr, "Loaded music\n");
+//
+//    fprintf(stderr, "Loaded music\n");
     world->update();
 }
 

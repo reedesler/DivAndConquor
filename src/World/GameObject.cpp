@@ -35,12 +35,13 @@ void GameObject::move(vec2 pos) {
 }
 
 void GameObject::fire(vec2 dest, vec2 pos){
-        if (sprite.selected && playerControlled){
+       // if (sprite.selected && playerControlled){
         fight = true;
-            attack = new Attack({pos.x, pos.y});
-            attack->target = dest;
+            Attack * attack = new Attack({pos.x, pos.y}, dest, this);
+            world->bullets.push_back(attack);
+            //attack->target = dest;
         //attack->init();
-    }
+   // }
 
 
 
@@ -125,5 +126,70 @@ void GameObject::collide(GameObject* obj) {
 
 void GameObject::destroy() {
     world->removeGameObject(this);
+}
+
+double inline clamp(double d, double min, double max)
+{
+    const double t = d < min ? min : d;
+    return t > max ? max : t;
+}
+
+bool GameObject::collideAttack(bounds b1, bounds b2) {
+    return b1.left <= b2.right && b1.right >= b2.left && b1.top <= b2.bottom && b1.bottom >= b2.top;
+}
+
+bool GameObject::checkCollision(Attack *one, GameObject *two) // AABB - Circle collision
+{
+    if (two != one->shooter) {
+        bounds ob2 = two->getBounds();
+        return one->collidesWith(one->position, 3, {ob2.left, ob2.top}, {ob2.right, ob2.bottom});
+//       if(collideAttack(other, ob2) && (abs(one->target.x - two->getPosition().x) < 20) && (abs(one->target.y - two->getPosition().y) < 20)){
+//           return true;
+//       } else {
+//           return false;
+//       }
+//
+//
+//
+////        vec2 center = {(one->width/2) + one->position.x, (one->height/2) + one->position.y};
+////        // Calculate AABB info (center, half-extents)
+////        vec2 aabb_half_extents= {(two->getBounds().left - two->getBounds().right) / 2, (two->getBounds().top - two->getBounds().bottom) /2 };
+////        vec2 aabb_center = {
+////                two->getPosition().x + aabb_half_extents.x,
+////                two->getPosition().y + aabb_half_extents.y
+////        };
+////        // Get difference vector between both centers
+////        vec2 difference = {center.x - aabb_center.x, center.y - aabb_center.y};
+////        auto valA = (float)clamp(difference.x, -aabb_half_extents.x, aabb_half_extents.x);
+////        auto valB = (float)clamp(difference.y, -aabb_half_extents.y, aabb_half_extents.y);
+////
+////        vec2 clamped = {valA, valB};
+////
+////        // Add clamped value to AABB_center and we get the value of box closest to circle
+////        vec2 closest = {aabb_center.x + clamped.x, aabb_center.y + clamped.y};
+////        // Retrieve vector between center circle and closest point AABB and check if length <= radius
+////        difference = {closest.x - center.x,closest.y - center.y};
+////        float length = sqrtf((difference.x * difference.x) + (difference.y + difference.y));
+////
+////        return length < two->w;
+//    } else {
+//        return false;
+    }
+    return false;
+}
+
+
+bool GameObject::missed(Attack *one, GameObject *two) // AABB - Circle collision
+{
+
+    if (one) {
+
+        if (abs(two->position.x - one->position.x) < 2 && abs(two->position.y - one->position.y) < 2) {
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

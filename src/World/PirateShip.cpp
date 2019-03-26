@@ -1,26 +1,30 @@
 #include "GameObject.hpp"
 
-#define SHIP_VELOCITY 4
+#define SHIP_VELOCITY 1
 
 PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     w = 100;
     h = 100;
+    ticks = std::rand() % 120;
     if (!sprite.init(w, h, textures_path("pirateship.png"), {0.5f, 1.f})) {
         printf("ERROR initializing sprite\n");
     }
+    canShoot = true;
     rotation = 0;
     scale = {1.f, 1.f};
     landUnit = false;
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
     health = maxHealth = 100;
+    world->pirateStrength++;
 }
 
 void PirateShip::update() {
     vec2 position = getPosition();
     GameObject::update();
-    if (ticks % 60 == 0) {
+    if (ticks % 120 == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
+
         if (o) {
             vec2 targetPos = o->getPosition();
             TilePos start = Tilemap::getTilePos(position.x, position.y);
@@ -29,6 +33,9 @@ void PirateShip::update() {
             pathfinder->replan();
             path = pathfinder->getPath();
         }
+        world->fireOnClosestObject(this, true, true);
+
+
     }
 
 
@@ -56,6 +63,9 @@ void PirateShip::update() {
     }
 
     if (health <= 0) {
+        if(world->lock == this){
+            world->lock = nullptr;
+        }
         destroy();
     }
 

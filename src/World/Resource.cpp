@@ -4,7 +4,7 @@
 
 #include "GameObject.hpp"
 
-Resource::Resource(World *world, vec2 loc, uint16_t type, uint16_t size) : GameObject(world, loc) {
+Resource::Resource(World *world, vec2 loc, uint16_t type, int size) : GameObject(world, loc) {
     w = 50;
     h = 50;
     if (type == 0) {
@@ -29,6 +29,7 @@ bool Resource::collect(Sailor *obj) {
     if (position.x >= other.left && position.x <= other.right)
         if (position.y >= other.top && position.y <= other.bottom){
             obj->settlement->updateResources(this->loot_type, this->resource);
+            world->wealth++;
             return true;
         }
     return false;

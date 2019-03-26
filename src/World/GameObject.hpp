@@ -34,14 +34,15 @@ public:
 
     virtual void lockOn();
 
+    bool checkCollision(Attack *one, GameObject *two);
+
     vec2 getPosition() {return position;};
     bool onTerrain(vec2 loc, int type);
 
     Pathfinder * pathfinder = nullptr;
 
-    GameObject(Pathfinder *pathfinder);
+    //Attack * attack = nullptr;
 
-    Attack * attack = nullptr;
     Path path;
     bool landUnit;
     Sprite& getSprite() {return sprite;};
@@ -53,6 +54,8 @@ public:
 
     virtual void collide(GameObject* obj);
 
+    bool missed(Attack *one, GameObject *two);
+    bool collideAttack(bounds b1, bounds b2);
     float health;
     float maxHealth;
 
@@ -70,7 +73,6 @@ protected:
 
     void destroy();
 
-private:
     vec2 position;
     vec2 velocity;
     vec2 forces;
@@ -87,17 +89,17 @@ public:
 
     vec3 getResources();
 
-    void updateResources(uint16_t type, uint16_t amount);
+    void updateResources(uint16_t type, int amount);
 
 private:
-    uint16_t gold;
-    uint16_t timber;
-    uint16_t iron;
+    int gold;
+    int timber;
+    int iron;
 };
 
 class ShipObject : public GameObject {
 public:
-    ShipObject(World *world, vec2 loc);
+    ShipObject(World *world, vec2 loc, SettlementObject *settlement);
 
     void travel(vec2 dir);
 
@@ -106,6 +108,8 @@ public:
     void move(vec2 pos);
 
     void collide(GameObject* obj);
+
+    SettlementObject* settlement;
 
 private:
 
@@ -140,15 +144,15 @@ public:
 
 class Resource: public GameObject{
 public:
-    Resource(World *world, vec2 loc, uint16_t type, uint16_t size);
+    Resource(World *world, vec2 loc, uint16_t type, int size);
 
     bool collect(Sailor *obj);
 private:
     uint16_t loot_type;
-    uint16_t resource;
+    int resource;
 };
 
-class Pirate : public GameObject, public Renderable {
+class Pirate : public GameObject {
 
     static Texture pirate_texture;
 
@@ -163,9 +167,11 @@ public:
 
     // Update turtle due to current
     // ms represents the number of milliseconds elapsed from the previous update() call
-    void update(float ms);
+    void update();
 
+    void renderDirection(vec2);
 
+    void travel(vec2);
 
     void updateFrame(float ms);
 
@@ -173,7 +179,7 @@ public:
 
     // Renders the salmon
     // projection is the 2D orthographic projection matrix
-    void draw(const mat3 &projection);
+   // void draw(const mat3 &projection);
 
     void setSelected();
 
@@ -195,6 +201,9 @@ public:
     //vec2 p_position; // Window coordinates
     //float w;
     //float h;
+    float frameNo;
+    int r = std::rand();
+
     bool moveUp = true;
     bool moveDown;
     bool moveLeft;

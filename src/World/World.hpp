@@ -6,6 +6,7 @@ class World;
 #include "GameObject.hpp"
 #endif
 
+#include "EnemyAi.h"
 #include <vector>
 #include <unordered_set>
 #include "GameObject.hpp"
@@ -13,12 +14,21 @@ class World;
 #include "Camera.hpp"
 #include "PathRenderer.hpp"
 #include "Attack.h"
+
 class PathRenderer;
 
 class ShipObject;
 class Sailor;
 class Resource;
+class EnemyAi;
 
+enum State {
+    invade,
+    explore,
+    flee,
+    neutral,
+
+};
 class World
 {
 public:
@@ -31,9 +41,13 @@ public:
   void addShip();
   void addSettlement();
   void setResources();
-  void addSailor(Sailor *sailor);
+  void setPirates();
+  void addSailor();
   void centerCameraOn(GameObject &go);
   GameObject *getSelected() { return selectedObject; }
+
+  void fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit);
+
   // bool tooFar(GameObject * a, GameObject * b);
 
   Tilemap tilemap;
@@ -41,27 +55,41 @@ public:
   long int w;
   GameObject *selectedObject = nullptr;
   GameObject *lock = nullptr;
-  Attack *attack;
+  //Attack *attack;
   long int h;
+    int navalStrength = 0;
+    int pirateStrength = 0;
+    int manPower = 0;
+    int wealth = 0;
+   // State state;
+   State state = neutral;
 
-  GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
+
+    GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
 
   void removeGameObject(GameObject *obj);
 
+    std::vector<GameObject *> gameObjects;
+    std::vector<Attack *> bullets;
 private:
-  std::vector<GameObject *> gameObjects;
-  std::vector<GameObject *> toBeDeleted;
-  int64_t balance;
-  uint64_t sailors;
 
-  std::vector<ShipObject *> fleet;
-  std::vector<Sailor *> army;
-  std::vector<Resource *> resources;
+  std::vector<GameObject *> toBeDeleted;
+
+    std::vector<Attack *> pastAttacks;
+    int64_t balance;
+
+  uint64_t sailors;
+    std::vector<ShipObject *> fleet;
+    std::vector<Sailor *> army;
+    std::vector<Resource *> resources;
 
   VisibleSet visibleTiles;
   PathRenderer *pathRenderer;
+  EnemyAi * ai;
 
   double prevMouseXpos, prevMouseYpos;
+
+  long ticks = 0;
 };
 
 #endif //DIVCONQ_WORLD_H

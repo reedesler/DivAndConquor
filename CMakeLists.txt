@@ -55,7 +55,7 @@ set(SOURCE_FILES
         src/Ui/UiElement.cpp
         src/Ui/Label.cpp
         src/World/Resource.cpp
-
+        src/Pirate.cpp
         src/ProjectPath.hpp
         src/Common.hpp
         src/GameWindow.hpp
@@ -79,7 +79,9 @@ set(SOURCE_FILES
         src/Attack.cpp
         src/Attack.h
         src/Ui/Label.hpp
-        src/Ui/UiCallback.h)
+        src/Ui/UiCallback.h
+        src/EnemyAi.cpp
+        src/EnemyAi.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)

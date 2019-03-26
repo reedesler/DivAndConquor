@@ -22,10 +22,14 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     rotation = 0;
     scale = {1.f, 1.f};
     this->settlement = settlement;
+    this->settlement->updateResources(0, -100);
     landUnit = true;
     canShoot = true;
     pathfinder = new Pathfinder(world, landUnit);
     fight = false;
+    health = maxHealth = 100;
+    world->manPower++;
+
 }
 
 void Sailor::move(vec2 pos) {
@@ -40,14 +44,35 @@ void Sailor::move(vec2 pos) {
 void Sailor::update() {
     GameObject::update();
 
-    vec2 position = getPosition();
-
-    if (attack){
-    if(attack->attackCondition(fight)){
-        fight = false;
+    if(health < 0){
+        world->manPower--;
+        world->lock = nullptr;
+        this->destroy();
     }
-}
 
+//    if(world->selectedObject->attack != nullptr){
+//        if(checkCollision(world->selectedObject->attack,  this)){
+//            health -= 10;
+//            printf("hit");
+//            //world->selectedObject->attack->destroy();
+//            //delete world->selectedObject->attack;
+//
+//        }
+//    }
+
+
+
+
+
+//    if (attack){
+//        if(attack->attackCondition(fight)){
+//            fight = false;
+//        }
+//
+//
+//    }
+
+    vec2 position = getPosition();
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
         auto next = std::next(path.path.begin());
@@ -62,6 +87,9 @@ void Sailor::update() {
             travel({destX, destY});
         }
     }
+
+    sprite.tint = {1.f, health / maxHealth, health / maxHealth};
+
 
 
 }

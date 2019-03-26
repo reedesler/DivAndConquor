@@ -1,0 +1,13 @@
+Team 11
+Robust Game Submission
+
+David Ma         12428165
+Dmitry Narkevich 12032141
+Reed Esler       25426140
+Tomer Torgeman   50138156
+Vladimir Agushev 17501157
+
+We continued adding gameplay features to the game. The game can now be paused and started with a button inn the UI.
+Pirate ships will now attack the player ships with cannons, and they player is able to shoot back. Pirate ships will
+now also spawn randomly around the worls as the player explores. We also improved the stability of the game, reducing
+lag in certain spots.
