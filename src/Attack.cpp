@@ -8,15 +8,18 @@
 #define PROJECTILE_VELOCITY 25
 Texture Attack::attack_texture;
 
-Attack::Attack(vec2 pos)
+Attack::Attack(vec2 pos, vec2 dest)
 {
-    width = 1000;
-    height = 1000;
+    width = 5;
+    height = 5;
     position = {pos.x, pos.y};
     rotation = 0;
     scale = {0.06f, 0.06f};
+    target = dest;
     this->init();
 };
+
+Attack::~Attack() {}
 
 double inline clamp(double d, double min, double max)
 {
@@ -24,15 +27,87 @@ double inline clamp(double d, double min, double max)
     return t > max ? max : t;
 }
 
-bool Attack::init()
-{
+//bool Attack::init()
+//{
+//    // Loading shaders
+//
+//    //TODO seems to be problem loading texturee
+//    if (!attack_texture.is_valid())
+//    {
+//        if (!attack_texture.load_from_file(textures_path("cannonball.png")))
+//        {
+//            fprintf(stderr, "Failed to load cannon texture!");
+//            return false;
+//        }
+//    }
+//
+//    // The position corresponds to the center of the texture
+//    float wr = attack_texture.width * 0.5f;
+//    float hr = attack_texture.height * 0.5f;
+//
+//    //    if (moveRight) {
+//    //        ANIMATION_FRAME_H = 0.50f;
+//    //        ANIMATION_FRAME_W = 0.33f;
+//    //    } else if (moveLeft) {
+//    //    } else if (moveUp) {
+//    //        ANIMATION_FRAME_H = 0.25f;
+//    //        ANIMATION_FRAME_W = 0.33f;
+//    //        Frame = 0.5f;
+//    //    } else if (moveDown) {
+//    //    } else {
+//    //        ANIMATION_FRAME_H = 0.25f;
+//    //        ANIMATION_FRAME_W = 0.33f;
+//    //    }
+//    const int OUTLINE_VERTICES = 20;
+//    const int CENTER_VERTEX_INDEX = OUTLINE_VERTICES;
+//    const int NUM_OF_VERTICES = OUTLINE_VERTICES + 1;
+//    const float radius = 1.f;
+//    TexturedVertex vertices[NUM_OF_VERTICES];
+//    uint16_t indices[NUM_OF_VERTICES * 3] = {};
+//
+//    for (int i = 0; i < OUTLINE_VERTICES; i += 1)
+//    {
+//         //counterclockwise as it's the default opengl front winding direction
+//         vertices[i].position = {(float)(radius * cos(i * M_PI * 2 / OUTLINE_VERTICES) - 1), (float)(radius * sin(i * M_PI * 2 / OUTLINE_VERTICES) - 1), -0.02f};
+//        vertices[i].texcoord = {0.0, 0.0};
+//    }
+//    vertices[CENTER_VERTEX_INDEX] = {0.f, 0.f, 0.02f};
+//    for (int i = 0; i < 20 - 1; i += 1)
+//    {
+//        indices[i * 3] = CENTER_VERTEX_INDEX;
+//        indices[i * 3 + 1] = i;
+//        indices[i * 3 + 2] = i + 1;
+//    }
+//
+//    // Vertex Buffer creation
+//    glGenBuffers(1, &mesh.vbo);
+//    glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+//
+//    // Index Buffer creation
+//    glGenBuffers(1, &mesh.ibo);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+//
+//    // Vertex Array (Container for Vertex + Index buffer)
+//    glGenVertexArrays(1, &mesh.vao);
+//    if (gl_has_errors())
+//    {
+//        printf("gl_has_error\n");
+//        return false;
+//    }
+//    // Loading shaders
+//    return effect.load_from_file(shader_path("attack.vs.glsl"), shader_path("attack.fs.glsl"));
+//}
+
+
+bool Attack::init() {
     // Loading shaders
 
-    //TODO seems to be problem loading texturee
-    if (!attack_texture.is_valid())
-    {
-        if (!attack_texture.load_from_file(textures_path("cannonball.png")))
-        {
+
+//TODO seems to be problem loading texturee
+    if (!attack_texture.is_valid()) {
+        if (!attack_texture.load_from_file(textures_path("cannonball.png"))) {
             fprintf(stderr, "Failed to load cannon texture!");
             return false;
         }
@@ -42,60 +117,57 @@ bool Attack::init()
     float wr = attack_texture.width * 0.5f;
     float hr = attack_texture.height * 0.5f;
 
-    //    if (moveRight) {
-    //        ANIMATION_FRAME_H = 0.50f;
-    //        ANIMATION_FRAME_W = 0.33f;
-    //    } else if (moveLeft) {
-    //    } else if (moveUp) {
-    //        ANIMATION_FRAME_H = 0.25f;
-    //        ANIMATION_FRAME_W = 0.33f;
-    //        Frame = 0.5f;
-    //    } else if (moveDown) {
-    //    } else {
-    //        ANIMATION_FRAME_H = 0.25f;
-    //        ANIMATION_FRAME_W = 0.33f;
-    //    }
-    const int OUTLINE_VERTICES = 20;
-    const int CENTER_VERTEX_INDEX = OUTLINE_VERTICES;
-    const int NUM_OF_VERTICES = OUTLINE_VERTICES + 1;
-    const float radius = 1.f;
-    TexturedVertex vertices[NUM_OF_VERTICES];
-    uint16_t indices[NUM_OF_VERTICES * 3] = {};
 
-    for (int i = 0; i < OUTLINE_VERTICES; i += 1)
-    {
-         //counterclockwise as it's the default opengl front winding direction
-         vertices[i].position = {(float)(radius * cos(i * M_PI * 2 / OUTLINE_VERTICES) - 1), (float)(radius * sin(i * M_PI * 2 / OUTLINE_VERTICES) - 1), -0.02f};
-        vertices[i].texcoord = {0.0, 0.0};
-    }
-    vertices[CENTER_VERTEX_INDEX] = {0.f, 0.f, 0.02f};
-    for (int i = 0; i < 20 - 1; i += 1)
-    {
-        indices[i * 3] = CENTER_VERTEX_INDEX;
-        indices[i * 3 + 1] = i;
-        indices[i * 3 + 2] = i + 1;
-    }
+
+//    if (moveRight) {
+//        ANIMATION_FRAME_H = 0.50f;
+//        ANIMATION_FRAME_W = 0.33f;
+//    } else if (moveLeft) {
+//    } else if (moveUp) {
+//        ANIMATION_FRAME_H = 0.25f;
+//        ANIMATION_FRAME_W = 0.33f;
+//        Frame = 0.5f;
+//    } else if (moveDown) {
+//    } else {
+//        ANIMATION_FRAME_H = 0.25f;
+//        ANIMATION_FRAME_W = 0.33f;
+//    }
+
+    TexturedVertex vertices[4];
+    vertices[0].position = {-wr, +hr, -0.02f};
+    vertices[0].texcoord = {0.f, 1.f};
+    vertices[1].position = {+wr, +hr, -0.02f};
+    vertices[1].texcoord = {1.f, 1.f};
+    vertices[2].position = {+wr, -hr, -0.02f};
+    vertices[2].texcoord = {1.f, 0.f};
+    vertices[3].position = {-wr, -hr, -0.02f};
+    vertices[3].texcoord = {0.f, 0.f};
+
+    // counterclockwise as it's the default opengl front winding direction
+    uint16_t indices[] = {0, 3, 1, 1, 3, 2};
+
+
+
+    gl_flush_errors();
 
     // Vertex Buffer creation
     glGenBuffers(1, &mesh.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * 4, vertices, GL_STATIC_DRAW);
 
     // Index Buffer creation
     glGenBuffers(1, &mesh.ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * 6, indices, GL_STATIC_DRAW);
 
     // Vertex Array (Container for Vertex + Index buffer)
     glGenVertexArrays(1, &mesh.vao);
     if (gl_has_errors())
-    {
-        printf("gl_has_error\n");
         return false;
-    }
     // Loading shaders
     return effect.load_from_file(shader_path("attack.vs.glsl"), shader_path("attack.fs.glsl"));
 }
+
 
 void Attack::move(){
 
@@ -147,6 +219,7 @@ bool Attack::attackCondition(bool isFighting)
         {
             // attack->destroy();
             //free(attack);
+
             return true;
         }
     }
@@ -155,6 +228,8 @@ bool Attack::attackCondition(bool isFighting)
 
 void Attack::draw(const mat3 &projection)
 {
+    this->travel(target);
+
     transform_begin();
     transform_translate(position);
     transform_rotate(rotation);
@@ -213,3 +288,7 @@ void Attack::destroy()
     glDeleteShader(effect.fragment);
     glDeleteShader(effect.program);
 };
+
+bounds Attack::getBounds() {
+    return {position.x - 6 / 2, position.x + 6 / 2, position.y - 6 / 2, position.y + 6 / 2};
+}

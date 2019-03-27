@@ -34,6 +34,8 @@ public:
 
     virtual void lockOn();
 
+    bool checkCollision(Attack *one, GameObject *two);
+
     vec2 getPosition() {return position;};
     bool onTerrain(vec2 loc, int type);
 
@@ -41,7 +43,8 @@ public:
 
     GameObject(Pathfinder *pathfinder);
 
-    Attack * attack = nullptr;
+
+    //Attack * attack = nullptr;
     Path path;
     bool landUnit;
     Sprite& getSprite() {return sprite;};
@@ -53,6 +56,7 @@ public:
 
     virtual void collide(GameObject* obj);
 
+    bool collideAttack(bounds b1, bounds b2);
     float health;
     float maxHealth;
 

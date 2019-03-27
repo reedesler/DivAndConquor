@@ -95,10 +95,11 @@ void World::update()
 {
     tilemap.clearVisible(visibleTiles);
     visibleTiles.clear();
-
+    ai->setState(this);
     camera.update();
     for (auto o : gameObjects)
     {
+
         o->update();
     }
 
@@ -124,6 +125,13 @@ void World::update()
 
     toBeDeleted.clear();
 
+
+//    for (auto a : pastAttacks)
+//    {
+//        pastAttacks.erase(std::remove(pastAttacks.begin(), pastAttacks.end(), a), pastAttacks.end());
+//        delete a;
+//    }
+
     //check for loot collisions
     std::vector<int> toDelete;
     for (int i = 0; i < resources.size(); ++i)
@@ -148,6 +156,29 @@ void World::update()
         pathRenderer->init(selectedObject->pathfinder->getPath());
     }
 
+
+    std::vector<Attack *> shot;
+    for (auto a : bullets)
+    {
+        for (auto o : gameObjects)
+        {
+            if ( o->checkCollision(a, o) && o != selectedObject)
+            {
+                o->health = o->health - 30;
+                shot.push_back(a);
+            }
+        }
+    }
+
+    for (auto o : shot)
+    {
+        bullets.erase(std::remove(bullets.begin(), bullets.end(), o), bullets.end());
+        delete o;
+    }
+
+    shot.clear();
+
+
     if (camera.followSelected && getSelected() != nullptr)
         centerCameraOn(*getSelected());
 }
@@ -157,24 +188,29 @@ void World::draw(int pixelScale)
     mat3 projection = camera.getProjection(pixelScale);
     tilemap.draw(projection);
 
+    for (auto a: bullets){
+       // if(selectedObject && a != nullptr && selectedObject->fight){
+
+            a->draw(projection);
+        //}
+}
+
     for (auto o : gameObjects)
     {
         o->draw(projection);
-        if (o && o->fight)
-        {
-            o->attack->draw(projection);
-        }
+
     }
     for (auto o : resources)
         o->draw(projection);
+
+
+
     if (selectedObject && selectedObject->pathfinder)
     {
         pathRenderer->draw(projection);
     }
 
-    if(selectedObject && selectedObject->attack != nullptr && selectedObject->fight){
-        selectedObject->attack->draw(projection);
-    }
+
 }
 
 void World::onClick(int button, int action, float xpos, float ypos)
@@ -212,7 +248,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
     {
         for (auto o : gameObjects)
         {
-            if (o->playerControlled && inBounds(o->getBounds(), worldCoords))
+            if (!o->playerControlled && inBounds(o->getBounds(), worldCoords))
             {
                 //int a = 1;
                 if (lock == o)
@@ -322,7 +358,7 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
 }
 void World::setPirates()
 {
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < 1; i++){
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
         while (tilemap.getTile(x, y).type != 0)

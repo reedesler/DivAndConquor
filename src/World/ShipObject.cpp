@@ -20,6 +20,8 @@ ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : G
     canShoot = true;
     this->settlement = settlement;
     settlement->updateResources(0, -500);
+    world->navalStrength++;
+
 }
 
 void ShipObject::move(vec2 pos) {
@@ -37,11 +39,11 @@ void ShipObject::update() {
     GameObject::update();
 
     vec2 position = getPosition();
-    if (attack){
-        if(attack->attackCondition(fight)){
-            fight = false;
-        }
-    }
+//    if (attack){
+//        if(attack->attackCondition(fight)){
+//            fight = false;
+//        }
+//    }
 
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
@@ -67,8 +69,10 @@ void ShipObject::update() {
         addForce({difX * 0.5f, difY * 0.5f});
     }
 
-    if (health <= 0) {
-        destroy();
+
+    if(health < 0){
+        world->lock = nullptr;
+        this->destroy();
     }
 
     sprite.tint = {1.f, health / maxHealth, health / maxHealth};

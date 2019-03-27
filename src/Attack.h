@@ -13,11 +13,15 @@ class Attack : public Renderable
   static Texture attack_texture;
 
 public:
-  Attack(vec2);
+  Attack(vec2, vec2);
+    ~Attack();
 
-  bool init();
+
+    bool init();
 
   void travel(vec2);
+
+    bounds getBounds();
 
   bool attackCondition(bool);
 

@@ -29,6 +29,7 @@ bool Resource::collect(Sailor *obj) {
     if (position.x >= other.left && position.x <= other.right)
         if (position.y >= other.top && position.y <= other.bottom){
             obj->settlement->updateResources(this->loot_type, this->resource);
+            world->wealth++;
             return true;
         }
     return false;

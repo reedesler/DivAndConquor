@@ -25,6 +25,7 @@ Pirate::Pirate(World *world, vec2 pos): GameObject(world, pos){
     rotation = 0;
     scale = {1.f, 1.f};
     selected = false;
+    playerControlled = false;
    // playerControlled = false;
     enemy = true;
     //init();
@@ -397,11 +398,11 @@ void Pirate::update() {
 
     vec2 position = getPosition();
 
-    if (attack){
-        if(attack->attackCondition(fight)){
-            fight = false;
-        }
-    }
+//    if (attack){
+//        if(attack->attackCondition(fight)){
+//            fight = false;
+//        }
+//    }
 
     world->setExplored(position, 7 * TILE_SIZE);
     if (!path.path.empty()) {
