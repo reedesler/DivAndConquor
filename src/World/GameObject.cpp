@@ -35,13 +35,13 @@ void GameObject::move(vec2 pos) {
 }
 
 void GameObject::fire(vec2 dest, vec2 pos){
-        if (sprite.selected && playerControlled){
+       // if (sprite.selected && playerControlled){
         fight = true;
             Attack * attack = new Attack({pos.x, pos.y}, dest);
             world->bullets.push_back(attack);
             //attack->target = dest;
         //attack->init();
-    }
+   // }
 
 
 
@@ -140,8 +140,7 @@ bool GameObject::collideAttack(bounds b1, bounds b2) {
 
 bool GameObject::checkCollision(Attack *one, GameObject *two) // AABB - Circle collision
 {
-    //TODO make this work properly
-    // Get center point circle first
+
     if(one){
 
         bounds other = one->getBounds();
@@ -150,8 +149,10 @@ bool GameObject::checkCollision(Attack *one, GameObject *two) // AABB - Circle c
 //                return true;
 //            }
 //        return false;
+
+//TODO prob is i have to make sure that checking bullet and object collision is not with itself.
         bounds ob2 = two->getBounds();
-       if(collideAttack(other, ob2)){
+       if(collideAttack(other, ob2) && (abs(one->target.x - two->getPosition().x) < 10) && (abs(one->target.y - two->getPosition().y) < 10)){
            return true;
        } else {
            return false;

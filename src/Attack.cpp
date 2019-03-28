@@ -105,7 +105,6 @@ bool Attack::init() {
     // Loading shaders
 
 
-//TODO seems to be problem loading texturee
     if (!attack_texture.is_valid()) {
         if (!attack_texture.load_from_file(textures_path("cannonball.png"))) {
             fprintf(stderr, "Failed to load cannon texture!");

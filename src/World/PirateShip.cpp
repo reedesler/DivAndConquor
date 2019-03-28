@@ -8,6 +8,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     if (!sprite.init(w, h, textures_path("pirateship.png"), {0.5f, 1.f})) {
         printf("ERROR initializing sprite\n");
     }
+    canShoot = true;
     rotation = 0;
     scale = {1.f, 1.f};
     landUnit = false;
@@ -21,6 +22,7 @@ void PirateShip::update() {
     GameObject::update();
     if (ticks % 60 == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
+
         if (o) {
             vec2 targetPos = o->getPosition();
             TilePos start = Tilemap::getTilePos(position.x, position.y);
@@ -29,6 +31,9 @@ void PirateShip::update() {
             pathfinder->replan();
             path = pathfinder->getPath();
         }
+        world->fireOnClosestObject(this, true, false);
+
+
     }
 
 
@@ -56,6 +61,7 @@ void PirateShip::update() {
     }
 
     if (health <= 0) {
+        printf("DEAADDDD");
         destroy();
     }
 

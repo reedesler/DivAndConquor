@@ -162,7 +162,7 @@ void World::update()
     {
         for (auto o : gameObjects)
         {
-            if ( o->checkCollision(a, o) && o != selectedObject)
+            if ( o->checkCollision(a, o))
             {
                 o->health = o->health - 30;
                 shot.push_back(a);
@@ -356,9 +356,41 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
     }
     return closest;
 }
+
+
+void World::fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit)
+{
+    float minDist = 500;
+    GameObject *closest = nullptr;
+    for (auto o : gameObjects)
+    {
+        if (o->playerControlled == playerControlled && o->landUnit == landUnit )
+        {
+            float difX = attacker->getPosition().x - o->getPosition().x;
+            float difY = attacker->getPosition().y - o->getPosition().y;
+            float dist = sqrt(difX * difX + difY * difY);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = o;
+            }
+
+            if(closest != nullptr){
+                attacker->fire(closest->getPosition(), attacker->getPosition());
+            }
+        }
+    }
+
+
+
+
+
+}
+
+
 void World::setPirates()
 {
-    for (int i = 0; i < 1; i++){
+    for (int i = 0; i < 3; i++){
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
         while (tilemap.getTile(x, y).type != 0)

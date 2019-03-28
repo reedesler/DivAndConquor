@@ -37,6 +37,9 @@ public:
   void addSailor();
   void centerCameraOn(GameObject &go);
   GameObject *getSelected() { return selectedObject; }
+
+  void fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit);
+
   // bool tooFar(GameObject * a, GameObject * b);
 
   Tilemap tilemap;
