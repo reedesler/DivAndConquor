@@ -7,19 +7,23 @@
 
 #include "Common.hpp"
 
+class GameObject;
+
 class Attack : public Renderable
 {
 
   static Texture attack_texture;
 
 public:
-  Attack(vec2, vec2);
+  Attack(vec2, vec2, GameObject* shooter);
     ~Attack();
 
 
     bool init();
 
-  void travel(vec2);
+  void travel();
+
+  GameObject* shooter;
 
     bounds getBounds();
 
@@ -45,7 +49,9 @@ public:
 
   vec2 scale = {1.f, 1.f};
 
-  vec2 target;
+  vec2 direction;
+
+  int ticks = 0;
 };
 
 #endif //DIVCONQ_BULLET_H

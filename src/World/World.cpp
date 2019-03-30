@@ -164,9 +164,12 @@ void World::update()
         {
             if ( o->checkCollision(a, o))
             {
-                o->health = o->health - 30;
+                o->health = o->health - 20;
                 shot.push_back(a);
             }
+        }
+        if (a->ticks >= 100) {
+            shot.push_back(a);
         }
     }
 

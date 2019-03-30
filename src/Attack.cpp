@@ -8,18 +8,20 @@
 #define PROJECTILE_VELOCITY 25
 Texture Attack::attack_texture;
 
-Attack::Attack(vec2 pos, vec2 dest)
+Attack::Attack(vec2 pos, vec2 dest, GameObject* shooter)
 {
     width = 5;
     height = 5;
     position = {pos.x, pos.y};
     rotation = 0;
     scale = {0.06f, 0.06f};
-    target = dest;
+    direction = {dest.x - pos.x, dest.y - pos.y};
+    this->shooter = shooter;
     this->init();
 };
 
-Attack::~Attack() {}
+Attack::~Attack() {
+}
 
 double inline clamp(double d, double min, double max)
 {
@@ -99,11 +101,10 @@ void Attack::move(){
 
 };
 
-void Attack::travel(vec2 destination)
+void Attack::travel()
 {
     //printf("desx:%f, desty:%f\n", destination.x, destination.y);
-    vec2 dir = {-position.x + destination.x, -position.y + destination.y};
-    float length = sqrt((dir.x * dir.x) + (dir.y * dir.y));
+    float length = sqrt((direction.x * direction.x) + (direction.y * direction.y));
     // float angle = atan2(dir.y, dir.x) * 180 / 3.14f;
 
     // vec2 newPos = { (cos(angle * 3.14f/180) * PROJECTILE_VELOCITY), (sin(angle * 3.14f/180) * PROJECTILE_VELOCITY)};
@@ -111,12 +112,14 @@ void Attack::travel(vec2 destination)
     //    float length = sqrt(dir.x * dir.x + dir.y * dir.y);
     //
     //
-    vec2 newPos = {(dir.x / length) * PROJECTILE_VELOCITY, (dir.y / length) * PROJECTILE_VELOCITY};
+    vec2 newPos = {(direction.x / length) * PROJECTILE_VELOCITY, (direction.y / length) * PROJECTILE_VELOCITY};
     //
     //        vec2 newPos = {position.x + dir.x * PROJECTILE_VELOCITY, position.y + dir.y * PROJECTILE_VELOCITY};
 
     position.x += newPos.x;
     position.y += newPos.y;
+
+    ticks++;
 }
 
 bool Attack::collidesWith(vec2 circlePosition, float radius, vec2 rectLeftTop, vec2 rectRightBottom)
@@ -134,27 +137,9 @@ bool Attack::collidesWith(vec2 circlePosition, float radius, vec2 rectLeftTop, v
     return distanceSquared < (radius * radius);
 }
 
-bool Attack::attackCondition(bool isFighting)
-{
-    //    (world->lock->health > 0 || !GameObject->tooFar(world->selectedObject, world->lock)){
-
-    if (isFighting)
-    {
-        travel(target);
-        if (abs(position.x - target.x) < 15 && abs(position.y - target.y) < 15)
-        {
-            // attack->destroy();
-            //free(attack);
-
-            return true;
-        }
-    }
-    return false;
-}
-
 void Attack::draw(const mat3 &projection)
 {
-    this->travel(target);
+    this->travel();
 
     transform_begin();
     transform_translate(position);
