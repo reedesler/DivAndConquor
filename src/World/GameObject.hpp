@@ -42,6 +42,7 @@ public:
     Pathfinder * pathfinder = nullptr;
 
     //Attack * attack = nullptr;
+
     Path path;
     bool landUnit;
     Sprite& getSprite() {return sprite;};
@@ -53,6 +54,7 @@ public:
 
     virtual void collide(GameObject* obj);
 
+    bool missed(Attack *one, GameObject *two);
     bool collideAttack(bounds b1, bounds b2);
     float health;
     float maxHealth;

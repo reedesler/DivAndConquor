@@ -52,6 +52,8 @@ public:
   vec2 direction;
 
   int ticks = 0;
+  vec2 target;
+  bool miss;
 };
 
 #endif //DIVCONQ_BULLET_H

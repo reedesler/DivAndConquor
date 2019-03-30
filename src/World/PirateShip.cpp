@@ -62,6 +62,9 @@ void PirateShip::update() {
     }
 
     if (health <= 0) {
+        if(world->lock == this){
+            world->lock = nullptr;
+        }
         destroy();
     }
 

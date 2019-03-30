@@ -11,6 +11,7 @@ void EnemyAi::setState(World* world){
 if(world->navalStrength > 1){
 //    world->gameObjects.push_back(new PirateShip(world, {2300, 1300}));
 //    printf("enemy added");
+
 }
 
 };

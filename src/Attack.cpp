@@ -17,6 +17,8 @@ Attack::Attack(vec2 pos, vec2 dest, GameObject* shooter)
     scale = {0.06f, 0.06f};
     direction = {dest.x - pos.x, dest.y - pos.y};
     this->shooter = shooter;
+    target = dest;
+    miss = false;
     this->init();
 };
 
@@ -34,6 +36,7 @@ bool Attack::init() {
     // Loading shaders
 
 
+//TODO seems to be problem loading texturee
     if (!attack_texture.is_valid()) {
         if (!attack_texture.load_from_file(textures_path("cannonball.png"))) {
             fprintf(stderr, "Failed to load cannon texture!");
@@ -120,6 +123,10 @@ void Attack::travel()
     position.y += newPos.y;
 
     ticks++;
+//    if(abs(position.x - destination.x) < 20 && abs(position.y - destination.y) < 20){
+//        miss = true;
+//    }
+
 }
 
 bool Attack::collidesWith(vec2 circlePosition, float radius, vec2 rectLeftTop, vec2 rectRightBottom)

@@ -60,7 +60,8 @@ public:
     std::vector<GameObject *> gameObjects;
     std::vector<Attack *> bullets;
 private:
-    std::vector<GameObject *> toBeDeleted;
+
+  std::vector<GameObject *> toBeDeleted;
 
     std::vector<Attack *> pastAttacks;
     int64_t balance;

@@ -20,6 +20,7 @@ ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : G
     canShoot = true;
     this->settlement = settlement;
     settlement->updateResources(0, -500);
+
     world->navalStrength++;
 
 }

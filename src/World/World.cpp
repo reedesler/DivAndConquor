@@ -166,6 +166,12 @@ void World::update()
             {
                 o->health = o->health - 20;
                 shot.push_back(a);
+
+//                if(o->missed(a,o) ){
+//                    shot.push_back(a);
+//                }
+            } else if(a->miss){
+                shot.push_back(a);
             }
         }
         if (a->ticks >= 100) {
