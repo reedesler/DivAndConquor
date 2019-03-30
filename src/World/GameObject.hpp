@@ -41,9 +41,6 @@ public:
 
     Pathfinder * pathfinder = nullptr;
 
-    GameObject(Pathfinder *pathfinder);
-
-
     //Attack * attack = nullptr;
     Path path;
     bool landUnit;

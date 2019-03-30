@@ -75,6 +75,8 @@ private:
   EnemyAi * ai;
 
   double prevMouseXpos, prevMouseYpos;
+
+  long ticks = 0;
 };
 
 #endif //DIVCONQ_WORLD_H

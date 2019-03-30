@@ -5,6 +5,7 @@
 PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     w = 100;
     h = 100;
+    ticks = std::rand() % 60;
     if (!sprite.init(w, h, textures_path("pirateship.png"), {0.5f, 1.f})) {
         printf("ERROR initializing sprite\n");
     }
@@ -61,7 +62,6 @@ void PirateShip::update() {
     }
 
     if (health <= 0) {
-        printf("DEAADDDD");
         destroy();
     }
 

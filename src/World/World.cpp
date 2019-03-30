@@ -181,6 +181,12 @@ void World::update()
 
     if (camera.followSelected && getSelected() != nullptr)
         centerCameraOn(*getSelected());
+
+    if (ticks % 1800 == 0) {
+        setPirates();
+    }
+
+    ticks++;
 }
 
 void World::draw(int pixelScale)
@@ -390,6 +396,7 @@ void World::fireOnClosestObject(GameObject * attacker, bool playerControlled, bo
 
 void World::setPirates()
 {
+    printf("Adding pirates\n");
     for (int i = 0; i < 3; i++){
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
