@@ -5,7 +5,7 @@
 PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     w = 100;
     h = 100;
-    ticks = std::rand() % 60;
+    ticks = std::rand() % 120;
     if (!sprite.init(w, h, textures_path("pirateship.png"), {0.5f, 1.f})) {
         printf("ERROR initializing sprite\n");
     }
@@ -21,7 +21,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
 void PirateShip::update() {
     vec2 position = getPosition();
     GameObject::update();
-    if (ticks % 60 == 0) {
+    if (ticks % 120 == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
 
         if (o) {
