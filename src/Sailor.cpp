@@ -28,6 +28,7 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     pathfinder = new Pathfinder(world, landUnit);
     fight = false;
     health = maxHealth = 100;
+    world->manPower++;
 
 }
 
@@ -44,6 +45,7 @@ void Sailor::update() {
     GameObject::update();
 
     if(health < 0){
+        world->manPower--;
         world->lock = nullptr;
         this->destroy();
     }

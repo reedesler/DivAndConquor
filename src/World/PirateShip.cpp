@@ -16,6 +16,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
     health = maxHealth = 100;
+    world->pirateStrength++;
 }
 
 void PirateShip::update() {
@@ -32,7 +33,7 @@ void PirateShip::update() {
             pathfinder->replan();
             path = pathfinder->getPath();
         }
-        world->fireOnClosestObject(this, true, false);
+        world->fireOnClosestObject(this, true, true);
 
 
     }

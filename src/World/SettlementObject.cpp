@@ -17,6 +17,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     this->iron = 500;
     this->timber = 500;
     canShoot = false;
+    health = 200;
 
 }
 
@@ -24,6 +25,12 @@ void SettlementObject::move(vec2 pos) {
 }
 void SettlementObject::update() {
     world->setExplored(getPosition(), 15 * TILE_SIZE);
+    if (health <= 0) {
+//        if(world->lock == this){
+//            world->lock = nullptr;
+//        }
+        destroy();
+    }
 }
 void SettlementObject::updateResources(uint16_t type, int amount) {
     if (type == 0)

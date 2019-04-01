@@ -14,6 +14,7 @@ class World;
 #include "Camera.hpp"
 #include "PathRenderer.hpp"
 #include "Attack.h"
+
 class PathRenderer;
 
 class ShipObject;
@@ -21,6 +22,13 @@ class Sailor;
 class Resource;
 class EnemyAi;
 
+enum State {
+    invade,
+    explore,
+    flee,
+    neutral,
+
+};
 class World
 {
 public:
@@ -50,10 +58,14 @@ public:
   //Attack *attack;
   long int h;
     int navalStrength = 0;
+    int pirateStrength = 0;
     int manPower = 0;
     int wealth = 0;
+   // State state;
+   State state = neutral;
 
-  GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
+
+    GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
 
   void removeGameObject(GameObject *obj);
 

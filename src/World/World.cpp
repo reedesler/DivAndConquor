@@ -6,7 +6,6 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
     auto *initialSet = new SettlementObject(this, {1650, 4200});
     gameObjects.push_back(initialSet);
     //gameObjects.push_back(new PirateShip(this, {2300, 1300}));
-
     pathRenderer = new PathRenderer();
     //attack = new Attack({340, 900});
     // attack->init();
@@ -95,7 +94,6 @@ void World::update()
 {
     tilemap.clearVisible(visibleTiles);
     visibleTiles.clear();
-    ai->setState(this);
     camera.update();
     for (auto o : gameObjects)
     {
@@ -186,6 +184,8 @@ void World::update()
     }
 
     shot.clear();
+
+    ai->setState(this);
 
 
     if (camera.followSelected && getSelected() != nullptr)

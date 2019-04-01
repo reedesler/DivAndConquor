@@ -8,20 +8,14 @@
 #include <World/GameObject.hpp>
 //#include "Game.hpp"
 
-enum State {
-    invade,
-    explore,
-    flee,
 
-};
 class EnemyAi {
 
 public:
     void setState(World*);
 
-    void giveOrder();
+    void giveOrder(World*);
 
-    State state;
 
 
 };

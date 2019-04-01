@@ -72,6 +72,7 @@ void ShipObject::update() {
 
 
     if(health < 0){
+        world->navalStrength--;
         world->lock = nullptr;
         this->destroy();
     }
