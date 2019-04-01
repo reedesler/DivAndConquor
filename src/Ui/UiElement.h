@@ -10,9 +10,10 @@
 #include "Sprite.hpp"
 #include "Ui/UiCallback.h"
 
+/*
 #define STB_IMAGE_IMPLEMENTATION
 #include "../ext/stb_image/stb_image.h"
-
+*/
 class Game;
 
 class UiElement
