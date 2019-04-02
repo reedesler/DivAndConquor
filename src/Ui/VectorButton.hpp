@@ -16,7 +16,7 @@ class VectorButton : public Label
     bool inSeperateLines = false;
     std::array<GLfloat, 4> color;
 
-    VectorButton(std::string textStr, int fontSize, vec2 location, bool inSeperateLines = False, std::string fontPath = "Carlito-Bold.ttf", UiCallback::OnClickFunc callback = nullptr)
+    VectorButton(std::string textStr, int fontSize, vec2 location, bool inSeperateLines = false, std::string fontPath = "Carlito-Bold.ttf", UiCallback::OnClickFunc callback = nullptr)
         : UiElement(*new Sprite, location, callback), text(textStr.c_str()), fontSize(fontSize)
     {
         if (nlines == 1)

@@ -1,6 +1,7 @@
 #include "Common.hpp"
 #include "GameWindow.hpp"
 #include "TextRenderer.hpp"
+#include "Ui/Polygon.hpp"
 
 #define GL3W_IMPLEMENTATION
 #include <gl3w.h>
@@ -66,7 +67,47 @@ void displayText(double window_width, double window_height)
     tr.config(48, translucent_black);
 
     /* Effects of alignment */
-    tr.draw("Test String", -1 + 8 * sx, 1 - 50 * sy, sx, sy);
+    tr.draw("Fake button text", -1 + 8 * sx, 1 - 50 * sy, sx, sy);
+}
+
+void displayPolygon()
+{
+    Polygon polygon;
+    float vertices[] = {
+        0.0, 0.0, 0.0, 0.0, 1.0,
+        -0.273529225, 0.2826445, 0.0, 0.0, 1.0,
+        -0.109408175, 0.40117325, 0.0, 0.0, 1.0,
+        0.091170575, 0.2005875, 0.0, 0.0, 1.0,
+        0.237054, 0.19146875, 0.0, 0.0, 1.0,
+        0.036475225, 0.528819, 0.0, 0.0, 1.0,
+        0.145883425, 0.018235, 0.0, 0.0, 1.0,
+        -0.00911, 0.05470575, 0.0, 0.0, 1.0,
+        0.18235875, -0.1094115, 0.0, 0.0, 1.0,
+        0.13675575, -0.3464675, 0.0, 0.0, 1.0,
+        0.10942575, -0.136763, 0.0, 0.0, 1.0,
+        0.33733475, -0.26441025, 0.0, 0.0, 1.0,
+        0.091188, -0.054706, 0.0, 0.0, 1.0,
+        0.0182375, -0.11852875, 0.0, 0.0, 1.0,
+        0.87528325, -0.33735025, 0.0, 0.0, 1.0};
+    unsigned int elements[] = {
+        0, 1, 2,
+        0, 2, 3,
+        0, 3, 4,
+        0, 4, 5,
+        0, 5, 6,
+        0, 6, 7,
+        0, 7, 8,
+        0, 8, 9,
+        0, 9, 10,
+        0, 10, 11,
+        0, 11, 12,
+        0, 12, 13,
+        0, 13, 14,
+        0, 14, 15,
+        0, 15, 16};
+    polygon.init(vertices, sizeof(vertices), elements, sizeof(elements), shader_path("simple.vs.glsl"), shader_path("simple.fs.glsl"));
+    polygon.render();
+    _check_gl_error(__FILE__, __LINE__);
 }
 
 int main(void)
@@ -100,6 +141,7 @@ int main(void)
         window.draw();
 
         displayText(width, height);
+        displayPolygon();
         glfwSwapBuffers(window.window);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

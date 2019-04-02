@@ -59,8 +59,12 @@ set(SOURCE_FILES
         src/ProjectPath.hpp
         src/Common.hpp
         src/GameWindow.hpp
-        # src/World/CannonBall.hpp
-        # src/World/CannonBall.cpp
+
+        # src/Ui/VectorButton.hpp
+        # src/Ui/VectorButton.cpp
+        src/Ui/Polygon.hpp
+        src/Ui/Polygon.cpp
+
         src/Game.hpp
         src/Ui/Button.hpp
         src/Sprite.hpp
