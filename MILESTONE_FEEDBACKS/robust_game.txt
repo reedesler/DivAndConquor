@@ -1,0 +1,26 @@
+# Team 11
+Grades: 61/100
+
+The game still needs more work to reach the stage of playable. Given the remaining time, I suggest to aim to deliver the very basic game play and concentrate on making it bug-free. Please see the section below for the bug report.
+
+Here are some extra comments:
+- Add more UIs to indicate (1) if an enemy unit is locked on; (2) collected resources; (3) health levels of ships and sailors.
+- For the efficiency, (1) before running the accurate mesh-mesh collision detection, run the simple AABB test first; (2) only call the pathfinding when pirates are sufficiently close.
+- The cannon fires too fast in the current version. Try slowing it down so the player can actually see the effect.
+
+## Milestone requirements (34)
+
++5/10 Gameplay (6 min): The current version has many basic features missing and also several small bugs, which makes it hard to play for 6 min.
++10/15 Performance & Robust Playing: The game crashes once during the grading session (no one was playing the game and it crashes by itself). When I ran the game on my windows machine, I had to fix several bugs to run the game long enough for memory leak detection and still the game crashes after a short period of time (points not reduced for this).
++5/5 Correct Time Step.
++7/20 Memory: The game has severe memory leaks. I suspect that the game is not terminated properly when the player closes the windows.
++0/10 Reloadable: The game has no save & load support.
++9/15 Bugs & Glitches:
+- -6 The cannon feature only works occasionally.
+
+## Milestone creative (25)
+
++10 The cannon attack (partially working).
++10 Dynamic difficulty (different number of pirates).
++5 The new music track.
+
