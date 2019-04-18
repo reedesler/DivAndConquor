@@ -15,17 +15,33 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     landUnit = false;
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
-    health = maxHealth = 500;
+    health = maxHealth = 400;
     world->pirateStrength++;
+    printf("enemyNum %d", world->pirateStrength);
+
 }
 
 void PirateShip::update() {
     vec2 position = getPosition();
     GameObject::update();
+
+    if (world->state == flee){
+        GameObject* o = world->getClosestObject(position, true, false);
+        if (o && abs(o->position.x - position.x) < 800 && abs(o->position.y - position.y) < 800) {
+            vec2 targetPos = o->getPosition();
+            TilePos start = Tilemap::getTilePos(position.x, position.y);
+            TilePos goal = Tilemap::getTilePos(world->w - 100, world->h - 100);
+            pathfinder->init(start.x, start.y, goal.x - 400, goal.y - 400);
+            pathfinder->replan();
+            path = pathfinder->getPath();
+        }
+    }
+
+
     if (ticks % 120 == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
 
-        if (o) {
+        if (o && world->state != flee) {
             vec2 targetPos = o->getPosition();
             TilePos start = Tilemap::getTilePos(position.x, position.y);
             TilePos goal = Tilemap::getTilePos(targetPos.x, targetPos.y);
@@ -66,6 +82,7 @@ void PirateShip::update() {
         if(world->lock == this){
             world->lock = nullptr;
         }
+        world->pirateStrength--;
         destroy();
     }
 
@@ -91,16 +108,19 @@ void PirateShip::travel(vec2 destination) {
 }
 
 void PirateShip::collide(GameObject* obj) {
-    vec2 pos = obj->getPosition();
-    vec2 position = getPosition();
-    float difX = position.x - pos.x;
-    float difY = position.y - pos.y;
-    float mul = 0.05f;
+    if(obj->playerControlled){
+        vec2 pos = obj->getPosition();
+        vec2 position = getPosition();
+        float difX = position.x - pos.x;
+        float difY = position.y - pos.y;
+        float mul = 0.05f;
 
-    if (obj->playerControlled) {
-        obj->health -= 7;
-        mul = 0.2f;
+        if (obj->playerControlled) {
+            obj->health -= 7;
+            mul = 0.2f;
+        }
+
+        addForce({difX * mul, difY * mul});
     }
 
-    addForce({difX * mul, difY * mul});
 }

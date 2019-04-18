@@ -12,7 +12,7 @@
 class EnemyAi {
 
 public:
-    void setState(World*);
+    void updateState(World*);
 
     void giveOrder(World*);
 

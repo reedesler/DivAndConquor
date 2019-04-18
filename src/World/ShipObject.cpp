@@ -112,16 +112,19 @@ void ShipObject::travel(vec2 destination) {
 }
 
 void ShipObject::collide(GameObject* obj) {
-    vec2 pos = obj->getPosition();
-    vec2 position = getPosition();
-    float difX = position.x - pos.x;
-    float difY = position.y - pos.y;
-    float mul = 0.05f;
+    if(!obj->playerControlled){
+        vec2 pos = obj->getPosition();
+        vec2 position = getPosition();
+        float difX = position.x - pos.x;
+        float difY = position.y - pos.y;
+        float mul = 0.05f;
 
-    if (!obj->playerControlled) {
-        obj->health -= 10;
-        mul = 0.2f;
+        if (!obj->playerControlled) {
+            obj->health -= 10;
+            mul = 0.2f;
+        }
+
+        addForce({difX * mul, difY * mul});
     }
 
-    addForce({difX * mul, difY * mul});
 }

@@ -3,6 +3,8 @@
 World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
                               camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
+    state = neutral;
+    printf("%c", state);
     auto *initialSet = new SettlementObject(this, {1650, 4200});
     gameObjects.push_back(initialSet);
     //gameObjects.push_back(new PirateShip(this, {2300, 1300}));
@@ -11,6 +13,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
     // attack->init();
     w = tilemap.width * TILE_SIZE;
     h = tilemap.height * TILE_SIZE;
+    this->setPirateSoldiers();
     this->setResources();
     this->setPirates();
     initialSet->updateResources(0, 3000);
@@ -179,12 +182,12 @@ void World::update()
     for (auto o : shot)
     {
         bullets.erase(std::remove(bullets.begin(), bullets.end(), o), bullets.end());
-        delete o;
+        //delete o;
     }
 
     shot.clear();
 
-    ai->setState(this);
+    ai->updateState(this);
 
 
     if (camera.followSelected && getSelected() != nullptr)
@@ -371,6 +374,27 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
     return closest;
 }
 
+GameObject *World::getClosestObjectOnLand(vec2 pos, bool playerControlled, bool landUnit)
+{
+    float minDist = 900;
+    GameObject *closest;
+    for (auto o : gameObjects)
+    {
+        if (o->playerControlled == playerControlled && o->landUnit == landUnit)
+        {
+            float difX = pos.x - o->getPosition().x;
+            float difY = pos.y - o->getPosition().y;
+            float dist = difX * difX + difY * difY;
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = o;
+            }
+        }
+    }
+    return closest;
+}
+
 
 void World::fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit)
 {
@@ -404,17 +428,22 @@ void World::fireOnClosestObject(GameObject * attacker, bool playerControlled, bo
 
 void World::setPirates()
 {
-    printf("Adding pirates\n");
-    for (int i = 0; i < 3; i++){
-        float x = std::rand() % (this->w - 100);
-        float y = std::rand() % (this->h - 100);
-        while (tilemap.getTile(x, y).type != 0)
-        {
-            x = std::rand() % (this->w - 100);
-            y = std::rand() % (this->h - 100);
+    if(pirateStrength < 3){
+        printf("Adding pirates\n");
+        for (int i = 0; i < 1; i++){
+            float x = std::rand() % (this->w - 100);
+            float y = std::rand() % (this->h - 100);
+            while (tilemap.getTile(x, y).type != 0)
+            {
+                x = std::rand() % (this->w - 100);
+                y = std::rand() % (this->h - 100);
+            }
+            gameObjects.push_back(new PirateShip(this, {x, y}));
         }
-        gameObjects.push_back(new PirateShip(this, {x, y}));
+
+
     }
+
 }
 void World::setResources()
 {
@@ -454,6 +483,23 @@ void World::setResources()
         }
         resources.push_back(new Resource(this, {x, y}, 2, 500));
     }
+}
+
+void World::setPirateSoldiers()
+{
+    //setting gold
+    for (int i = 0; i < 20; i++)
+    {
+        float x = std::rand() % (this->w - 100);
+        float y = std::rand() % (this->h - 100);
+        while (tilemap.getTile(x, y).type != 2)
+        {
+            x = std::rand() % (this->w - 100);
+            y = std::rand() % (this->h - 100);
+        }
+        gameObjects.push_back(new Pirate(this, {x, y}));
+    }
+
 }
 
 void World::removeGameObject(GameObject *obj)

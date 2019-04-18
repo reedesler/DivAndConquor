@@ -59,6 +59,7 @@ public:
     float health;
     float maxHealth;
 
+    vec2 position;
 protected:
     Sprite sprite;
 
@@ -73,7 +74,6 @@ protected:
 
     void destroy();
 
-    vec2 position;
     vec2 velocity;
     vec2 forces;
 
@@ -157,7 +157,6 @@ class Pirate : public GameObject {
     static Texture pirate_texture;
 
 public:
-    bool init();
 
     // Creates all the associated render resources and default transform
     Pirate(World *world, vec2 pos);
@@ -169,33 +168,23 @@ public:
     // ms represents the number of milliseconds elapsed from the previous update() call
     void update();
 
-    void renderDirection(vec2);
 
     void travel(vec2);
 
-    void updateFrame(float ms);
-
-    void move(vec2 off);
+    void renderDirection(vec2 dir);
 
     // Renders the salmon
     // projection is the 2D orthographic projection matrix
    // void draw(const mat3 &projection);
 
-    void setSelected();
 
     // Returns the current turtle position
-    vec2 get_position() const;
 
     // Sets the new turtle position
-    void set_position(vec2 position);
 
-    // Returns the turtle' bounding box for collision detection, called by collides_with()
-    vec2 get_bounding_box() const;
 
     // bounds getBounds();
-    void moveToPos(vec2 pos);
 
-    void movement(vec2 pos);
 
 public:
     //vec2 p_position; // Window coordinates

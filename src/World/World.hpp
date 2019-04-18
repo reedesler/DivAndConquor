@@ -42,7 +42,9 @@ public:
   void addSettlement();
   void setResources();
   void setPirates();
-  void addSailor();
+    void setPirateSoldiers();
+    void addSailor();
+    GameObject * getClosestObjectOnLand(vec2 pos, bool playerControlled, bool landUnit);
   void centerCameraOn(GameObject &go);
   GameObject *getSelected() { return selectedObject; }
 

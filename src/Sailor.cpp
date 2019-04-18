@@ -27,7 +27,7 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     canShoot = true;
     pathfinder = new Pathfinder(world, landUnit);
     fight = false;
-    health = maxHealth = 100;
+    health = maxHealth = 200;
     world->manPower++;
     playerControlled = true;
 

@@ -6,33 +6,50 @@
 #include "EnemyAi.h"
 
 
-void EnemyAi::setState(World* world){
+void EnemyAi::updateState(World *world) {
 
-if(world->navalStrength > 3){
-    world->state = invade;
-}
+    if (world->navalStrength > 3) {
+        world->state = invade;
+    }
 
-if (world->wealth > 5){
-    world->state = invade;
-}
+    if (world->wealth > 5) {
+        world->state = invade;
+    }
+
+    if(world->pirateStrength < (world->navalStrength/2)){
+        world->state = flee;
+        printf("fleestate");
+    }
+
+    if (world->state != neutral && world->state != invade){
+        if(world->pirateStrength > (world->navalStrength/2)){
+            world->state = neutral;
+            printf("neutralstate");
+        }
+    }
 
 
-
-giveOrder(world);
+    giveOrder(world);
 };
 
-void EnemyAi::giveOrder(World* world){
+void EnemyAi::giveOrder(World *world) {
 
-    switch (world->state){
+    switch (world->state) {
         case explore:
 
             break;
         case invade:
 
             for (int i = 0; i < world->navalStrength + 1; ++i) {
-                world->gameObjects.push_back(new PirateShip(world, {2300, 1300}));
+                float x = std::rand() % (world->w - 100);
+                float y = std::rand() % (world->h - 100);
+                while (world->tilemap.getTile(x, y).type != 0)
+                {
+                    x = std::rand() % (world->w - 100);
+                    y = std::rand() % (world->h - 100);
+                }
+                world->gameObjects.push_back(new PirateShip(world, {x, y}));
                 printf("enemy added");
-
             }
             world->wealth = 0;
             world->navalStrength = 0;
@@ -40,6 +57,8 @@ void EnemyAi::giveOrder(World* world){
 
             break;
         case flee:
+
+
             break;
 
         case neutral:
@@ -47,3 +66,23 @@ void EnemyAi::giveOrder(World* world){
 
     }
 };
+
+//void World::addPirateShips()
+//{
+//    if(pirateStrength < 3){
+//        printf("Adding pirates\n");
+//        for (int i = 0; i < 1; i++){
+//            float x = std::rand() % (this->w - 100);
+//            float y = std::rand() % (this->h - 100);
+//            while (tilemap.getTile(x, y).type != 0)
+//            {
+//                x = std::rand() % (this->w - 100);
+//                y = std::rand() % (this->h - 100);
+//            }
+//            gameObjects.push_back(new PirateShip(this, {x, y}));
+//        }
+//
+//
+//    }
+//
+//}
