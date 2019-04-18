@@ -105,8 +105,8 @@ void displayPolygon()
         0, 13, 14,
         0, 14, 15,
         0, 15, 16};
-    polygon.init(vertices, sizeof(vertices), elements, sizeof(elements), shader_path("simple.vs.glsl"), shader_path("simple.fs.glsl"));
-    polygon.render();
+//    polygon.init(vertices, sizeof(vertices), elements, sizeof(elements), shader_path("simple.vs.glsl"), shader_path("simple.fs.glsl"));
+  //  polygon.render();
     _check_gl_error(__FILE__, __LINE__);
 }
 

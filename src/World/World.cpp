@@ -156,15 +156,14 @@ void World::update()
 
 
     std::vector<Attack *> shot;
+
     for (auto a : bullets)
     {
         for (auto o : gameObjects)
-        {
-            if ( o->checkCollision(a, o))
+        {if ( o->checkCollision(a, o))
             {
                 o->health = o->health - 20;
                 shot.push_back(a);
-
 //                if(o->missed(a,o) ){
 //                    shot.push_back(a);
 //                }
@@ -379,7 +378,7 @@ void World::fireOnClosestObject(GameObject * attacker, bool playerControlled, bo
     GameObject *closest = nullptr;
     for (auto o : gameObjects)
     {
-        if (o->playerControlled == playerControlled && o->landUnit == landUnit )
+        if (o->playerControlled == playerControlled || o->landUnit == landUnit && o->landUnit != landUnit)
         {
             float difX = attacker->getPosition().x - o->getPosition().x;
             float difY = attacker->getPosition().y - o->getPosition().y;

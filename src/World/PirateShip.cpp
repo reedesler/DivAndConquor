@@ -15,7 +15,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     landUnit = false;
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
-    health = maxHealth = 100;
+    health = maxHealth = 500;
     world->pirateStrength++;
 }
 

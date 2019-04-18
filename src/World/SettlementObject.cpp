@@ -18,6 +18,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     this->timber = 500;
     canShoot = false;
     health = 200;
+    playerControlled = true;
 
 }
 

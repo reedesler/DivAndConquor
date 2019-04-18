@@ -16,7 +16,7 @@ ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : G
     scale = {1.f, 1.f};
     landUnit = false;
     pathfinder = new Pathfinder(world, landUnit);
-    health = maxHealth = 100;
+    health = maxHealth = 250;
     canShoot = true;
     this->settlement = settlement;
     settlement->updateResources(0, -500);
@@ -60,6 +60,10 @@ void ShipObject::update() {
                 travel({destX, destY});
             }
         };
+    }
+    if (ticks % 120 == 0) {
+
+        world->fireOnClosestObject(this, false, true);
     }
 
     TilePos tilePos = Tilemap::getTilePos(position.x, position.y);

@@ -29,6 +29,7 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     fight = false;
     health = maxHealth = 100;
     world->manPower++;
+    playerControlled = true;
 
 }
 
@@ -48,6 +49,11 @@ void Sailor::update() {
         world->manPower--;
         world->lock = nullptr;
         this->destroy();
+    }
+
+    if (ticks % 120 == 0) {
+
+        world->fireOnClosestObject(this, false, true);
     }
 
 //    if(world->selectedObject->attack != nullptr){
