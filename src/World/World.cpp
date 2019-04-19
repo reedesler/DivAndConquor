@@ -266,9 +266,9 @@ void World::onClick(int button, int action, float xpos, float ypos)
             if (dragArea.bottom < dragArea.top){
                 dragArea = {dragArea.left, dragArea.right, dragArea.bottom, dragArea.top};
             }
-            std::cout << "Drag complete:" << std::endl;
-            std::cout << "\tw: "<< dragArea.right - dragArea.left << std::endl;
-            std::cout << "\th: "<< dragArea.bottom - dragArea.top << std::endl;
+            // std::cout << "Drag complete:" << std::endl;
+            // std::cout << "\tw: "<< dragArea.right - dragArea.left << std::endl;
+            // std::cout << "\th: "<< dragArea.bottom - dragArea.top << std::endl;
             for (auto o : selectedObjects){
                 o->setSelected(false);
             }
@@ -378,7 +378,7 @@ void World::setExplored(vec2 pos, float radius)
 
 void World::onMouseMove(double xpos, double ypos)
 {
-    std::cout << "mouse move\t" << xpos << "\t" << ypos << std::endl;
+    // std::cout << "mouse move\t" << xpos << "\t" << ypos << std::endl;
     vec2 worldCoords = camera.viewToWorld({xpos, ypos});
     if (mouseDrag) {
             mouseDragTempArea = {mouseDragStart.x, worldCoords.x, mouseDragStart.y, worldCoords.y};

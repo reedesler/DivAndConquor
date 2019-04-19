@@ -62,7 +62,7 @@ public:
     vec2 position;
 protected:
     Sprite sprite;
-
+    Sprite hpBarSprite;
     float w, h;
     vec2 scale;     // 1.f in each dimension. 1.f is as big as the associated texture
     float rotation; // in radians

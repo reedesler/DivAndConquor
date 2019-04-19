@@ -59,6 +59,19 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         spt.draw(projection, {100, screen.y - UI_HEIGHT / 2.f + 20}, 0.f, {100.f / spt.width, 100.f / spt.height});
         spt.selected = tmpSelected;
     }
+    // todo: draw hp bars for all selected in UI frame?
+    /*
+    int i = 0;
+    for (auto o : world->selectedObjects) {
+        Sprite spt = o->getSprite();
+        bool tmpSelected = spt.selected;
+        spt.selected = false;
+        spt.state = 0;
+        spt.draw(projection, {100 + 100*i, screen.y - UI_HEIGHT* 1.5f + 10}, 0.f, {50.f / spt.width, 50.f / spt.height});
+        spt.selected = tmpSelected;
+        i++;
+    }
+    */
     if (state == Game::State::PAUSE)
     {
 

@@ -21,6 +21,7 @@ Resource::Resource(World *world, vec2 loc, uint16_t type, int size) : GameObject
     landUnit = true;
     loot_type = type;
     resource = size;
+    health = maxHealth = 0.f;
 }
 
 bool Resource::collect(Sailor *obj) {
