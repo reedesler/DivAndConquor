@@ -24,6 +24,12 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
 
     prevMouseXpos = viewPort.w / 2.f;
     prevMouseYpos = viewPort.h / 2.f;
+
+    selectOverlay = Sprite();
+    if (!selectOverlay.init(1, 1, textures_path("select_overlay.png")))
+    {
+        printf("ERROR initializing sprite\n");
+    }
 }
 
 void World::addShip()
@@ -230,12 +236,17 @@ void World::draw(int pixelScale)
     {
         pathRenderer->draw(projection);
     }
+    if( mouseDrag) {
+        vec2 area = {-(mouseDragTempArea.right - mouseDragTempArea.left), mouseDragTempArea.bottom - mouseDragTempArea.top};
+        // uncomment to give the selection box a cool negative effect :D
+        //glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
+        selectOverlay.draw(projection,{mouseDragTempArea.left - area.x/2, mouseDragTempArea.bottom - area.y/2},0.f, area);
+        //glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    }
 
 
 }
 
-bool mouseDrag = false;
-vec2 mouseDragStart = {0,0};
 void World::onClick(int button, int action, float xpos, float ypos)
 {
     vec2 worldCoords = camera.viewToWorld({xpos, ypos});
@@ -247,6 +258,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
             }
             mouseDrag=false;
             bounds dragArea = {mouseDragStart.x, worldCoords.x, mouseDragStart.y, worldCoords.y};
+            mouseDragStart = {-1,-1};
             // swap values around to make sure w/h aren't negative
             if (dragArea.right < dragArea.left){
                 dragArea = {dragArea.right, dragArea.left, dragArea.top, dragArea.bottom};
@@ -295,6 +307,7 @@ void World::onClick(int button, int action, float xpos, float ypos)
         if (action == GLFW_PRESS) {
             mouseDrag = true;
             mouseDragStart = worldCoords;
+            mouseDragTempArea = {worldCoords.x, worldCoords.x, worldCoords.y, worldCoords.y };
         }
 
     }
@@ -365,6 +378,18 @@ void World::setExplored(vec2 pos, float radius)
 
 void World::onMouseMove(double xpos, double ypos)
 {
+    std::cout << "mouse move\t" << xpos << "\t" << ypos << std::endl;
+    vec2 worldCoords = camera.viewToWorld({xpos, ypos});
+    if (mouseDrag) {
+            mouseDragTempArea = {mouseDragStart.x, worldCoords.x, mouseDragStart.y, worldCoords.y};
+            // swap values around to make sure w/h aren't negative
+            if (mouseDragTempArea.right < mouseDragTempArea.left){
+                mouseDragTempArea = {mouseDragTempArea.right, mouseDragTempArea.left, mouseDragTempArea.top, mouseDragTempArea.bottom};
+            }
+            if (mouseDragTempArea.bottom < mouseDragTempArea.top){
+                mouseDragTempArea = {mouseDragTempArea.left, mouseDragTempArea.right, mouseDragTempArea.bottom, mouseDragTempArea.top};
+            }
+    }
     if (xpos == -1 && ypos == -1)
     {
         xpos = camera.viewPort.w / 2.f;

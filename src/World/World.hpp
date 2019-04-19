@@ -14,6 +14,7 @@ class World;
 #include "Camera.hpp"
 #include "PathRenderer.hpp"
 #include "Attack.h"
+#include "Sprite.hpp"
 
 class PathRenderer;
 
@@ -77,7 +78,7 @@ public:
 private:
 
   std::vector<GameObject *> toBeDeleted;
-
+  Sprite selectOverlay;
     std::vector<Attack *> pastAttacks;
     int64_t balance;
 
@@ -92,6 +93,9 @@ private:
 
   double prevMouseXpos, prevMouseYpos;
 
+  bool mouseDrag = false;
+  vec2 mouseDragStart = {0,0};
+  bounds mouseDragTempArea = {0,0,0,0}; // for display purposes during selection (before mouseup)
   long ticks = 0;
 };
 
