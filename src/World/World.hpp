@@ -46,7 +46,7 @@ public:
     void addSailor();
     GameObject * getClosestObjectOnLand(vec2 pos, bool playerControlled, bool landUnit);
   void centerCameraOn(GameObject &go);
-  GameObject *getSelected() { return selectedObject; }
+  GameObject* getSelected() { return selectedObject; }
 
   void fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit);
 
@@ -55,7 +55,8 @@ public:
   Tilemap tilemap;
   Camera camera;
   long int w;
-  GameObject *selectedObject = nullptr;
+  std::vector<GameObject *> selectedObjects;
+  GameObject* selectedObject = nullptr; // primary selection
   GameObject *lock = nullptr;
   //Attack *attack;
   long int h;

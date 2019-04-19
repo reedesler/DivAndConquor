@@ -1,4 +1,8 @@
 #include "World.hpp"
+#include <iostream>
+#include <vector>
+#include <typeindex>
+#include <algorithm>
 
 World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
                               camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
@@ -230,36 +234,69 @@ void World::draw(int pixelScale)
 
 }
 
+bool mouseDrag = false;
+vec2 mouseDragStart = {0,0};
 void World::onClick(int button, int action, float xpos, float ypos)
 {
     vec2 worldCoords = camera.viewToWorld({xpos, ypos});
-    if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
+    if (button == GLFW_MOUSE_BUTTON_1 )
     {
-        for (auto o : gameObjects)
-        {
-            if (o->playerControlled && inBounds(o->getBounds(), worldCoords))
+        if (action == GLFW_RELEASE) {
+            if (mouseDrag == false){
+                std::cout << "Drag finished but wasn't started???" << std::endl;
+            }
+            mouseDrag=false;
+            bounds dragArea = {mouseDragStart.x, worldCoords.x, mouseDragStart.y, worldCoords.y};
+            // swap values around to make sure w/h aren't negative
+            if (dragArea.right < dragArea.left){
+                dragArea = {dragArea.right, dragArea.left, dragArea.top, dragArea.bottom};
+            }
+            if (dragArea.bottom < dragArea.top){
+                dragArea = {dragArea.left, dragArea.right, dragArea.bottom, dragArea.top};
+            }
+            std::cout << "Drag complete:" << std::endl;
+            std::cout << "\tw: "<< dragArea.right - dragArea.left << std::endl;
+            std::cout << "\th: "<< dragArea.bottom - dragArea.top << std::endl;
+            for (auto o : selectedObjects){
+                o->setSelected(false);
+            }
+            selectedObjects.clear();
+            selectedObject = nullptr;
+            std::vector<GameObject *> selectionCandidates;
+            std::map<std::type_index, int> counts;
+            for (auto o : gameObjects)
             {
-                //int a = 1;
-                if (selectedObject == o)
-                    selectedObject = nullptr;
-                else
+                if (o->playerControlled && collide(o->getBounds(), dragArea))
                 {
-                    if (selectedObject)
-                        selectedObject->setSelected();
-                    selectedObject = o;
+                    counts[typeid(*o)]++;
+                    // std::cout << "Selected a " << typeid(*o).name() << std::endl;
+                    selectionCandidates.push_back(o);
                 }
-                o->setSelected();
-                return;
             }
-            else
-            {
+
+            if (!selectionCandidates.empty()) {
+                // find the type that shows up the most
+                type_index maxType = typeid(*selectionCandidates.at(0));
+                for (auto x : counts){
+                    if(x.second >= counts.at(maxType))
+                        maxType = x.first;
+                }
+                // only keep objects with that type
+                for (auto o : selectionCandidates){
+                    if(std::type_index(typeid(*o)) == maxType)
+                       selectedObjects.push_back(o);
+                }
+                selectedObject = selectedObjects.at(0);
+
+
             }
+            return;
+        }
+        if (action == GLFW_PRESS) {
+            mouseDrag = true;
+            mouseDragStart = worldCoords;
         }
 
-        if (selectedObject != nullptr)
-        {
-            selectedObject->move(worldCoords);
-        }
     }
     if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
     {
@@ -281,11 +318,18 @@ void World::onClick(int button, int action, float xpos, float ypos)
             }
         }
 
-        if (selectedObject != nullptr && lock != nullptr)
-        {
-            if (selectedObject->canShoot)
-            {
-                selectedObject->fire(lock->getPosition(), selectedObject->getPosition());
+        for (GameObject* o : selectedObjects) {
+            if (lock != nullptr && o->canShoot) {
+
+                o->fire(lock->getPosition(), o->getPosition());
+            }
+            else if (o == selectedObject) {
+                o->move(worldCoords);
+            } else {
+                float r1 = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))* 10 - 5;
+                float r2 = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))* 10 - 5;
+                vec2 target = {worldCoords.x + r1, worldCoords.y + r2};
+                o->move(target);
             }
         }
     }
@@ -356,7 +400,7 @@ void World::onMouseMove(double xpos, double ypos)
 GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit)
 {
     float minDist = INFINITY;
-    GameObject *closest;
+    GameObject *closest = nullptr;
     for (auto o : gameObjects)
     {
         if (o->playerControlled == playerControlled && o->landUnit == landUnit)
@@ -377,7 +421,7 @@ GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUn
 GameObject *World::getClosestObjectOnLand(vec2 pos, bool playerControlled, bool landUnit)
 {
     float minDist = 900;
-    GameObject *closest;
+    GameObject *closest = nullptr;
     for (auto o : gameObjects)
     {
         if (o->playerControlled == playerControlled && o->landUnit == landUnit)

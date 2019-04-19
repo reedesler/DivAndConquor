@@ -189,7 +189,6 @@ bool Game::registerButton(Sprite &btn, vec2 location, UiCallback::OnClickFunc ca
     return true;
 }
 
-// TODO: this doesn't seem to account for viewport size... y positions seem a bit off
 void Game::onClick(int button, int action, double xpos, double ypos)
 {
     //printf("falled in the region? %lf %lf\n", xpos, ypos);

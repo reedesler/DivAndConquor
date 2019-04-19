@@ -72,7 +72,7 @@ void displayText(double window_width, double window_height)
 
 void displayPolygon()
 {
-    Polygon polygon;
+    // Polygon polygon;
     float vertices[] = {
         0.0, 0.0, 0.0, 0.0, 1.0,
         -0.273529225, 0.2826445, 0.0, 0.0, 1.0,

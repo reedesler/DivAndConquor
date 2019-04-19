@@ -30,7 +30,7 @@ public:
 
     virtual void move(vec2 pos);
 
-    virtual void setSelected();
+    virtual void setSelected(bool selected);
 
     virtual void lockOn();
 

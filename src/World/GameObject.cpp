@@ -16,6 +16,11 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
 
 GameObject::~GameObject() {
     delete pathfinder;
+
+    world->selectedObjects.erase(std::remove_if(world->selectedObjects.begin(), world->selectedObjects.end(), [this](GameObject* o){ return  o== this;}), world->selectedObjects.end());
+    if (world->selectedObject == this){
+        world->selectedObject = world->selectedObjects.empty()? nullptr : world->selectedObjects.at(0);
+    }
 }
 
 void GameObject::draw(const mat3 &projection)
@@ -92,8 +97,8 @@ void GameObject::update() {
     }
 }
 
-void GameObject::setSelected() {
-    sprite.selected = !sprite.selected;
+void GameObject::setSelected(bool selected) {
+    sprite.selected = selected;
 }
 
 void GameObject::lockOn() {
