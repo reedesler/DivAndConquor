@@ -42,8 +42,12 @@ void GameObject::move(vec2 pos) {
 void GameObject::fire(vec2 dest, vec2 pos){
        // if (sprite.selected && playerControlled){
         fight = true;
+
+        Mix_PlayChannel(-1, world->fire, 0);
+
             Attack * attack = new Attack({pos.x, pos.y}, dest, this);
-            world->bullets.push_back(attack);
+    world->bullets.push_back(attack);
+
             //attack->target = dest;
         //attack->init();
    // }

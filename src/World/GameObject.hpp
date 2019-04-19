@@ -50,6 +50,7 @@ public:
     bool init = false;
     bool canShoot;
     bool playerControlled = true;
+
     //int health = 100;
 
     virtual void collide(GameObject* obj);

@@ -13,9 +13,9 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     }
     this->rotation = 0;
     this->scale = {1.f, 1.f};
-    this->gold = 500;
-    this->iron = 500;
-    this->timber = 500;
+    this->gold = 400;
+    this->iron = 400;
+    this->timber = 400;
     canShoot = false;
     health = 200;
     playerControlled = true;

@@ -4,6 +4,7 @@
 #include <typeindex>
 #include <algorithm>
 
+
 World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
                               camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
@@ -30,6 +31,40 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
     {
         printf("ERROR initializing sprite\n");
     }
+
+    //==================================
+    // sound initialized here
+
+    //TODO uncomment music
+    if (SDL_Init(SDL_INIT_AUDIO) < 0)
+    {
+        fprintf(stderr, "Failed to initialize SDL Audio");
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+    {
+        fprintf(stderr, "Failed to open audio device");
+    }
+
+    background_music = Mix_LoadMUS(audio_path("background.wav"));
+    fire = Mix_LoadWAV(audio_path("gunfire.wav"));
+
+
+    if (background_music == nullptr || fire == nullptr)
+    {
+        fprintf(stderr, "Failed to load sounds\n %s\n %s\n %s\n make sure the data directory is present",
+                audio_path("background.wav"),
+                audio_path("gunfire.wav"));
+
+    }
+
+    // Playing background music undefinitely
+    Mix_PlayMusic(background_music, -1);
+
+    fprintf(stderr, "Loaded music\n");
+
+    fprintf(stderr, "Loaded music\n");
+
 }
 
 void World::addShip()
@@ -245,6 +280,8 @@ void World::draw(int pixelScale)
     }
 
 
+
+
 }
 
 void World::onClick(int button, int action, float xpos, float ypos)
@@ -379,7 +416,7 @@ void World::setExplored(vec2 pos, float radius)
 void World::onMouseMove(double xpos, double ypos)
 {
     std::cout << "mouse move\t" << xpos << "\t" << ypos << std::endl;
-    vec2 worldCoords = camera.viewToWorld({xpos, ypos});
+    vec2 worldCoords = camera.viewToWorld({(float)xpos, (float)ypos});
     if (mouseDrag) {
             mouseDragTempArea = {mouseDragStart.x, worldCoords.x, mouseDragStart.y, worldCoords.y};
             // swap values around to make sure w/h aren't negative

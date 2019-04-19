@@ -15,6 +15,8 @@ class World;
 #include "PathRenderer.hpp"
 #include "Attack.h"
 #include "Sprite.hpp"
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 class PathRenderer;
 
@@ -67,6 +69,9 @@ public:
     int wealth = 0;
    // State state;
    State state = neutral;
+    Mix_Chunk* fire = nullptr;
+    bool firing = false;
+    Mix_Music *background_music = nullptr;
 
 
     GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
