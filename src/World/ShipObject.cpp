@@ -19,7 +19,7 @@ ShipObject::ShipObject(World *world, vec2 loc, SettlementObject *settlement) : G
     health = maxHealth = 250;
     canShoot = true;
     this->settlement = settlement;
-    settlement->updateResources(0, -500);
+    settlement->updateResources(0, -300);
 
     world->navalStrength++;
 

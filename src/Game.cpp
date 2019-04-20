@@ -10,6 +10,7 @@
 Sprite portraitFrame;
 void Game::update()
 {
+
     switch (state)
     {
     case Game::State::RUNNING:
@@ -161,38 +162,7 @@ void Game::init(vec2 screen)
     //renderText(characters, "std::string", vec2{20.f, 20.f}, 1.0, vec3{0.f, 200.f, 0.f});
     //renderText(characters, "This is sample text", vec2{25.0f, 25.0f}, 1.0f, vec3{0.5, 0.8f, 0.2f});
 
-    //==================================
-    // sound initialized here
 
-    //TODO uncomment music
-//        if (SDL_Init(SDL_INIT_AUDIO) < 0)
-//        {
-//            fprintf(stderr, "Failed to initialize SDL Audio");
-//        }
-//
-//        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
-//        {
-//            fprintf(stderr, "Failed to open audio device");
-//        }
-//
-//        background_music = Mix_LoadMUS(audio_path("background.wav"));
-//
-//
-//        if (background_music == nullptr)
-//        {
-//            fprintf(stderr, "Failed to load sounds\n %s\n %s\n %s\n make sure the data directory is present",
-//                    audio_path("music.wav"),
-//                    audio_path("salmon_dead.wav"),
-//                    audio_path("salmon_eat.wav"));
-//
-//        }
-//
-//        // Playing background music undefinitely
-//        Mix_PlayMusic(background_music, -1);
-//
-//        fprintf(stderr, "Loaded music\n");
-//
-//    fprintf(stderr, "Loaded music\n");
     world->update();
 }
 
