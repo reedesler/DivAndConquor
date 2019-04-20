@@ -32,6 +32,11 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
         printf("ERROR initializing sprite\n");
     }
 
+    selectRing = Sprite();
+    if (!selectRing.init(1, 1, textures_path("select_ring.png")))
+    {
+        printf("ERROR initializing sprite\n");
+    }
     //==================================
     // sound initialized here
 
@@ -257,6 +262,18 @@ void World::draw(int pixelScale)
         //}
 }
 
+    for (auto o : selectedObjects) {
+        if (o == selectedObject)
+        {
+            selectRing.tint = {1.f, 1.f, 1.f};
+        } else {
+            selectRing.tint = {0.1f, 1.f, 0.1f};
+        }
+        vec2 spt_size = {o->getSprite().width, o->getSprite().height};
+        glBlendFunc(GL_ONE, GL_ONE);
+        selectRing.draw(projection, {o->position.x, o->position.y + spt_size.y/2.f}, 0.f, {spt_size.x*1.3f, spt_size.x});
+        glBlendFunc(GL_ONE, GL_ZERO);
+    }
     for (auto o : gameObjects)
     {
         o->draw(projection);

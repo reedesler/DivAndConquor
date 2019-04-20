@@ -89,6 +89,7 @@ private:
 
   std::vector<GameObject *> toBeDeleted;
   Sprite selectOverlay;
+  Sprite selectRing;
     std::vector<Attack *> pastAttacks;
     int64_t balance;
 
