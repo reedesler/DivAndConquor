@@ -15,8 +15,13 @@ class World;
 #include "PathRenderer.hpp"
 #include "Attack.h"
 #include "Sprite.hpp"
-#include <SDL.h>
+#ifdef __LINUX__
+#include <SDL/SDL_mixer.h>
+#include <SDL/SDL.h>
+#else
 #include <SDL_mixer.h>
+#include <SDL.h>
+#endif
 
 class PathRenderer;
 

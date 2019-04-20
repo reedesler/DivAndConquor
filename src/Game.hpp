@@ -12,13 +12,6 @@
 #include "Ui/Label.hpp"
 #include "Ui/UiCallback.h"
 
-#ifdef __LINUX__
-#include <SDL/SDL_mixer.h>
-#include <SDL/SDL.h>
-#else
-#include <SDL_mixer.h>
-#include <SDL.h>
-#endif
 
 struct Settlement
 {
