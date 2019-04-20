@@ -72,6 +72,7 @@ public:
 private:
     std::map<std::type_index, std::vector<UiElement *>> unitUis;
 
+    TextRenderer tr;
 
     std::vector<UiElement *> activeUiElements;
     std::vector<UiElement *> staticUiElements;

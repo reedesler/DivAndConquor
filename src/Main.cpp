@@ -54,6 +54,9 @@ void _check_gl_error(const char *file, int line)
 
 void displayText(double window_width, double window_height)
 {
+
+    return;
+
     TextRenderer tr;
     tr.init(fonts_path("Carlito-Bold.ttf"));
 
