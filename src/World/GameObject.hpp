@@ -127,6 +127,9 @@ public:
 
     void update();
     void collide(GameObject* obj);
+
+private:
+    int pathfindingDelay;
 };
 
 class Sailor : public GameObject{

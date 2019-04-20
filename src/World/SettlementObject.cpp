@@ -19,7 +19,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     canShoot = false;
     health = 200;
     playerControlled = true;
-
+    landUnit = true;
 }
 
 void SettlementObject::move(vec2 pos) {

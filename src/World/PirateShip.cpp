@@ -17,8 +17,8 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     pathfinder = new Pathfinder(world, landUnit, true);
     health = maxHealth = 400;
     world->pirateStrength++;
-    printf("enemyNum %d", world->pirateStrength);
-
+    printf("enemyNum %d\n", world->pirateStrength);
+    pathfindingDelay = 120;
 }
 
 void PirateShip::update() {
@@ -38,20 +38,31 @@ void PirateShip::update() {
     }
 
 
-    if (ticks % 120 == 0) {
+    if (ticks % pathfindingDelay == 0) {
         GameObject* o = world->getClosestObject(position, true, false);
+        if (o) {
+            double temp;
+            double min = abs(position.x - o->getPosition().x);
+            double max = abs(position.y - o->getPosition().y);
+            if (min > max) {
+                temp = min;
+                min = max;
+                max = temp;
+            }
+            double dist = ((M_SQRT2 - 1.0) * min + max);
+            pathfindingDelay = static_cast<int>(dist * 0.048);
+            if (pathfindingDelay < 120) pathfindingDelay = 120;
 
-        if (o && world->state != flee) {
-            vec2 targetPos = o->getPosition();
-            TilePos start = Tilemap::getTilePos(position.x, position.y);
-            TilePos goal = Tilemap::getTilePos(targetPos.x, targetPos.y);
-            pathfinder->init(start.x, start.y, goal.x, goal.y);
-            pathfinder->replan();
-            path = pathfinder->getPath();
+            if (world->state != flee) {
+                vec2 targetPos = o->getPosition();
+                TilePos start = Tilemap::getTilePos(position.x, position.y);
+                TilePos goal = Tilemap::getTilePos(targetPos.x, targetPos.y);
+                pathfinder->init(start.x, start.y, goal.x, goal.y);
+                pathfinder->replan();
+                path = pathfinder->getPath();
+            }
+            world->fireOnClosestObject(this, true, true);
         }
-        world->fireOnClosestObject(this, true, true);
-
-
     }
 
 
