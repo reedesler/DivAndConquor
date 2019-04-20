@@ -51,7 +51,7 @@ World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.
         fprintf(stderr, "Failed to open audio device");
     }
 
-    background_music = Mix_LoadMUS(audio_path("background.wav"));
+    background_music = Mix_LoadMUS(audio_path("divide_and_conquer.mp3"));
     fire = Mix_LoadWAV(audio_path("gunfire.wav"));
 
 
