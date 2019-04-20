@@ -257,6 +257,33 @@ void Game::onKey(int key, int scancode, int action)
         case GLFW_KEY_SPACE:
             world->camera.followSelected = true;
             break;
+        case GLFW_KEY_TAB:
+        {
+            if( world->selectedObjects.size() <= 1){
+                break;
+            }
+            auto it = std::find(world->selectedObjects.begin(), world->selectedObjects.end(), world->selectedObject);
+            if (world->selectedObject == nullptr || it == world->selectedObjects.end())
+            {
+                world->selectedObject = world->selectedObjects.at(0);
+            } else {
+                long unsigned int index = std::distance(world->selectedObjects.begin(), it);
+                index ++;
+                if (index >= world->selectedObjects.size()){
+                    index = 0;
+                }
+                world->selectedObject = world->selectedObjects.at(index);
+            }
+            break;
+        }
+        case GLFW_KEY_ESCAPE: // TODO: or do we want this to open the menu?
+        {
+            if(world->selectedObject == nullptr || world->selectedObjects.size() <= 1){
+                break;
+            }
+            world->selectedObjects = {world->selectedObject};
+            break;
+        }
         default:
             break;
         }
