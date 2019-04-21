@@ -5,7 +5,7 @@
 #include <cmath>
 #include "Attack.h"
 
-#define PROJECTILE_VELOCITY 25
+#define PROJECTILE_VELOCITY 15
 Texture Attack::attack_texture;
 
 Attack::Attack(vec2 pos, vec2 dest, GameObject* shooter)

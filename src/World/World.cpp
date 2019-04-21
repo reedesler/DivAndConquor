@@ -239,6 +239,10 @@ void World::update()
 
     ai->updateState(this);
 
+    if (lock && !tilemap.getTile(lock->getPosition().x, lock->getPosition().y).visible) {
+        lock = nullptr;
+    }
+
 
     if (camera.followSelected && getSelected() != nullptr)
         centerCameraOn(*getSelected());
@@ -385,6 +389,10 @@ void World::onClick(int button, int action, float xpos, float ypos)
             }
         }
 
+        int x,y,dx,dy;
+        x = y = dx = 0;
+        dy = -1;
+        int t;
         for (GameObject* o : selectedObjects) {
             if (lock != nullptr && o->canShoot) {
 
@@ -393,9 +401,17 @@ void World::onClick(int button, int action, float xpos, float ypos)
             else if (o == selectedObject) {
                 o->move(worldCoords);
             } else {
-                float r1 = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))* 10 - 5;
-                float r2 = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))* 10 - 5;
-                vec2 target = {worldCoords.x + r1, worldCoords.y + r2};
+                vec2 target = {0, 0};
+                do {
+                    if( (x == y) || ((x < 0) && (x == -y)) || ((x > 0) && (x == 1-y))){
+                        t = dx;
+                        dx = -dy;
+                        dy = t;
+                    }
+                    x += dx;
+                    y += dy;
+                    target = {worldCoords.x + x * TILE_SIZE, worldCoords.y + y * TILE_SIZE};
+                } while (!inBounds(getWorldBounds(), target) || (o->landUnit ? tilemap.getTile(target.x, target.y).type == 0 : tilemap.getTile(target.x, target.y).type != 0));
                 o->move(target);
             }
         }
@@ -632,4 +648,12 @@ void World::removeGameObject(GameObject *obj)
         selectedObject = nullptr;
     }
     toBeDeleted.push_back(obj);
+}
+
+bounds World::getWorldBounds() {
+
+    float topLeftBorder = 0 - TILE_SIZE / 2.f;
+    float rightBorder = w * TILE_SIZE + topLeftBorder;
+    float bottomBorder = h * TILE_SIZE + topLeftBorder;
+    return {topLeftBorder, rightBorder, topLeftBorder, bottomBorder};
 }

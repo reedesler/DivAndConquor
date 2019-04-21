@@ -63,6 +63,7 @@ public:
   Tilemap tilemap;
   Camera camera;
   long int w;
+  bounds getWorldBounds();
   std::vector<GameObject *> selectedObjects;
   GameObject* selectedObject = nullptr; // primary selection
   GameObject *lock = nullptr;
