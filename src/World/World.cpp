@@ -556,7 +556,7 @@ void World::setPirates()
         for (int i = 0; i < 1; i++){
             float x = std::rand() % (this->w - 100);
             float y = std::rand() % (this->h - 100);
-            while (tilemap.getTile(x, y).type != 0)
+            while (tilemap.getTile(x, y).type != 0 && !tilemap.getTile(x, y).visible)
             {
                 x = std::rand() % (this->w - 100);
                 y = std::rand() % (this->h - 100);
