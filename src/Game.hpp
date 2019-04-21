@@ -66,7 +66,8 @@ public:
   {
     MAINMENU,
     PAUSE,
-    RUNNING
+    RUNNING,
+    WIN
   };
   Game::State state;
 private:

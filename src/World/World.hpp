@@ -55,7 +55,7 @@ public:
     GameObject * getClosestObjectOnLand(vec2 pos, bool playerControlled, bool landUnit);
   void centerCameraOn(GameObject &go);
   GameObject* getSelected() { return selectedObject; }
-
+    bool checkWinCond();
   void fireOnClosestObject(GameObject * attacker, bool playerControlled, bool landUnit);
 
   // bool tooFar(GameObject * a, GameObject * b);
@@ -78,6 +78,7 @@ public:
     Mix_Chunk* fire = nullptr;
     bool firing = false;
     Mix_Music *background_music = nullptr;
+    float settlementPoints = 0;
 
 
     GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);

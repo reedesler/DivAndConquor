@@ -145,6 +145,7 @@ void World::centerCameraOn(GameObject &go)
 
 void World::update()
 {
+
     tilemap.clearVisible(visibleTiles);
     visibleTiles.clear();
     camera.update();
@@ -657,3 +658,13 @@ bounds World::getWorldBounds() {
     float bottomBorder = h * TILE_SIZE + topLeftBorder;
     return {topLeftBorder, rightBorder, topLeftBorder, bottomBorder};
 }
+
+bool World::checkWinCond(){
+    float areaAvailable = w * h;
+    float areaConquered = (settlementPoints * settlementPoints)/areaAvailable;
+    if(areaConquered > 0.4){
+        return true;
+    }
+    return false;
+
+};

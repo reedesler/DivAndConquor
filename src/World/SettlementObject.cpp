@@ -20,6 +20,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     health = 200;
     playerControlled = true;
     landUnit = true;
+    world->settlementPoints += (15*TILE_SIZE);
 }
 
 void SettlementObject::move(vec2 pos) {
@@ -30,6 +31,7 @@ void SettlementObject::update() {
 //        if(world->lock == this){
 //            world->lock = nullptr;
 //        }
+        world->settlementPoints -= (15*TILE_SIZE);
         destroy();
     }
 }

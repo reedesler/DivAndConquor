@@ -10,7 +10,9 @@
 Sprite portraitFrame;
 void Game::update()
 {
-
+if (world->checkWinCond()){
+    state = Game::State::WIN;
+}
     switch (state)
     {
     case Game::State::RUNNING:
@@ -91,7 +93,7 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
 
     std::vector<std::string> lines = {
         "Welcome to Divide and Conquer!",
-        "The objective is to collect all the resources on the map while fending off pirates!", // TODO: IS THIS TRUE???
+        "The objective is to conquer more than 80% of the map by building settlements, while fending off pirates!", // TODO: IS THIS TRUE???
         "Your sailors (deployed at a settlement) can collect resources, but you'll need ships to travel across water.",
         "",
         "== Camera ==",
@@ -112,6 +114,40 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
             y_offset ++;
         }
     }
+
+    if(state == Game::State::WIN){
+        for (auto &it : pauseScreenUiElements)
+        {
+            it->Draw(projection);
+        }
+
+        float sx = 2.0 / screen.x;
+        float sy = 2.0 / screen.y;
+
+
+        glm::vec4 translucent_black(1.f, 1.f, 1.f, 1.f);
+        tr.config(120, translucent_black);
+
+        std::vector<std::string> lines = {
+                "         ",
+                "         ",
+                "         ",
+                "         ",
+                "         ",
+                "         ",
+                "         ",
+                "         ",
+                "YOU ARE VICTORIOUS",
+        };
+        int y_offset = 1;
+        for (auto line : lines) {
+            tr.draw( line.c_str() , -1 + 50 * sx, 1 - (20* sy) - (sy*y_offset*30), sx, sy);
+            y_offset ++;
+        }
+    }
+
+
+
 }
 
 void invokeBuildShip(Game *game, int button, int action, double xpos, double ypos)
