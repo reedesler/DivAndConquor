@@ -308,7 +308,9 @@ void World::draw(int pixelScale)
     for (auto o : gameObjects)
     {
        // hp bar
-        if (o->health < o->maxHealth && o->health >= 0.f) {
+
+        Tile t = tilemap.getTile(o->position.x,o->position.y);
+        if (t.visible && o->health < o->maxHealth && o->health >= 0.f) {
             float maxWidth = 100.f;
             float border = 2.f;
             float width = maxWidth * (o->health/o->maxHealth);
