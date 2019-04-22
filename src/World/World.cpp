@@ -1,5 +1,6 @@
 #include "World.hpp"
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <typeindex>
 #include <algorithm>
@@ -92,6 +93,11 @@ void World::addShip()
         this->gameObjects.push_back(tmpShip);
         this->fleet.push_back(tmpShip);
     }
+    else {
+        std::ostringstream out;
+        out << "Not enough gold! You need " << (500- ((SettlementObject *) selectedObject)->getResources().x) << " more.";
+     	game->printLn(out.str());   
+    }
 }
 
 void World::addSettlement()
@@ -116,6 +122,11 @@ void World::addSettlement()
         tmpShip->settlement->updateResources(0, -1000);
         this->gameObjects.push_back(new SettlementObject(this, {x, y}));
     }
+    else {
+        std::ostringstream out;
+        out << "Not enough gold! You need " << (1000 - tmpShip->settlement->getResources().x) << " more.";
+     	game->printLn(out.str());   
+    }
 }
 
 void World::addSailor()
@@ -136,6 +147,11 @@ void World::addSailor()
         auto *tmpSailor = new Sailor(this, {x, y}, (SettlementObject *)selectedObject);
         this->gameObjects.push_back(tmpSailor);
         this->army.push_back(tmpSailor);
+    }
+    else {
+        std::ostringstream out;
+        out << "Not enough gold! You need " << (100 - ((SettlementObject *) selectedObject)->getResources().x) << " more.";
+     	game->printLn(out.str());   
     }
 }
 

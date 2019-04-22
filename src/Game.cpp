@@ -101,10 +101,10 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
                 break;
             glm::vec4 black(0.f, 0.f, 0.f, bright);
             tr.config(24, black);
-            tr.draw( text.c_str() , -1 + 51 * sx, 1 - (201* sy) - (sy*y_offset*30), sx, sy);
+            tr.draw( text.c_str() , -1 + 51 * sx, 1 - (151* sy) - (sy*y_offset*30), sx, sy);
             glm::vec4 white(1.f, 1.f, 1.f, bright);
             tr.config(24, white);
-            tr.draw( text.c_str() , -1 + 50 * sx, 1 - (200* sy) - (sy*y_offset*30), sx, sy);
+            tr.draw( text.c_str() , -1 + 50 * sx, 1 - (150* sy) - (sy*y_offset*30), sx, sy);
             y_offset --;
         }
     if (state == Game::State::PAUSE)
