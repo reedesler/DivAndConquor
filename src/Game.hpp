@@ -7,6 +7,9 @@
 #include "Common.hpp"
 #include "World/World.hpp"
 #include <cassert>
+#include <utility>
+#include <deque>
+#include <vector>
 #include <typeindex>
 #include "Ui/Button.hpp"
 #include "Ui/Label.hpp"
@@ -75,6 +78,7 @@ private:
 
     TextRenderer tr;
 
+    std::deque<std::pair<std::string, long>> logLines;
     std::vector<UiElement *> activeUiElements;
     std::vector<UiElement *> staticUiElements;
     std::vector<UiElement *> pauseScreenUiElements;
@@ -84,6 +88,8 @@ private:
     vec2 screen;
 
   void drawUI(const mat3 &projection, int pixelScale);
+public:
+  void printLn(std::string line) {logLines.emplace_front(std::make_pair(line, currentTimeMs()));}
 };
 
 #endif //DIVCONQ_GAME_H

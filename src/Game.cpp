@@ -62,19 +62,29 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         spt.draw(projection, {100, screen.y - UI_HEIGHT / 2.f + 20}, 0.f, {100.f / spt.width, 100.f / spt.height});
         spt.selected = tmpSelected;
     }
-    // todo: draw hp bars for all selected in UI frame?
-    /*
-    int i = 0;
-    for (auto o : world->selectedObjects) {
-        Sprite spt = o->getSprite();
-        bool tmpSelected = spt.selected;
-        spt.selected = false;
-        spt.state = 0;
-        spt.draw(projection, {100 + 100*i, screen.y - UI_HEIGHT* 1.5f + 10}, 0.f, {50.f / spt.width, 50.f / spt.height});
-        spt.selected = tmpSelected;
-        i++;
-    }
-    */
+
+        float sx = 2.0 / screen.x;
+        float sy = 2.0 / screen.y;
+
+
+        int y_offset = -1;
+        for (auto line : logLines) {
+            std::string text = line.first;
+            long time = line.second;
+            long now = currentTimeMs();
+            long delta = now - time;
+            // 2 seconds display time, then 2 seconds fade
+            float bright = 2.f - (delta / 2000.f);
+            if (bright <= 0.f)
+                break;
+            glm::vec4 black(0.f, 0.f, 0.f, bright);
+            tr.config(24, black);
+            tr.draw( text.c_str() , -1 + 51 * sx, 1 - (201* sy) - (sy*y_offset*30), sx, sy);
+            glm::vec4 white(1.f, 1.f, 1.f, bright);
+            tr.config(24, white);
+            tr.draw( text.c_str() , -1 + 50 * sx, 1 - (200* sy) - (sy*y_offset*30), sx, sy);
+            y_offset --;
+        }
     if (state == Game::State::PAUSE)
     {
 
@@ -176,7 +186,7 @@ void Game::init(vec2 screen)
     this->screen = screen;
     this->state = Game::State::PAUSE;
 
-    world = new World({0, UI_HEIGHT, (GLint)screen.x, (GLint)screen.y - UI_HEIGHT});
+    world = new World(this, {0, UI_HEIGHT, (GLint)screen.x, (GLint)screen.y - UI_HEIGHT});
 
     tr.init(fonts_path("Carlito-Bold.ttf"));
     Sprite build_ship_button = Sprite();
@@ -320,6 +330,12 @@ void Game::onKey(int key, int scancode, int action)
             break;
         case GLFW_KEY_E:
             cameraZoom += 1;
+            break;
+        case GLFW_KEY_P:
+            this->printLn("Test P!");
+            break;
+        case GLFW_KEY_M:
+            this->printLn("Test M!");
             break;
         case GLFW_KEY_SPACE:
             world->camera.followSelected = true;

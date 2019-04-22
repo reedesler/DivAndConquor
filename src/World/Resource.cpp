@@ -3,6 +3,8 @@
 //
 
 #include "GameObject.hpp"
+#include <sstream>
+
 
 Resource::Resource(World *world, vec2 loc, uint16_t type, int size) : GameObject(world, loc) {
     w = 50;
@@ -23,14 +25,29 @@ Resource::Resource(World *world, vec2 loc, uint16_t type, int size) : GameObject
     resource = size;
     health = maxHealth = 0.f;
 }
+std::string Resource::getName(){
 
-bool Resource::collect(Sailor *obj) {
+    if (loot_type == 0) {
+        return "gold";
+    } else if (loot_type == 1){
+        return "iron";
+    } else if (loot_type==2) {
+        return "timber";
+    } else {
+        return "UNKNOWN";
+    }
+}
+
+bool Resource::collect(Game* game, Sailor *obj) {
     bounds other = obj->getBounds();
     vec2 position = getPosition();
     if (position.x >= other.left && position.x <= other.right)
         if (position.y >= other.top && position.y <= other.bottom){
             obj->settlement->updateResources(this->loot_type, this->resource);
             world->wealth++;
+            std::ostringstream str;
+            str << "Collected " << this->resource << " " << this->getName();
+            game->printLn(str.str());
             return true;
         }
     return false;

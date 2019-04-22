@@ -4,7 +4,9 @@
 #define DIVCONQ_GAMEOBJECT_H_DEFINED
 
 class GameObject;
+class Game;
 #include "World.hpp"
+#include "Game.hpp"
 
 #endif
 
@@ -150,7 +152,8 @@ class Resource: public GameObject{
 public:
     Resource(World *world, vec2 loc, uint16_t type, int size);
 
-    bool collect(Sailor *obj);
+    bool collect(Game* game, Sailor *obj);
+    std::string getName();
 private:
     uint16_t loot_type;
     int resource;

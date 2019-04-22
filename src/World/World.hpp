@@ -10,6 +10,7 @@ class World;
 #include <vector>
 #include <unordered_set>
 #include "GameObject.hpp"
+#include "Game.hpp"
 #include "Tilemap.h"
 #include "Camera.hpp"
 #include "PathRenderer.hpp"
@@ -40,7 +41,7 @@ enum State {
 class World
 {
 public:
-  explicit World(rect viewPort);
+  explicit World(Game* game, rect viewPort);
   void update();
   void draw(int pixelScale);
   void onClick(int button, int action, float xpos, float ypos);
@@ -81,6 +82,7 @@ public:
     float settlementPoints = 0;
 
 
+  Game* game;
     GameObject *getClosestObject(vec2 pos, bool playerControlled, bool landUnit);
 
   void removeGameObject(GameObject *obj);

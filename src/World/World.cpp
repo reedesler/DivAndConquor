@@ -5,9 +5,10 @@
 #include <algorithm>
 
 
-World::World(rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
+World::World(Game* game, rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_path("map_demo.txt"))),
                               camera(Camera(viewPort, tilemap.width, tilemap.height, TILE_SIZE))
 {
+    this->game = game;
     state = neutral;
     printf("%c", state);
     auto *initialSet = new SettlementObject(this, {1650, 4200});
@@ -190,7 +191,7 @@ void World::update()
     {
         for (auto o : army)
         {
-            if (o->playerControlled && resources[i]->collect(o))
+            if (o->playerControlled && resources[i]->collect(game, o))
             {
                 toDelete.push_back(i);
             }
