@@ -76,6 +76,7 @@ public:
     int wealth = 0;
    // State state;
    State state = neutral;
+   float coverage = 0;
     Mix_Chunk* fire = nullptr;
     bool firing = false;
     Mix_Music *background_music = nullptr;

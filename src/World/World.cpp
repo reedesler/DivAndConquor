@@ -696,8 +696,9 @@ bounds World::getWorldBounds() {
 
 bool World::checkWinCond(){
     float areaAvailable = w * h;
-    float areaConquered = (settlementPoints * settlementPoints)/areaAvailable;
-    if(areaConquered > 0.4){
+    float areaConquered = 2 * ((settlementPoints * settlementPoints)/areaAvailable);
+    coverage = areaConquered * 100;
+    if(areaConquered > 0.8){
         return true;
     }
     return false;
