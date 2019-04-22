@@ -17,7 +17,7 @@ SettlementObject::SettlementObject(World *world, vec2 loc): GameObject(world, lo
     this->iron = 400;
     this->timber = 400;
     canShoot = false;
-    health = 200;
+    health = maxHealth = 200;
     playerControlled = true;
     landUnit = true;
     world->settlementPoints += (15*TILE_SIZE);

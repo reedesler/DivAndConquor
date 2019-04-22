@@ -34,6 +34,11 @@ World::World(Game* game, rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_pat
         printf("ERROR initializing sprite\n");
     }
 
+    hpBar = Sprite();
+    if (!hpBar.init(1,1, textures_path("pixel.png")))
+    {
+        printf("ERROR initializing sprite\n");
+    }
     selectRing = Sprite();
     if (!selectRing.init(1, 1, textures_path("select_ring.png")))
     {
@@ -299,7 +304,20 @@ void World::draw(int pixelScale)
     for (auto o : gameObjects)
     {
         o->draw(projection);
-
+    }
+    for (auto o : gameObjects)
+    {
+       // hp bar
+        if (o->health < o->maxHealth && o->health >= 0.f) {
+            float maxWidth = 100.f;
+            float border = 2.f;
+            float width = maxWidth * (o->health/o->maxHealth);
+            float height = 16.f;
+            hpBar.tint = {0,0,0};
+            hpBar.draw(projection, {o->position.x, o->position.y - o->getSprite().height/2 - 5}, 0 , {maxWidth + border*2.f, height + border*2.f});
+            hpBar.tint = {0,1.f,0};
+            hpBar.draw(projection, {o->position.x - maxWidth/2 + width/2 + border , o->position.y - o->getSprite().height/2 - 5}, 0 , {width, height});
+        }
     }
     for (auto o : resources)
         o->draw(projection);

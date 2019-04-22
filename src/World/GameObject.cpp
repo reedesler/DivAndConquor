@@ -7,10 +7,6 @@ GameObject::GameObject(World* world, vec2 loc) : world(world) {
     {
         printf("ERROR initializing sprite\n");
     }
-    if (!hpBarSprite.init(1,1, textures_path("pixel.png")))
-    {
-        printf("ERROR initializing sprite\n");
-    }
     position = loc;
     velocity = {0, 0};
     forces = {0, 0};
@@ -32,18 +28,6 @@ void GameObject::draw(const mat3 &projection)
     Tile t = world->tilemap.getTile(position.x, position.y);
     if (t.visible) {
         sprite.draw(projection, position, rotation, scale);
-
-        // hp bar
-        if (health < maxHealth && health > 0.f) {
-            float maxWidth = 100.f;
-            float border = 2.f;
-            float width = maxWidth * (health/maxHealth);
-            float height = 16.f;
-            hpBarSprite.tint = {0,0,0};
-            hpBarSprite.draw(projection, {position.x, position.y - h/2 - 5}, 0 , {maxWidth + border*2.f, height + border*2.f});
-            hpBarSprite.tint = {0,1.f,0};
-            hpBarSprite.draw(projection, {position.x - maxWidth/2 + width/2 + border , position.y - h/2 - 5}, 0 , {width, height});
-        }
     }
 
 
