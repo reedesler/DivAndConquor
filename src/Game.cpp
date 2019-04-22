@@ -81,8 +81,11 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
                 glm::vec4 black(0.f, 0.f, 0.f, 0.7f);
                 tr.config(24, black);
     		for(int i =0; i < 4; i++) {
-                    tr.draw(names[i].c_str() , -1 + 1025 * sx, 1 - (701* sy) - (sy*i*30), sx, sy);
-                    tr.draw(std::to_string((int)vals[i]).c_str(), -1 + 1125 * sx, 1 - (701* sy) - (sy*i*30), sx, sy);
+                    tr.draw(names[i].c_str() , -1 + 1010 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
+                    auto val = std::to_string((int)vals[i]);
+                    if(i == 3)
+                        val += "%";
+                    tr.draw(val.c_str(), -1 + 1125 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
                 }	
         }
     }
