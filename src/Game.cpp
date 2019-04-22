@@ -43,6 +43,8 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
 {
     glViewport(0, 0, screen.x * pixelScale, screen.y * pixelScale); // reset viewport
 
+    float sx = 2.0 / screen.x;
+    float sy = 2.0 / screen.y;
     for (auto &it : staticUiElements)
     {
         it->Draw(projection);
@@ -61,10 +63,30 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         spt.state = 0;
         spt.draw(projection, {100, screen.y - UI_HEIGHT / 2.f + 20}, 0.f, {100.f / spt.width, 100.f / spt.height});
         spt.selected = tmpSelected;
+
+	SettlementObject * settl = dynamic_cast<SettlementObject*>(world->getSelected());
+	ShipObject * ship  = dynamic_cast<ShipObject*>(world->getSelected());
+	if (ship  != nullptr) {
+    		settl = ship->settlement;
+        }
+
+	Sailor* sailor = dynamic_cast<Sailor*>(world->getSelected());
+	if (sailor != nullptr) {
+    		settl = sailor->settlement;
+        }
+	if (settl != nullptr) {
+    		auto resources = settl->getResources();
+    		std::string names[] = {"Gold", "Iron", "Timber"};
+    		float vals[] = {resources.x, resources.y, resources.z};
+                glm::vec4 black(0.f, 0.f, 0.f, 0.7f);
+                tr.config(24, black);
+    		for(int i =0; i < 3; i++) {
+                    tr.draw(names[i].c_str() , -1 + 1025 * sx, 1 - (701* sy) - (sy*i*30), sx, sy);
+                    tr.draw(std::to_string((int)vals[i]).c_str(), -1 + 1125 * sx, 1 - (701* sy) - (sy*i*30), sx, sy);
+                }	
+        }
     }
 
-        float sx = 2.0 / screen.x;
-        float sy = 2.0 / screen.y;
 
 
         int y_offset = -1;
@@ -99,12 +121,14 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
 
 
     glm::vec4 translucent_black(1.f, 1.f, 1.f, 1.f);
-    tr.config(23, translucent_black);
+    int line_spacing = 29;
+    tr.config(24, translucent_black);
 
     std::vector<std::string> lines = {
         "Welcome to Divide and Conquer!",
         "The objective is to conquer more than 80% of the map by building settlements, while fending off pirates!", // TODO: IS THIS TRUE???
         "Your sailors (deployed at a settlement) can collect resources, but you'll need ships to travel across water.",
+        "In lieu of a treasury, each settlement has its own inventory of resources, shared with its associated units.",
         "",
         "== Camera ==",
         "  WASD or edge-pan - move camera.",
@@ -120,7 +144,7 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         };
         int y_offset = 1;
         for (auto line : lines) {
-            tr.draw( line.c_str() , -1 + 50 * sx, 1 - (20* sy) - (sy*y_offset*30), sx, sy);
+            tr.draw( line.c_str() , -1 + 50 * sx, 1 - (20* sy) - (sy*y_offset*line_spacing), sx, sy);
             y_offset ++;
         }
     }
