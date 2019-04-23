@@ -4,6 +4,7 @@
 #include "Ui/TriangleBtn.h"
 
 #include <iostream>
+#include <random>
 #include <string>
 #define UI_HEIGHT 150
 
@@ -212,6 +213,7 @@ void invokeTogPause(Game *game, int btn, int action, double xpos, double ypos)
 }
 void Game::init(vec2 screen)
 {
+    std::srand(1); // fixed seed to make sure resource distirbution makes for a winnable game :D
     this->screen = screen;
     this->state = Game::State::PAUSE;
 
