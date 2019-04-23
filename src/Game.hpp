@@ -87,6 +87,8 @@ private:
 
     vec2 screen;
 
+    double prevMouseXpos, prevMouseYpos;
+
   void drawUI(const mat3 &projection, int pixelScale);
 public:
   void printLn(std::string line) {logLines.emplace_front(std::make_pair(line, currentTimeMs()));}

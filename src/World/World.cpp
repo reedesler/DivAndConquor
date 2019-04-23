@@ -27,9 +27,6 @@ World::World(Game* game, rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_pat
     this->setPirates();
     initialSet->updateResources(0, 3000);
 
-    prevMouseXpos = viewPort.w / 2.f;
-    prevMouseYpos = viewPort.h / 2.f;
-
     selectOverlay = Sprite();
     if (!selectOverlay.init(1, 1, textures_path("select_overlay.png")))
     {
@@ -95,7 +92,7 @@ void World::addShip()
         x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
-    vec3 cost = {100,500,100};
+    vec3 cost = {100,100,500};
     auto settl = (SettlementObject *) selectedObject;
     vec3 res = settl->getResources();
     if (this->canAfford( res, cost, true)){
@@ -526,8 +523,6 @@ void World::setExplored(vec2 pos, float radius)
     }
 }
 
-#define MOUSE_MOVE_SIZE 50
-
 void World::onMouseMove(double xpos, double ypos)
 {
     // std::cout << "mouse move\t" << xpos << "\t" << ypos << std::endl;
@@ -542,36 +537,6 @@ void World::onMouseMove(double xpos, double ypos)
                 mouseDragTempArea = {mouseDragTempArea.left, mouseDragTempArea.right, mouseDragTempArea.bottom, mouseDragTempArea.top};
             }
     }
-    if (xpos == -1 && ypos == -1)
-    {
-        xpos = camera.viewPort.w / 2.f;
-        ypos = camera.viewPort.h / 2.f;
-    }
-    vec2 cameraDir = {0, 0};
-    if (xpos <= MOUSE_MOVE_SIZE && prevMouseXpos > MOUSE_MOVE_SIZE)
-        cameraDir.x -= 1;
-    if (prevMouseXpos <= MOUSE_MOVE_SIZE && xpos > MOUSE_MOVE_SIZE)
-        cameraDir.x += 1;
-
-    if (xpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && prevMouseXpos < camera.viewPort.w - MOUSE_MOVE_SIZE)
-        cameraDir.x += 1;
-    if (prevMouseXpos >= camera.viewPort.w - MOUSE_MOVE_SIZE && xpos < camera.viewPort.w - MOUSE_MOVE_SIZE)
-        cameraDir.x -= 1;
-
-    if (ypos <= MOUSE_MOVE_SIZE && prevMouseYpos > MOUSE_MOVE_SIZE)
-        cameraDir.y -= 1;
-    if (prevMouseYpos <= MOUSE_MOVE_SIZE && ypos > MOUSE_MOVE_SIZE)
-        cameraDir.y += 1;
-
-    if (ypos >= camera.viewPort.h - MOUSE_MOVE_SIZE && prevMouseYpos < camera.viewPort.h - MOUSE_MOVE_SIZE)
-        cameraDir.y += 1;
-    if (prevMouseYpos >= camera.viewPort.h - MOUSE_MOVE_SIZE && ypos < camera.viewPort.h - MOUSE_MOVE_SIZE)
-        cameraDir.y -= 1;
-
-    camera.move(cameraDir, 0);
-
-    prevMouseXpos = xpos;
-    prevMouseYpos = ypos;
 }
 
 GameObject *World::getClosestObject(vec2 pos, bool playerControlled, bool landUnit)
@@ -692,6 +657,7 @@ void World::setResources()
         }
         resources.push_back(new Resource(this, {x, y}, 1, 500));
     }
+    resources.push_back(new Resource(this, {2700, 3000}, 1, 500));
     //setting timber
     for (int i = 0; i < 50; i++)
     {

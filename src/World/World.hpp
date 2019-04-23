@@ -108,8 +108,6 @@ private:
   PathRenderer *pathRenderer;
   EnemyAi * ai;
 
-  double prevMouseXpos, prevMouseYpos;
-
   bool mouseDrag = false;
   vec2 mouseDragStart = {0,0};
   bounds mouseDragTempArea = {0,0,0,0}; // for display purposes during selection (before mouseup)

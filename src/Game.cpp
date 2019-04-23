@@ -215,6 +215,9 @@ void Game::init(vec2 screen)
     this->screen = screen;
     this->state = Game::State::PAUSE;
 
+    prevMouseXpos = screen.x / 2.f;
+    prevMouseYpos = screen.y / 2.f;
+
     world = new World(this, {0, UI_HEIGHT, (GLint)screen.x, (GLint)screen.y - UI_HEIGHT});
 
     tr.init(fonts_path("Carlito-Bold.ttf"));
@@ -448,6 +451,8 @@ void Game::onKey(int key, int scancode, int action)
     world->camera.move(cameraDir, cameraZoom);
 }
 
+#define MOUSE_MOVE_SIZE 40
+
 void Game::onMouseMove(double xpos, double ypos)
 {
 
@@ -458,10 +463,39 @@ void Game::onMouseMove(double xpos, double ypos)
     {
         world->onMouseMove(viewX, viewY);
     }
-    else
+
+    if (xpos < 0 || xpos > screen.x || ypos < 0 || ypos > screen.y)
     {
-        world->onMouseMove(-1, -1);
+        xpos = screen.x / 2.f;
+        ypos = screen.y / 2.f;
     }
+    vec2 cameraDir = {0, 0};
+    if (xpos <= MOUSE_MOVE_SIZE && prevMouseXpos > MOUSE_MOVE_SIZE)
+        cameraDir.x -= 1;
+    if (prevMouseXpos <= MOUSE_MOVE_SIZE && xpos > MOUSE_MOVE_SIZE)
+        cameraDir.x += 1;
+
+    if (xpos >= screen.x - MOUSE_MOVE_SIZE && prevMouseXpos < screen.x - MOUSE_MOVE_SIZE)
+        cameraDir.x += 1;
+    if (prevMouseXpos >= screen.x - MOUSE_MOVE_SIZE && xpos < screen.x - MOUSE_MOVE_SIZE)
+        cameraDir.x -= 1;
+
+    if (ypos <= MOUSE_MOVE_SIZE && prevMouseYpos > MOUSE_MOVE_SIZE)
+        cameraDir.y -= 1;
+    if (prevMouseYpos <= MOUSE_MOVE_SIZE && ypos > MOUSE_MOVE_SIZE)
+        cameraDir.y += 1;
+
+    if (ypos >= screen.y - MOUSE_MOVE_SIZE && prevMouseYpos < screen.y - MOUSE_MOVE_SIZE)
+        cameraDir.y += 1;
+    if (prevMouseYpos >= screen.y - MOUSE_MOVE_SIZE && ypos < screen.y - MOUSE_MOVE_SIZE)
+        cameraDir.y -= 1;
+
+    world->camera.move(cameraDir, 0);
+
+    prevMouseXpos = xpos;
+    prevMouseYpos = ypos;
+
+
 }
 
 void Game::onScroll(double xoffset, double yoffset, double xpos, double ypos)
