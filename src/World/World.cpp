@@ -215,6 +215,10 @@ void World::update()
     {
 
         o->update();
+        o->getSprite().selected = false;
+    }
+    for (auto o : selectedObjects) {
+        o->getSprite().selected = true;
     }
 
     for (int i = 0; i < gameObjects.size(); i++)
@@ -332,9 +336,9 @@ void World::draw(int pixelScale)
     for (auto o : selectedObjects) {
         if (o == selectedObject)
         {
-            selectRing.tint = {1.f, 1.f, 1.f};
+            selectRing.tint = {1.0f, 1.0f, 1.0f};
         } else {
-            selectRing.tint = {0.1f, 1.f, 0.1f};
+            selectRing.tint = {0.0f, 1.0f, 0.0f};
         }
         vec2 spt_size = {o->getSprite().width, o->getSprite().height};
         glBlendFunc(GL_ONE, GL_ONE);

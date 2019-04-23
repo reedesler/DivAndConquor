@@ -64,30 +64,30 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         spt.draw(projection, {100, screen.y - UI_HEIGHT / 2.f + 20}, 0.f, {100.f / spt.width, 100.f / spt.height});
         spt.selected = tmpSelected;
 
-	SettlementObject * settl = dynamic_cast<SettlementObject*>(world->getSelected());
-	ShipObject * ship  = dynamic_cast<ShipObject*>(world->getSelected());
-	if (ship  != nullptr) {
-    		settl = ship->settlement;
+        SettlementObject * settl = dynamic_cast<SettlementObject*>(world->getSelected());
+        ShipObject * ship  = dynamic_cast<ShipObject*>(world->getSelected());
+        if (ship  != nullptr) {
+            settl = ship->settlement;
         }
 
-	Sailor* sailor = dynamic_cast<Sailor*>(world->getSelected());
-	if (sailor != nullptr) {
-    		settl = sailor->settlement;
+        Sailor* sailor = dynamic_cast<Sailor*>(world->getSelected());
+        if (sailor != nullptr) {
+            settl = sailor->settlement;
         }
-	if (settl != nullptr) {
-    		auto resources = settl->getResources();
-                // swapped around z and y cuz i dont want to redraw icons...
-    		std::string names[] = {"Gold", "Timber" , "Iron", "Coverage"};
-    		float vals[] = {resources.x, resources.z, resources.y, world->coverage};
-                glm::vec4 black(0.f, 0.f, 0.f, 0.7f);
-                tr.config(24, black);
-    		for(int i =0; i < 4; i++) {
-                    tr.draw(names[i].c_str() , -1 + 1010 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
-                    auto val = std::to_string((int)vals[i]);
-                    if(i == 3)
-                        val += "%";
-                    tr.draw(val.c_str(), -1 + 1125 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
-                }	
+        if (settl != nullptr) {
+            auto resources = settl->getResources();
+            // swapped around z and y cuz i dont want to redraw icons...
+            std::string names[] = {"Gold", "Timber" , "Iron", "Coverage"};
+            float vals[] = {resources.x, resources.z, resources.y, world->coverage};
+            glm::vec4 black(0.f, 0.f, 0.f, 0.7f);
+            tr.config(24, black);
+            for(int i =0; i < 4; i++) {
+                tr.draw(names[i].c_str() , -1 + 1010 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
+                auto val = std::to_string((int)vals[i]);
+                if(i == 3)
+                    val += "%";
+                tr.draw(val.c_str(), -1 + 1125 * sx, 1 - (691* sy) - (sy*i*30), sx, sy);
+            }	
         }
     }
 
@@ -125,7 +125,7 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
 
 
     glm::vec4 translucent_black(1.f, 1.f, 1.f, 1.f);
-    int line_spacing = 29;
+    int line_spacing = 27;
     tr.config(24, translucent_black);
 
     std::vector<std::string> lines = {
@@ -143,6 +143,7 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         "  Right-click - move/attack.",
         "  Tab - switch which unit in the selection is the main one.",
         "  Escape - deselect all non-main units.",
+        "  1, 2 - Use unit abilities.",
         "",
         "Click anywhere to dismiss this screen. Good luck!",
         };
@@ -359,6 +360,20 @@ void Game::onKey(int key, int scancode, int action)
             break;
         case GLFW_KEY_E:
             cameraZoom += 1;
+            break;
+        case GLFW_KEY_1:
+            if(world->getSelected() != nullptr) {
+                auto v = unitUis[typeid(*world->getSelected())];
+                if(v.size() > 0)
+                    v.at(0)->OnClick(this,0,0,0);
+            }
+            break;
+        case GLFW_KEY_2:
+            if(world->getSelected() != nullptr) {
+                auto v = unitUis[typeid(*world->getSelected())];
+                if(v.size() > 1)
+                    v.at(1)->OnClick(this,0,0,0);
+            }
             break;
         case GLFW_KEY_P:
             this->printLn("Test P!");
