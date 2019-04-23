@@ -45,7 +45,7 @@ void Camera::enforceConstraints() {
 }
 
 void Camera::move(vec2 dir, float zoom) {
-    const float CAMERA_SPEED = 5;
+    const float CAMERA_SPEED = 7;
     const float CAMERA_ZOOM = 1.01;
     vel.x += dir.x * CAMERA_SPEED;
     vel.y += dir.y * CAMERA_SPEED;
