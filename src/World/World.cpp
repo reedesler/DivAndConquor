@@ -634,7 +634,7 @@ void World::setPirates()
 void World::setResources()
 {
     //setting gold
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 60; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
@@ -646,7 +646,7 @@ void World::setResources()
         resources.push_back(new Resource(this, {x, y}, 0, 500));
     }
     //setting iron
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 60; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);
@@ -659,7 +659,7 @@ void World::setResources()
     }
     resources.push_back(new Resource(this, {2700, 3000}, 1, 500));
     //setting timber
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 60; i++)
     {
         float x = std::rand() % (this->w - 100);
         float y = std::rand() % (this->h - 100);

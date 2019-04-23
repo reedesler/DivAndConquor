@@ -15,7 +15,7 @@ PirateShip::PirateShip(World* world, vec2 loc) : GameObject(world, loc) {
     landUnit = false;
     playerControlled = false;
     pathfinder = new Pathfinder(world, landUnit, true);
-    health = maxHealth = 400;
+    health = maxHealth = 300;
     world->pirateStrength++;
     printf("enemyNum %d\n", world->pirateStrength);
     pathfindingDelay = 120;
