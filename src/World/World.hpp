@@ -114,6 +114,8 @@ private:
   vec2 mouseDragStart = {0,0};
   bounds mouseDragTempArea = {0,0,0,0}; // for display purposes during selection (before mouseup)
   long ticks = 0;
+
+    bool canAfford(vec3 resources, vec3 cost, bool verbose);
 };
 
 #endif //DIVCONQ_WORLD_H

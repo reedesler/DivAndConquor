@@ -98,6 +98,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/gl3w)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/glm)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/freetype/include)
 
 # so policy CMP0072 doesn't scream either
@@ -110,13 +111,7 @@ if (IS_OS_WINDOWS)
     set(FREETYPE_INCLUDE_DIRS ext/freetype/include)
 endif()
 find_package(Freetype REQUIRED)
-# Find glm
-find_package(glm REQUIRED)
 
-if (GLM_FOUND)
-    target_include_directories(${PROJECT_NAME} PUBLIC ${GLM_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${GLM_LIBRARY_DIRS})
-endif()
 
 if (OPENGL_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
@@ -153,7 +148,7 @@ elseif (IS_OS_WINDOWS)
 
     set(GLFW_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ext/glfw/include")
     set(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl/include/SDL")
-
+    set(GLM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ext/glm")
     if (${CMAKE_SIZEOF_VOID_P} MATCHES "8")
         set(GLFW_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/ext/glfw/lib/glfw3dll-x64.lib")
         set(SDL2_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/ext/sdl/lib/SDL2-x64.lib")
@@ -198,7 +193,8 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS})
-
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLM_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${GLM_LIBRARY_DIRS})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2_LIBRARIES} ${GLM_LIBRARIES})
 
 # Needed to add this

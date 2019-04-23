@@ -236,6 +236,7 @@ void Game::init(vec2 screen)
         printf("ERROR initializing sprite\n");
     }
 
+    unitUis[typeid(Sailor)].push_back(new Button(build_settlement_button, {300.f, screen.y - UI_HEIGHT / 2}, invokeBuildSettlement));
     unitUis[typeid(ShipObject)].push_back(new Button(build_settlement_button, {300.f, screen.y - UI_HEIGHT / 2}, invokeBuildSettlement));
 
     unitUis[typeid(SettlementObject)].push_back(new Button(build_ship_button, {300.f, screen.y - UI_HEIGHT / 2}, invokeBuildShip));

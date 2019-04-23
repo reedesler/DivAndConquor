@@ -93,16 +93,14 @@ void World::addShip()
         x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
-    if (((SettlementObject *) selectedObject)->getResources().x >= 500){
+    vec3 cost = {100,500,100};
+    vec3 res = ((SettlementObject *)selectedObject)->getResources();
+    if (this->canAfford( res, cost, true)){
         auto tmpShip = new ShipObject(this, {x, y}, (SettlementObject *)selectedObject);
         this->gameObjects.push_back(tmpShip);
         this->fleet.push_back(tmpShip);
     }
-    else {
-        std::ostringstream out;
-        out << "Not enough gold! You need " << (500- ((SettlementObject *) selectedObject)->getResources().x) << " more.";
-     	game->printLn(out.str());   
-    }
+
 }
 
 void World::addSettlement()
@@ -122,15 +120,26 @@ void World::addSettlement()
         if (tries++ >= 100)
             return;
     }
-    auto tmpShip = (ShipObject *) selectedObject;
-    if (tmpShip->settlement->getResources().x >= 1000){
-        tmpShip->settlement->updateResources(0, -1000);
-        this->gameObjects.push_back(new SettlementObject(this, {x, y}));
+    SettlementObject * settl = nullptr;
+    ShipObject * ship  = dynamic_cast<ShipObject*>(getSelected());
+    if (ship  != nullptr) {
+        settl = ship->settlement;
     }
-    else {
-        std::ostringstream out;
-        out << "Not enough gold! You need " << (1000 - tmpShip->settlement->getResources().x) << " more.";
-     	game->printLn(out.str());   
+
+    Sailor* sailor = dynamic_cast<Sailor*>(getSelected());
+    if (sailor != nullptr) {
+        settl = sailor->settlement;
+    }
+    if (settl == nullptr) {
+        return;
+    }
+    vec3 cost = {500,500,500};
+    vec3 res = settl->getResources();
+    if (this->canAfford( res, cost, true)){
+        settl->updateResources(0, -500);
+        settl->updateResources(1, -100);
+        settl->updateResources(2, -100);
+        this->gameObjects.push_back(new SettlementObject(this, {x, y}));
     }
 }
 
@@ -148,16 +157,37 @@ void World::addSailor()
         x = std::rand() % (10 * TILE_SIZE) + pos.x - 5 * TILE_SIZE;
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
-    if (((SettlementObject *) selectedObject)->getResources().x >= 100){
+    vec3 cost = {100,0,0};
+    vec3 res = ((SettlementObject *) selectedObject)->getResources();
+    if (this->canAfford( res, cost, true)){
         auto *tmpSailor = new Sailor(this, {x, y}, (SettlementObject *)selectedObject);
         this->gameObjects.push_back(tmpSailor);
         this->army.push_back(tmpSailor);
     }
-    else {
-        std::ostringstream out;
-        out << "Not enough gold! You need " << (100 - ((SettlementObject *) selectedObject)->getResources().x) << " more.";
-     	game->printLn(out.str());   
+
+}
+
+bool World::canAfford(vec3 resources, vec3 cost, bool verbose) {
+
+    std::string names[] = {"gold", "iron", "timber"};
+    float res[] = {resources.x, resources.y, resources.z};
+    float costs[] = {cost.x, cost.y, cost.z};
+    bool canAfford = true;
+    for (int i = 0; i < 3; i++) {
+        if(cost[i] > res[i])
+        {
+            canAfford = false;
+            if (verbose) {
+                std::ostringstream out;
+                out << "Not enough " << names[i] << "! ";
+                out << "You need " << (cost[i] - res[i]) << " more.";
+                game->printLn(out.str());
+            } else {
+                return false;
+            }
+        }
     }
+    return canAfford;
 }
 
 void World::centerCameraOn(GameObject &go)
