@@ -20,6 +20,7 @@ public:
     bool followSelected = false;
     void zoomToPoint(float zoom, vec2 pos);
     void stop();
+    void finishMovement() {actualPos = pos;}
 private:
     vec2 pos, actualPos;
     vec2 vel;

@@ -22,7 +22,6 @@ Sailor::Sailor(World *world, vec2 pos, SettlementObject *settlement): GameObject
     rotation = 0;
     scale = {1.f, 1.f};
     this->settlement = settlement;
-    this->settlement->updateResources(0, -100);
     landUnit = true;
     canShoot = true;
     pathfinder = new Pathfinder(world, landUnit);

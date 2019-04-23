@@ -76,8 +76,9 @@ void Game::drawUI(const mat3 &projection, int pixelScale)
         }
 	if (settl != nullptr) {
     		auto resources = settl->getResources();
-    		std::string names[] = {"Gold", "Iron", "Timber" , "Coverage"};
-    		float vals[] = {resources.x, resources.y, resources.z, world->coverage};
+                // swapped around z and y cuz i dont want to redraw icons...
+    		std::string names[] = {"Gold", "Timber" , "Iron", "Coverage"};
+    		float vals[] = {resources.x, resources.z, resources.y, world->coverage};
                 glm::vec4 black(0.f, 0.f, 0.f, 0.7f);
                 tr.config(24, black);
     		for(int i =0; i < 4; i++) {

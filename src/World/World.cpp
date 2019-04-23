@@ -12,7 +12,9 @@ World::World(Game* game, rect viewPort) : tilemap(Tilemap::LoadFromFile(maps_pat
     this->game = game;
     state = neutral;
     printf("%c", state);
-    auto *initialSet = new SettlementObject(this, {1650, 4200});
+    auto *initialSet = new SettlementObject(this, {3150, 3700});
+    centerCameraOn(*initialSet);
+    camera.finishMovement();
     gameObjects.push_back(initialSet);
     //gameObjects.push_back(new PirateShip(this, {2300, 1300}));
     pathRenderer = new PathRenderer();
@@ -94,9 +96,13 @@ void World::addShip()
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
     vec3 cost = {100,500,100};
-    vec3 res = ((SettlementObject *)selectedObject)->getResources();
+    auto settl = (SettlementObject *) selectedObject;
+    vec3 res = settl->getResources();
     if (this->canAfford( res, cost, true)){
-        auto tmpShip = new ShipObject(this, {x, y}, (SettlementObject *)selectedObject);
+        settl->updateResources(0, -cost.x);
+        settl->updateResources(1, -cost.y);
+        settl->updateResources(2, -cost.z);
+        auto tmpShip = new ShipObject(this, {x, y}, settl);
         this->gameObjects.push_back(tmpShip);
         this->fleet.push_back(tmpShip);
     }
@@ -136,9 +142,9 @@ void World::addSettlement()
     vec3 cost = {500,500,500};
     vec3 res = settl->getResources();
     if (this->canAfford( res, cost, true)){
-        settl->updateResources(0, -500);
-        settl->updateResources(1, -100);
-        settl->updateResources(2, -100);
+        settl->updateResources(0, -cost.x);
+        settl->updateResources(1, -cost.y);
+        settl->updateResources(2, -cost.z);
         this->gameObjects.push_back(new SettlementObject(this, {x, y}));
     }
 }
@@ -158,9 +164,13 @@ void World::addSailor()
         y = std::rand() % (10 * TILE_SIZE) + pos.y - 5 * TILE_SIZE;
     }
     vec3 cost = {100,0,0};
-    vec3 res = ((SettlementObject *) selectedObject)->getResources();
+    auto settl = (SettlementObject *) selectedObject;
+    vec3 res = settl->getResources();
     if (this->canAfford( res, cost, true)){
-        auto *tmpSailor = new Sailor(this, {x, y}, (SettlementObject *)selectedObject);
+        settl->updateResources(0, -cost.x);
+        settl->updateResources(1, -cost.y);
+        settl->updateResources(2, -cost.z);
+        auto *tmpSailor = new Sailor(this, {x, y}, settl);
         this->gameObjects.push_back(tmpSailor);
         this->army.push_back(tmpSailor);
     }
@@ -174,13 +184,13 @@ bool World::canAfford(vec3 resources, vec3 cost, bool verbose) {
     float costs[] = {cost.x, cost.y, cost.z};
     bool canAfford = true;
     for (int i = 0; i < 3; i++) {
-        if(cost[i] > res[i])
+        if(costs[i] > res[i])
         {
             canAfford = false;
             if (verbose) {
                 std::ostringstream out;
                 out << "Not enough " << names[i] << "! ";
-                out << "You need " << (cost[i] - res[i]) << " more.";
+                out << "You need " << (costs[i] - res[i]) << " more.";
                 game->printLn(out.str());
             } else {
                 return false;
